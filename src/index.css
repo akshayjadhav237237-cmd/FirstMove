@@ -6,40 +6,107 @@
 
 * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
 
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background-color: #080A0A;
   color: #F9FAFB;
   -webkit-font-smoothing: antialiased;
-  scroll-behavior: smooth;
-  margin: 0;
+  overflow: hidden;
 }
 
-textarea, input {
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-textarea:focus, input:focus {
-  outline: none;
-  border-color: rgba(108, 99, 255, 0.5) !important;
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-}
-
+/* ─── Shimmer Skeleton ─── */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
 }
-
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
     rgba(255,255,255,0.03) 0%,
-    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.07) 50%,
     rgba(255,255,255,0.03) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 8px;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #080A0A; }
-::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 3px; }
+/* ─── Rotating Border Beam ─── */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotate-beam {
+  to { --beam-angle: 360deg; }
+}
+.border-beam {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#0E1015, #0E1015) padding-box,
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 75%,
+      var(--beam-color, #6C63FF) 85%,
+      transparent 95%
+    ) border-box;
+  animation: rotate-beam 2.5s linear infinite;
+}
+.border-beam-strategist { --beam-color: #818CF8; }
+.border-beam-risk       { --beam-color: #F87171; }
+.border-beam-devil      { --beam-color: #FB923C; }
+
+/* ─── Typing Indicator Dots ─── */
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
+  40%           { transform: translateY(-4px); opacity: 1;   }
+}
+.typing-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: dot-bounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.1s; }
+.typing-dot:nth-child(3) { animation-delay: 0.2s; }
+
+/* ─── LIVE Badge Pulse ─── */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1;   }
+  50%      { opacity: 0.5; }
+}
+.live-badge { animation: live-pulse 2s ease-in-out infinite; }
+
+/* ─── Scrollbars ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+}
+
+/* ─── Focus Rings ─── */
+textarea:focus, input:focus {
+  outline: none;
+  border-color: rgba(108,99,255,0.4) !important;
+  box-shadow: 0 0 0 3px rgba(108,99,255,0.08);
+}
+
+/* ─── Workspace panels fill viewport ─── */
+.workspace-panel { height: 100vh; }
+
+/* ─── Screen 1 subtle card glow ─── */
+.card-top-glow {
+  box-shadow: 0 -1px 0 0 rgba(108,99,255,0.3), 0 4px 40px rgba(0,0,0,0.4);
+}
+
+/* ─── Scrollable inner panels ─── */
+.panel-scroll {
+  overflow-y: auto;
+  height: 100vh;
+}

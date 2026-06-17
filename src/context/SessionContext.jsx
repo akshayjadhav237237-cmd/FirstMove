@@ -5,29 +5,45 @@ const initialState = {
   rawIdea: "",
   socraticQuestions: [],
   userAnswers: {},
-  finalPlan: null,
+  debate: null,
+  blueprint: null,
   error: null,
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "SUBMIT_IDEA":
-      return { ...state, currentState: "PROCESSING_QUESTIONS", 
-               rawIdea: action.payload, error: null };
+      return {
+        ...state,
+        currentState: "PROCESSING_QUESTIONS",
+        rawIdea: action.payload,
+        error: null,
+      };
     case "QUESTIONS_RECEIVED":
-      return { ...state, currentState: "QUESTIONING", 
-               socraticQuestions: action.payload };
+      return {
+        ...state,
+        currentState: "QUESTIONING",
+        socraticQuestions: action.payload,
+      };
     case "SUBMIT_ANSWERS":
-      return { ...state, currentState: "PROCESSING_PLAN", 
-               userAnswers: action.payload, error: null };
-    case "PLAN_RECEIVED":
-      return { ...state, currentState: "PLAN_GENERATED", 
-               finalPlan: action.payload };
+      return {
+        ...state,
+        currentState: "PROCESSING_ANALYSIS",
+        userAnswers: action.payload,
+        error: null,
+      };
+    case "ANALYSIS_COMPLETE":
+      return {
+        ...state,
+        currentState: "ANALYSIS_COMPLETE",
+        debate: action.payload.debate,
+        blueprint: action.payload.blueprint,
+      };
     case "SET_ERROR":
       return {
         ...state,
-        currentState: state.currentState === "PROCESSING_QUESTIONS" 
-                      ? "IDLE" : "QUESTIONING",
+        currentState:
+          state.currentState === "PROCESSING_QUESTIONS" ? "IDLE" : "QUESTIONING",
         error: action.payload,
       };
     case "RESET":
@@ -43,9 +59,11 @@ export const SessionContext = createContext(null);
 export function SessionProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState, () => {
     try {
-      const p = sessionStorage.getItem("firstmove_session");
-      return p ? JSON.parse(p) : initialState;
-    } catch { return initialState; }
+      const saved = sessionStorage.getItem("firstmove_session");
+      return saved ? JSON.parse(saved) : initialState;
+    } catch {
+      return initialState;
+    }
   });
 
   useEffect(() => {
