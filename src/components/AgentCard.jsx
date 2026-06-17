@@ -1,127 +1,246 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useTypewriter } from "../hooks/useTypewriter";
-import { AgentSkeleton } from "./SkeletonLoader";
+import { motion, AnimatePresence } from "motion/react";
+
+const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
 
 const AGENT_CONFIG = {
   strategist: {
     name: "Lead Strategist",
-    role: "Opportunity Analysis",
+    role: "OPPORTUNITY_ANALYSIS",
     color: "#818CF8",
     beamClass: "border-beam border-beam-strategist",
-    scoreLabel: "Opportunity Score",
+    tintBg: "rgba(129,140,248,0.02)",
     scoreKey: "opportunity_score",
-    scoreColorCls: "bg-indigo-400/10 text-indigo-400",
+    scoreLabel: "OPP_SCORE",
   },
   risk_analyst: {
     name: "Risk Analyst",
-    role: "Threat Assessment",
+    role: "THREAT_ASSESSMENT",
     color: "#F87171",
     beamClass: "border-beam border-beam-risk",
-    scoreLabel: "Risk Score",
+    tintBg: "rgba(248,113,113,0.02)",
     scoreKey: "risk_score",
-    scoreColorCls: "bg-red-400/10 text-red-400",
+    scoreLabel: "RISK_SCORE",
   },
   devils_advocate: {
     name: "Devil's Advocate",
-    role: "Challenge Assessment",
+    role: "CHALLENGE_ASSESSMENT",
     color: "#FB923C",
     beamClass: "border-beam border-beam-devil",
-    scoreLabel: "Challenge Score",
+    tintBg: "rgba(251,146,60,0.02)",
     scoreKey: "challenge_score",
-    scoreColorCls: "bg-orange-400/10 text-orange-400",
+    scoreLabel: "CHAL_SCORE",
   },
 };
 
-export default function AgentCard({ agentKey, data, isLoading = false, autoStart = false, delay = 0 }) {
-  const cfg = AGENT_CONFIG[agentKey] || AGENT_CONFIG.strategist;
-  const [showPoints, setShowPoints] = useState(false);
-
-  const { displayed, isDone, isStarted } = useTypewriter(
-    data?.verdict || "",
-    14,
-    autoStart && !!data
-  );
-
-  const isTyping = isStarted && !isDone;
+function WordByWordReveal({ text, onDone }) {
+  const words = text ? text.split(/(\s+)/) : [];
+  const [revealedCount, setRevealedCount] = useState(0);
 
   useEffect(() => {
-    if (isDone && data) {
-      const t = setTimeout(() => setShowPoints(true), 300);
+    if (!text || words.length === 0) return;
+    setRevealedCount(0);
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setRevealedCount(i);
+      if (i >= words.length) {
+        clearInterval(interval);
+        if (onDone) onDone();
+      }
+    }, 20); // 20ms per word
+    return () => clearInterval(interval);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
+
+  const isDone = revealedCount >= words.length;
+
+  return (
+    <span>
+      {words.map((word, idx) => {
+        const revealed = idx < revealedCount;
+        return (
+          <motion.span
+            key={idx}
+            className="inline"
+            initial={{ opacity: 0, filter: "blur(4px)" }}
+            animate={revealed ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
+            transition={{ type: "spring", stiffness: 450, damping: 28, delay: 0 }}
+          >
+            {word}
+          </motion.span>
+        );
+      })}
+      {!isDone && (
+        <motion.span
+          animate={{ opacity: [1, 0] }}
+          transition={{ repeat: Infinity, duration: 0.8, ease: "steps(2)" }}
+          className="inline-block w-1.5 h-4 ml-0.5 bg-emerald-400 align-middle"
+        />
+      )}
+    </span>
+  );
+}
+
+export default function AgentCard({ agentKey, data, isLoading = false, autoStart = false, delay = 0 }) {
+  const cfg = AGENT_CONFIG[agentKey] || AGENT_CONFIG.strategist;
+  const [verdictDone, setVerdictDone] = useState(false);
+  const [showPoints, setShowPoints] = useState(false);
+  const [showReasoning, setShowReasoning] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  const isTyping = started && !verdictDone;
+  const score = data?.[cfg.scoreKey];
+
+  // Delay reveal start
+  useEffect(() => {
+    if (!autoStart || !data) return;
+    const t = setTimeout(() => setStarted(true), delay * 1000);
+    return () => clearTimeout(t);
+  }, [autoStart, data, delay]);
+
+  // Show points after verdict done
+  useEffect(() => {
+    if (verdictDone) {
+      const t = setTimeout(() => setShowPoints(true), 200);
       return () => clearTimeout(t);
     }
-  }, [isDone, data]);
+  }, [verdictDone]);
 
   const beamActive = isLoading || isTyping;
-  const score = data?.[cfg.scoreKey];
+
+  const cardBase = "rounded-lg overflow-hidden mb-4";
+  const cardStyle = {
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.5)",
+  };
+  const typingTintStyle = isTyping ? { background: cfg.tintBg } : {};
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.3 }}
-      className={`relative rounded-xl p-5 ${beamActive ? cfg.beamClass : "bg-card border border-white/8"}`}
+      initial={{ opacity: 0, scale: 0.98, y: 8 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay, ...smoothSpring }}
+      className={`${cardBase} ${beamActive ? cfg.beamClass : "bg-surface border border-white/[0.06]"}`}
+      style={{ ...cardStyle, ...typingTintStyle }}
     >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: cfg.color }} />
-          <span className="text-white text-sm font-semibold">{cfg.name}</span>
+      {/* ── Card Header ── */}
+      <div className="h-10 flex items-center justify-between px-4 bg-white/[0.01] border-b border-white/[0.04]">
+        <div className="flex items-center">
+          <span
+            className="w-3 h-3 rounded-sm mr-2.5 flex-shrink-0"
+            style={{ backgroundColor: cfg.color + "cc" }}
+          />
+          <span className="text-xs font-semibold text-[#f7f8f8]">{cfg.name}</span>
+          <span className="w-px h-3 bg-white/10 mx-2" />
+          <span className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest bg-white/[0.04] px-1.5 py-0.5 rounded">
+            {cfg.role}
+          </span>
         </div>
-        <div>
+
+        <div className="flex items-center">
           {isTyping && (
-            <span className="flex items-center gap-0.5">
-              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
-              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
-              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
+            <span className="flex items-center gap-1.5 text-[9px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+              RUNNING_NODE
             </span>
           )}
           {!isTyping && data && score !== undefined && (
-            <span className={`text-xs rounded-full px-2 py-0.5 font-medium ${cfg.scoreColorCls}`}>
-              {score}/100
+            <span className="text-[9px] font-mono text-[#8a8f98]">{score}/100</span>
+          )}
+          {isLoading && (
+            <span className="flex gap-0.5">
+              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
+              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
+              <span className="typing-dot" style={{ backgroundColor: cfg.color }} />
             </span>
           )}
         </div>
       </div>
 
-      {/* Role tag */}
-      <p className="text-xs font-medium uppercase tracking-wide mb-3" style={{ color: cfg.color + "99" }}>
-        {cfg.role}
-      </p>
-
-      {/* Verdict */}
-      <div className="min-h-[60px] mb-4">
+      {/* ── Card Body ── */}
+      <div className="p-4">
         {isLoading ? (
-          <AgentSkeleton />
+          <div className="space-y-2">
+            <div className="skeleton-shimmer h-2.5 w-4/5 rounded" />
+            <div className="skeleton-shimmer h-2.5 w-full rounded" />
+            <div className="skeleton-shimmer h-2.5 w-3/4 rounded" />
+            <div className="skeleton-shimmer h-2.5 w-5/6 rounded" />
+          </div>
         ) : data ? (
-          <p className="text-secondary text-sm leading-relaxed">
-            {autoStart ? displayed : data.verdict}
-            {isTyping && <span className="animate-pulse">▍</span>}
-          </p>
+          <div>
+            {/* Verdict */}
+            <p className="text-[#8a8f98] text-xs leading-relaxed mb-0">
+              {autoStart && started ? (
+                <WordByWordReveal text={data.verdict} onDone={() => setVerdictDone(true)} />
+              ) : (
+                <span>{data.verdict}</span>
+              )}
+            </p>
+
+            {/* Key points */}
+            <AnimatePresence>
+              {showPoints && data.key_points && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="mt-3 space-y-2"
+                >
+                  {data.key_points.map((point, i) => (
+                    <motion.div
+                      key={i}
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.08, ...smoothSpring }}
+                    >
+                      <span className="text-xs shrink-0 mt-0.5" style={{ color: cfg.color }}>–</span>
+                      <p className="text-[#8a8f98] text-xs leading-relaxed">{point}</p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Reasoning toggle */}
+            {verdictDone && (
+              <div className="mt-3 pt-3 border-t border-white/[0.04]">
+                <button
+                  onClick={() => setShowReasoning((v) => !v)}
+                  className="w-full flex items-center justify-between text-[10px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+                >
+                  <span>{showReasoning ? "HIDE_LOG ↑" : "VIEW_REASONING_LOG ↓"}</span>
+                </button>
+                <AnimatePresence>
+                  {showReasoning && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.18 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="bg-black/30 rounded-md p-3 mt-2 border border-white/[0.04]">
+                        <p className="font-mono text-xs text-[#62666d] leading-relaxed mb-2">
+                          Contributing factors extracted from context window analysis...
+                        </p>
+                        {(data.key_points || []).map((pt, i) => (
+                          <p key={i} className="font-mono text-xs text-[#8a8f98] leading-relaxed mb-1">
+                            {"  > "}{pt}
+                          </p>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
+          </div>
         ) : (
-          <p className="text-muted text-sm italic">Waiting for your answers...</p>
+          <p className="text-[#62666d] text-xs font-mono">AWAITING_INPUT_SIGNAL...</p>
         )}
       </div>
-
-      {/* Key Points */}
-      <AnimatePresence>
-        {showPoints && data?.key_points && (
-          <div className="space-y-2">
-            {data.key_points.map((point, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.25 }}
-                className="flex items-start gap-2"
-              >
-                <span className="text-xs mt-0.5 shrink-0 font-bold" style={{ color: cfg.color }}>–</span>
-                <p className="text-secondary text-xs leading-relaxed">{point}</p>
-              </motion.div>
-            ))}
-          </div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }

@@ -4,35 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        base:           '#080A0A',
-        card:           '#0E1015',
-        'card-hover':   '#13161E',
-        'input-bg':     '#1A1D24',
-        accent:         '#6C63FF',
+        canvas:      '#08090a',
+        surface:     '#0a0a0c',
+        'surface-2': '#0e0f11',
+        'panel-r':   '#06060a',
+        card:        '#0a0a0c',
+        'card-el':   '#0e0f11',
+        'input-bg':  '#0e0f11',
+        accent:      '#6C63FF',
         'accent-hover': '#5A52E0',
-        // Agent colors
-        strategist:     '#818CF8',
-        risk:           '#F87171',
-        devil:          '#FB923C',
-        // Scenario colors
-        optimistic:     '#10B981',
-        pessimistic:    '#EF4444',
-        // DVF colors
-        desirability:   '#818CF8',
-        viability:      '#34D399',
-        feasibility:    '#FB923C',
+        // Agent
+        strategist:  '#818CF8',
+        risk:        '#F87171',
+        devil:       '#FB923C',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans:  ['Inter', 'sans-serif'],
+        mono:  ["'Berkeley Mono'", "'Fira Code'", "'JetBrains Mono'", 'monospace'],
       },
-      animation: {
-        'live-pulse': 'live-pulse 2s ease-in-out infinite',
-      },
-      keyframes: {
-        'live-pulse': {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
-        },
+      letterSpacing: {
+        'display': '-0.04em',
       },
     },
   },

@@ -1,21 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+/* ─── Global reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 html, body, #root {
   height: 100%;
   margin: 0;
+  padding: 0;
+  background-color: #08090a;
+  color: #f7f8f8;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
 }
 
-body {
-  background-color: #080A0A;
-  color: #F9FAFB;
-  -webkit-font-smoothing: antialiased;
-  overflow: hidden;
+/* ─── Elevation shadow mixin helpers ─── */
+.shadow-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 1px 2px rgba(0,0,0,0.5),
+    0 8px 16px rgba(0,0,0,0.3);
+}
+.shadow-inset-top {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.shadow-inset-subtle {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 /* ─── Shimmer Skeleton ─── */
@@ -26,13 +43,13 @@ body {
 .skeleton-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255,255,255,0.03) 0%,
-    rgba(255,255,255,0.07) 50%,
-    rgba(255,255,255,0.03) 100%
+    rgba(255,255,255,0.02) 0%,
+    rgba(255,255,255,0.05) 50%,
+    rgba(255,255,255,0.02) 100%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
-  border-radius: 8px;
+  animation: shimmer 2s ease-in-out infinite;
+  border-radius: 4px;
 }
 
 /* ─── Rotating Border Beam ─── */
@@ -47,7 +64,7 @@ body {
 .border-beam {
   border: 1px solid transparent;
   background:
-    linear-gradient(#0E1015, #0E1015) padding-box,
+    linear-gradient(#0a0a0c, #0a0a0c) padding-box,
     conic-gradient(
       from var(--beam-angle),
       transparent 75%,
@@ -63,12 +80,11 @@ body {
 /* ─── Typing Indicator Dots ─── */
 @keyframes dot-bounce {
   0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
-  40%           { transform: translateY(-4px); opacity: 1;   }
+  40%           { transform: translateY(-3px); opacity: 1;   }
 }
 .typing-dot {
   display: inline-block;
-  width: 4px;
-  height: 4px;
+  width: 3px; height: 3px;
   border-radius: 50%;
   animation: dot-bounce 1.2s ease-in-out infinite;
 }
@@ -77,36 +93,51 @@ body {
 
 /* ─── LIVE Badge Pulse ─── */
 @keyframes live-pulse {
-  0%, 100% { opacity: 1;   }
-  50%      { opacity: 0.5; }
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
 }
 .live-badge { animation: live-pulse 2s ease-in-out infinite; }
 
+/* ─── Blinking cursor ─── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+.cursor-blink { animation: blink 1s step-end infinite; }
+
 /* ─── Scrollbars ─── */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar       { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
   border-radius: 2px;
 }
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.15);
+}
 
-/* ─── Focus Rings ─── */
+/* ─── Focus rings ─── */
 textarea:focus, input:focus {
   outline: none;
-  border-color: rgba(108,99,255,0.4) !important;
-  box-shadow: 0 0 0 3px rgba(108,99,255,0.08);
+  border-color: rgba(108,99,255,0.40) !important;
+  box-shadow: 0 0 0 1px rgba(108,99,255,0.20);
 }
 
-/* ─── Workspace panels fill viewport ─── */
-.workspace-panel { height: 100vh; }
+/* ─── Panel utilities ─── */
+.panel-scroll { overflow-y: auto; height: 100%; }
+.h-screen-fill { height: 100%; }
 
-/* ─── Screen 1 subtle card glow ─── */
-.card-top-glow {
-  box-shadow: 0 -1px 0 0 rgba(108,99,255,0.3), 0 4px 40px rgba(0,0,0,0.4);
+/* ─── Button glow ─── */
+.btn-accent {
+  background: #6C63FF;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 0 20px rgba(108,99,255,0.25);
+  transition: all 0.2s ease;
 }
-
-/* ─── Scrollable inner panels ─── */
-.panel-scroll {
-  overflow-y: auto;
-  height: 100vh;
+.btn-accent:hover {
+  background: #5A52E0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 0 30px rgba(108,99,255,0.35);
 }

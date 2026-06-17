@@ -1,30 +1,26 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
+
+const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
 
 const SCENARIO_CONFIG = {
   optimistic: {
-    label: "Optimistic",
-    emoji: "🟢",
-    color: "#10B981",
-    glowColor: "rgba(16,185,129,0.15)",
-    bgColor:   "rgba(16,185,129,0.05)",
-    borderColor: "rgba(16,185,129,0.3)",
+    mono:   "OPTIMISTIC_PATH",
+    accent: "#10B981",
+    borderCls: "border-l-emerald-500",
+    barCls: "bg-emerald-500",
   },
   neutral: {
-    label: "Neutral",
-    emoji: "🟡",
-    color: "#9CA3AF",
-    glowColor: "rgba(156,163,175,0.15)",
-    bgColor:   "rgba(156,163,175,0.05)",
-    borderColor: "rgba(156,163,175,0.3)",
+    mono:   "NEUTRAL_PATH",
+    accent: "#9CA3AF",
+    borderCls: "border-l-gray-500",
+    barCls: "bg-gray-500",
   },
   pessimistic: {
-    label: "Pessimistic",
-    emoji: "🔴",
-    color: "#EF4444",
-    glowColor: "rgba(239,68,68,0.15)",
-    bgColor:   "rgba(239,68,68,0.05)",
-    borderColor: "rgba(239,68,68,0.3)",
+    mono:   "RISK_PATH",
+    accent: "#EF4444",
+    borderCls: "border-l-red-500",
+    barCls: "bg-red-500",
   },
 };
 
@@ -38,48 +34,47 @@ export default function ScenarioCard({ type, data, delay = 0 }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.3 }}
-      className="rounded-xl p-5"
-      style={{
-        border: `1px solid ${cfg.borderColor}`,
-        background: cfg.bgColor,
-        boxShadow: `0 0 20px ${cfg.glowColor}`,
-      }}
+      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay, ...smoothSpring }}
+      className={`bg-surface border border-white/[0.06] border-l-[3px] ${cfg.borderCls} rounded-lg p-4 mb-3`}
+      style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
     >
       {/* Header */}
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-white text-sm font-semibold">
-          {cfg.emoji} {cfg.label}
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest">
+          {cfg.mono}
         </span>
-        <span className="bg-white/5 text-secondary text-xs rounded-full px-2 py-0.5">
-          {probability}% likely
+        <span className="text-[9px] font-mono text-[#8a8f98]">
+          {probability}% PROBABILITY
         </span>
       </div>
 
       {/* Headline */}
-      <p className="text-white text-sm font-medium mb-3 leading-snug">{data.headline}</p>
+      <p className="text-[#f7f8f8] text-sm font-medium leading-snug mt-2 mb-3">
+        {data.headline}
+      </p>
 
       {/* Key conditions */}
       <div className="mb-3 space-y-1">
         {(data.key_conditions || []).map((cond, i) => (
-          <p key={i} className="text-secondary text-xs">· {cond}</p>
+          <p key={i} className="text-[#8a8f98] text-xs">· {cond}</p>
         ))}
       </div>
 
-      {/* Bottom row */}
-      <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/8">
-        <span className="text-muted text-xs">Timeline: {data.estimated_timeline}</span>
+      {/* Bottom */}
+      <div className="border-t border-white/[0.04] pt-3 mt-2 flex items-center justify-between">
+        <span className="text-[9px] font-mono text-[#62666d]">
+          EST_TIMELINE: {data.estimated_timeline}
+        </span>
         <div className="flex items-center gap-2">
-          <span className="text-muted text-xs">Impact</span>
-          <div className="w-20 h-1.5 rounded-full bg-white/10 overflow-hidden">
+          <span className="text-[9px] font-mono text-[#62666d]">IMPACT</span>
+          <div className="w-16 h-1 rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${impactPct}%` }}
-              transition={{ delay: delay + 0.4, duration: 1, ease: "easeOut" }}
-              className="h-full rounded-full"
-              style={{ backgroundColor: cfg.color }}
+              transition={{ delay: delay + 0.4, duration: 0.9, ease: "easeOut" }}
+              className={`h-full rounded-full ${cfg.barCls}`}
             />
           </div>
         </div>

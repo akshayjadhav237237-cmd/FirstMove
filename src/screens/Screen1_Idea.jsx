@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useSession } from "../context/SessionContext";
 import { resilientFetch } from "../utils/resilientFetch";
 import { QuestionSkeleton } from "../components/SkeletonLoader";
+import SystemHeader from "../components/SystemHeader";
+
+const gentleSpring = { type: "spring", stiffness: 200, damping: 20, restSpeed: 0.1 };
 
 const CHIPS = [
   "An app that gives affordable 3D tours of rental flats in Pune",
@@ -28,90 +31,101 @@ export default function Screen1_Idea({ isLoading }) {
       if (data.error) throw new Error(data.error);
       dispatch({ type: "QUESTIONS_RECEIVED", payload: data.socratic_questions });
     } catch (err) {
-      dispatch({ type: "SET_ERROR", payload: err.message || "Failed to generate questions. Please try again." });
+      dispatch({ type: "SET_ERROR", payload: err.message || "Failed to generate questions." });
     }
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-base px-4 overflow-auto py-12">
-      {/* Logo row */}
-      <div className="flex items-center gap-3 mb-16">
-        <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center text-white font-bold text-sm shadow-[0_0_20px_rgba(108,99,255,0.4)]">
-          FM
-        </div>
-        <span className="text-white font-semibold text-xl tracking-tight">FirstMove</span>
-        <div className="w-px h-5 bg-white/10 mx-1" />
-        <span className="text-muted text-xs bg-white/5 px-3 py-1 rounded-full">
-          Multi-Agent Decision Intelligence
-        </span>
-      </div>
+    <div className="flex flex-col w-screen h-screen bg-canvas overflow-hidden">
+      <SystemHeader simplified />
 
-      {/* Headline */}
-      <h1 className="text-white text-5xl font-bold tracking-tight text-center mb-4">
-        What's your idea?
-      </h1>
-      <p className="text-secondary text-lg text-center mb-12">
-        Three AI agents will debate it. You'll get a de-risked plan.
-      </p>
-
-      {/* Main card */}
-      <div className="max-w-2xl w-full">
-        <div className="bg-card border border-white/8 rounded-2xl p-8 card-top-glow">
-          {isLoading ? (
-            <div>
-              <p className="text-secondary text-sm text-center animate-pulse mb-6 font-medium">
-                Analyzing your idea...
-              </p>
-              <QuestionSkeleton />
-            </div>
-          ) : (
-            <>
-              {/* Textarea */}
-              <textarea
-                value={idea}
-                onChange={(e) => setIdea(e.target.value)}
-                placeholder="Describe your idea in a sentence or two..."
-                className="w-full bg-input-bg border border-white/8 rounded-xl p-5 text-white text-base min-h-[140px] resize-none placeholder:text-muted/60 leading-relaxed transition-all duration-150"
-                onKeyDown={(e) => { if (e.key === "Enter" && e.metaKey) handleSubmit(); }}
+      <div className="flex-1 overflow-auto">
+        <div className="min-h-full flex flex-col items-center justify-center px-4 py-16">
+          {/* Pre-headline mono tag */}
+          <div className="mb-4 text-center">
+            <span className="text-[10px] font-mono text-[#62666d] uppercase tracking-widest">
+              INITIALIZE_IDEA_ANALYSIS
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ repeat: Infinity, duration: 1, ease: "steps(2)" }}
+                className="inline-block w-1.5 h-3.5 bg-accent/60 align-middle ml-1"
               />
+            </span>
+          </div>
 
-              {/* Chips */}
-              <div className="flex flex-wrap gap-2 mt-5 mb-6">
-                {CHIPS.map((chip, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => setIdea(chip)}
-                    className="border border-white/8 rounded-full text-muted text-sm px-4 py-2 cursor-pointer hover:border-accent/30 hover:text-white/70 hover:bg-accent/5 transition-all duration-200 text-left"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
+          {/* Headline */}
+          <h1
+            className="text-[#f7f8f8] text-5xl font-semibold text-center mb-3"
+            style={{ letterSpacing: "-0.04em" }}
+          >
+            What's your idea?
+          </h1>
+          <p className="text-[#8a8f98] text-base text-center mb-12">
+            Three agents will debate it. One plan comes out.
+          </p>
 
-              {/* Error */}
-              {state.error && (
-                <div className="bg-red-500/8 border border-red-500/25 rounded-xl p-4 text-red-400 text-sm mb-4">
-                  {state.error}
+          {/* Card */}
+          <div className="max-w-2xl w-full">
+            <div
+              className="bg-surface border border-white/[0.06] rounded-xl p-6"
+              style={{
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 1px rgba(255,255,255,0.03), 0 20px 40px rgba(0,0,0,0.4)",
+              }}
+            >
+              {isLoading ? (
+                <div>
+                  <p className="text-[#62666d] text-[10px] font-mono uppercase tracking-widest text-center mb-6 animate-pulse">
+                    ANALYZING_INPUT...
+                  </p>
+                  <QuestionSkeleton />
                 </div>
+              ) : (
+                <>
+                  <textarea
+                    value={idea}
+                    onChange={(e) => setIdea(e.target.value)}
+                    placeholder="Describe your idea in a sentence or two..."
+                    className="w-full bg-surface-2 border border-white/[0.06] rounded-lg p-4 text-[#d0d6e0] text-sm min-h-[140px] resize-none placeholder:text-[#62666d] leading-relaxed transition-all duration-150"
+                    onKeyDown={(e) => { if (e.key === "Enter" && e.metaKey) handleSubmit(); }}
+                  />
+
+                  {/* Chips */}
+                  <div className="flex flex-wrap gap-2 mt-4 mb-6">
+                    {CHIPS.map((chip, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setIdea(chip)}
+                        className="border border-white/[0.08] rounded-full text-[#62666d] text-xs px-3 py-1.5 hover:border-white/[0.14] hover:text-[#8a8f98] hover:bg-white/[0.02] transition-all duration-200 text-left cursor-pointer"
+                      >
+                        {chip}
+                      </button>
+                    ))}
+                  </div>
+
+                  {state.error && (
+                    <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-400 text-xs font-mono mb-4">
+                      ERROR: {state.error}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleSubmit}
+                    disabled={!idea.trim()}
+                    className="btn-accent w-full rounded-lg py-3 px-6 text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    Sharpen My Idea →
+                  </button>
+                </>
               )}
+            </div>
 
-              {/* Submit */}
-              <button
-                onClick={handleSubmit}
-                disabled={!idea.trim() || isLoading}
-                className="w-full rounded-xl py-4 font-semibold text-base mt-2 bg-accent hover:bg-accent-hover text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_20px_rgba(108,99,255,0.25)]"
-              >
-                Sharpen My Idea →
-              </button>
-            </>
-          )}
+            <p className="mt-8 text-center text-[9px] font-mono text-[#62666d] uppercase tracking-widest">
+              STRATEGIST · RISK_ANALYST · DEVILS_ADVOCATE
+            </p>
+          </div>
         </div>
-
-        {/* Bottom hint */}
-        <p className="mt-8 text-center text-muted text-xs">
-          Strategist · Risk Analyst · Devil's Advocate — three perspectives, one clear plan.
-        </p>
       </div>
     </div>
   );

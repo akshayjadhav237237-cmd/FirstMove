@@ -1,38 +1,61 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import ConfidenceBadge from "./ConfidenceBadge";
+import { motion, AnimatePresence } from "motion/react";
+import ConfidenceRing from "./ConfidenceRing";
+
+const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
+
+const DVF_STYLES = {
+  DESIRABILITY: {
+    label: "DESIRABILITY",
+    cls: "text-[#818CF8] bg-indigo-500/[0.08] border border-indigo-500/20",
+  },
+  VIABILITY: {
+    label: "VIABILITY",
+    cls: "text-[#34D399] bg-emerald-500/[0.08] border border-emerald-500/20",
+  },
+  FEASIBILITY: {
+    label: "FEASIBILITY",
+    cls: "text-[#FB923C] bg-orange-500/[0.08] border border-orange-500/20",
+  },
+};
 
 export default function AssumptionCard({ assumption, index = 0 }) {
-  const [view, setView] = useState("collapsed");
+  const [view, setView] = useState("collapsed"); // collapsed | expanded | tested
   const { dimension, assumption_statement, confidence_assessment } = assumption;
-  const { confidence_score, qualitative_label, contributing_factors } = confidence_assessment;
+  const { confidence_score, contributing_factors } = confidence_assessment || {};
 
-  const dim = (dimension || "").toUpperCase();
-  let dvfCls = "";
-  if (dim === "DESIRABILITY") dvfCls = "bg-indigo-500/15 text-indigo-400 border border-indigo-500/30";
-  else if (dim === "VIABILITY") dvfCls = "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30";
-  else if (dim === "FEASIBILITY") dvfCls = "bg-orange-500/15 text-orange-400 border border-orange-500/30";
+  const dim = (dimension || "DESIRABILITY").toUpperCase();
+  const dvf = DVF_STYLES[dim] || DVF_STYLES.DESIRABILITY;
 
-  const label = dim.charAt(0) + dim.slice(1).toLowerCase();
-
-  const cardBase = "rounded-xl p-4 mb-3 transition-all duration-200";
+  const cardStyle = {
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+  };
 
   if (view === "tested") {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
-        className={`${cardBase} border border-emerald-500/30 bg-emerald-500/5`}
+        transition={{ delay: index * 0.08, ...smoothSpring }}
+        className="bg-surface border border-white/[0.06] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden"
+        style={cardStyle}
       >
-        <div className="flex justify-between items-center mb-2">
-          <span className={`rounded-full text-xs px-2 py-0.5 font-medium ${dvfCls}`}>{label}</span>
-          <ConfidenceBadge score={confidence_score} label={qualitative_label} />
+        <div className="px-4 py-3 flex items-center justify-between border-b border-white/[0.04]">
+          <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
+            {dvf.label}
+          </span>
+          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/[0.08] border border-emerald-500/20 px-1.5 py-0.5 rounded">
+            NODE_VALIDATED
+          </span>
         </div>
-        <p className="line-through text-muted text-sm mt-1 mb-2 leading-relaxed">{assumption_statement}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-emerald-400 text-xs font-medium">✓ Tested</span>
-          <button onClick={() => setView("collapsed")} className="text-muted text-xs underline hover:text-white/60 transition">Untested</button>
+        <div className="px-4 py-3">
+          <p className="text-[#62666d] text-sm leading-relaxed line-through">{assumption_statement}</p>
+          <button
+            onClick={() => setView("collapsed")}
+            className="mt-3 text-[9px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+          >
+            MARK_UNTESTED →
+          </button>
         </div>
       </motion.div>
     );
@@ -40,49 +63,83 @@ export default function AssumptionCard({ assumption, index = 0 }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      onClick={() => view === "collapsed" && setView("expanded")}
-      className={`${cardBase} bg-card border border-white/8 ${view === "collapsed" ? "cursor-pointer hover:border-white/15" : ""}`}
+      transition={{ delay: index * 0.08, ...smoothSpring }}
+      className="bg-surface border border-white/[0.06] rounded-lg mb-3 overflow-hidden"
+      style={cardStyle}
     >
-      <div className="flex justify-between items-center mb-2">
-        <span className={`rounded-full text-xs px-2 py-0.5 font-medium ${dvfCls}`}>{label}</span>
-        <ConfidenceBadge score={confidence_score} label={qualitative_label} />
+      {/* Header */}
+      <div className="px-4 py-3 flex items-center justify-between border-b border-white/[0.04] bg-white/[0.01]">
+        <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
+          {dvf.label}
+        </span>
+        <ConfidenceRing score={confidence_score} />
       </div>
-      <p className="text-white text-sm mt-1 mb-2 leading-relaxed">{assumption_statement}</p>
 
-      {view === "collapsed" && (
-        <span className="text-muted text-xs">Tap to see how to test this ↓</span>
-      )}
+      {/* Body */}
+      <div className="px-4 py-3">
+        <p className="text-[#d0d6e0] text-sm leading-relaxed">{assumption_statement}</p>
+      </div>
 
-      <AnimatePresence>
-        {view === "expanded" && (
+      {/* Footer / expanded content */}
+      <AnimatePresence mode="wait">
+        {view === "collapsed" ? (
+          <div className="px-4 pb-3">
+            <button
+              onClick={() => setView("expanded")}
+              className="text-[9px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+            >
+              EXPAND_ANALYSIS →
+            </button>
+          </div>
+        ) : (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
+            key="expanded"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <p className="text-secondary text-xs mt-3 mb-3 font-medium">
-              Confidence: {confidence_score}/100
-            </p>
-            <div className="bg-input-bg rounded-lg p-3 mb-3">
-              <p className="text-muted text-xs mb-2 font-medium">Why this score:</p>
-              {contributing_factors.map((f, i) => (
-                <p key={i} className="text-secondary text-xs mb-1">• {f}</p>
-              ))}
-            </div>
-            <div className="bg-input-bg rounded-lg p-3 mb-3">
-              <p className="text-muted text-xs mb-1 font-medium">How to test this:</p>
-              <p className="text-white text-xs leading-relaxed">
-                Talk to 3 real people. Ask them: "Walk me through the last time you faced this problem. What did you do about it?"
+            <div className="px-4 pb-4">
+              <p className="text-[9px] font-mono text-[#62666d] mb-3">
+                CONFIDENCE_SCORE: {confidence_score}/100
               </p>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={(e) => { e.stopPropagation(); setView("collapsed"); }} className="flex-1 border border-white/10 rounded-lg py-2 text-xs text-muted hover:text-secondary transition">↑ Collapse</button>
-              <button onClick={(e) => { e.stopPropagation(); setView("tested"); }} className="flex-1 border border-emerald-500/30 rounded-lg py-2 text-xs text-emerald-400 hover:bg-emerald-500/10 transition">Mark as Tested ✓</button>
+
+              {/* Risk factors */}
+              <div className="bg-black/30 rounded-md p-3 mb-3 border border-white/[0.04]">
+                <p className="text-[9px] font-mono text-[#62666d] mb-2">RISK_FACTORS:</p>
+                {(contributing_factors || []).map((f, i) => (
+                  <p key={i} className="text-[#8a8f98] text-xs font-mono leading-relaxed">
+                    {"  > "}{f}
+                  </p>
+                ))}
+              </div>
+
+              {/* How to test */}
+              <div className="bg-black/30 rounded-md p-3 mb-3 border border-white/[0.04]">
+                <p className="text-[9px] font-mono text-[#62666d] mb-1">HOW_TO_TEST:</p>
+                <p className="text-[#d0d6e0] text-xs leading-relaxed">
+                  Talk to 3 real people who match your target. Ask: "Walk me through the last time you had this problem. What did you do?" Don't mention your idea.
+                </p>
+              </div>
+
+              {/* Action row */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setView("collapsed")}
+                  className="flex-1 h-7 text-[10px] font-mono text-[#62666d] hover:text-[#8a8f98] border border-white/[0.06] rounded-md transition-colors cursor-pointer"
+                >
+                  COLLAPSE_NODE
+                </button>
+                <button
+                  onClick={() => setView("tested")}
+                  className="flex-1 h-7 text-[10px] font-mono text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-500/[0.06] transition-colors cursor-pointer"
+                >
+                  MARK_TESTED ✓
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
