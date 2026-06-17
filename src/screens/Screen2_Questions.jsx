@@ -38,7 +38,7 @@ export default function Screen2_Questions({ isLoading }) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -77,8 +77,8 @@ export default function Screen2_Questions({ isLoading }) {
         {/* ── LEFT PANEL: Questions ── */}
         <div className={`${isMobile ? "w-full" : "w-[45%]"} flex flex-col`}>
           {/* Panel header */}
-          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-white/[0.04] mb-3">
-            <span className="text-[10px] font-mono text-[#f7f8f8] font-semibold uppercase tracking-widest">
+          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] mb-3">
+            <span className="text-[10px] font-mono text-zinc-900 dark:text-[#f7f8f8] font-semibold uppercase tracking-widest">
               CLARIFICATION_PROTOCOL
             </span>
             <span className="text-[9px] font-mono text-[#EAB308]">02 / 03</span>
@@ -88,7 +88,7 @@ export default function Screen2_Questions({ isLoading }) {
           <div className={`flex-1 ${isMobile ? "" : "overflow-y-auto pr-2"} space-y-4`}>
             {isLoading ? (
               <>
-                <p className="text-[#62666d] text-[9px] font-mono uppercase tracking-widest animate-pulse mb-5">
+                <p className="text-zinc-500 dark:text-[#62666d] text-[9px] font-mono uppercase tracking-widest animate-pulse mb-5">
                   PROCESSING_AGENT_PIPELINE...
                 </p>
                 <QuestionSkeleton />
@@ -101,16 +101,16 @@ export default function Screen2_Questions({ isLoading }) {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.08, ...smoothSpring }}
-                    className="bg-[#1c1c1e] border border-white/[0.04] hover:border-white/[0.12] rounded-xl p-5 transition-all duration-200"
-                    style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.4)" }}
+                    className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl p-5 transition-all duration-200"
+                    style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)" }}
                   >
-                    <p className="text-[9px] font-mono text-[#EAB308]/80 uppercase tracking-widest mb-2">
+                    <p className="text-[9px] font-mono text-[#EAB308]/85 uppercase tracking-widest mb-2 font-semibold">
                       {q.target_variable}
                     </p>
-                    <h2 className="text-[#d0d6e0] text-sm font-semibold leading-snug mb-1">
+                    <h2 className="text-zinc-900 dark:text-[#d0d6e0] text-sm font-semibold leading-snug mb-1">
                       {q.question_text}
                     </h2>
-                    <p className="text-[#62666d] text-[10px] font-mono italic mb-4">
+                    <p className="text-zinc-500 dark:text-[#62666d] text-[10px] font-mono italic mb-4">
                       {q.contextual_rationale}
                     </p>
                     <textarea
@@ -119,7 +119,7 @@ export default function Screen2_Questions({ isLoading }) {
                         setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                       }
                       placeholder="Type your response..."
-                      className="bg-[#121318] border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-3 text-[#d0d6e0] text-sm w-full min-h-[90px] resize-none placeholder:text-[#62666d] transition-all duration-150"
+                      className="bg-[#f1f1f4] dark:bg-[#121318] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-lg p-3 text-zinc-800 dark:text-[#d0d6e0] text-sm w-full min-h-[90px] resize-none placeholder:text-zinc-400 dark:placeholder:text-[#62666d] transition-all duration-150"
                     />
                   </motion.div>
                 ))}
@@ -128,16 +128,16 @@ export default function Screen2_Questions({ isLoading }) {
           </div>
 
           {/* Footer controls */}
-          <div className="flex-shrink-0 pt-4 border-t border-white/[0.04] mt-3">
+          <div className="flex-shrink-0 pt-4 border-t border-black/[0.06] dark:border-white/[0.04] mt-3">
             {state.error && (
-              <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-400 text-xs font-mono mb-3">
+              <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-500 dark:text-red-400 text-xs font-mono mb-3">
                 ERROR: {state.error}
               </div>
             )}
             <div className="flex justify-between items-center mb-3">
               <button
                 onClick={() => dispatch({ type: "RESET" })}
-                className="text-[#62666d] text-[10px] font-mono hover:text-[#8a8f98] transition-colors cursor-pointer"
+                className="text-zinc-500 dark:text-[#62666d] hover:text-zinc-950 dark:hover:text-[#8a8f98] text-[10px] font-mono transition-colors cursor-pointer"
               >
                 ← RESTART
               </button>
@@ -162,13 +162,13 @@ export default function Screen2_Questions({ isLoading }) {
         {/* ── RIGHT PANEL: Agent Previews ── */}
         <div className={`${isMobile ? "w-full" : "w-[55%]"} flex flex-col`}>
           {/* Panel header */}
-          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-white/[0.04] mb-3">
-            <span className="text-[10px] font-mono text-[#f7f8f8] font-semibold uppercase tracking-widest">
+          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] mb-3">
+            <span className="text-[10px] font-mono text-zinc-900 dark:text-[#f7f8f8] font-semibold uppercase tracking-widest">
               AGENT_MANIFEST
             </span>
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#62666d]" />
-              <span className="text-[9px] font-mono text-[#62666d] uppercase">STANDBY</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-[#62666d]" />
+              <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase">STANDBY</span>
             </div>
           </div>
 
@@ -189,20 +189,20 @@ export default function Screen2_Questions({ isLoading }) {
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.08, ...smoothSpring }}
-                      className="bg-[#1c1c1e] border border-white/[0.04] hover:border-white/[0.12] rounded-xl overflow-hidden transition-all duration-200 shadow-lg"
-                      style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.4)" }}
+                      className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl overflow-hidden transition-all duration-200 shadow-md"
+                      style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)" }}
                     >
-                      <div className="h-10 flex items-center px-4 bg-white/[0.01] border-b border-white/[0.04]">
+                      <div className="h-10 flex items-center px-4 bg-black/[0.01] dark:bg-white/[0.01] border-b border-black/[0.06] dark:border-white/[0.04]">
                         <span className="w-3 h-3 rounded-sm mr-2.5 flex-shrink-0" style={{ backgroundColor: cfg.color }} />
-                        <span className="text-xs font-semibold text-[#f7f8f8]">{cfg.name}</span>
-                        <span className="w-px h-3 bg-white/10 mx-2" />
-                        <span className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest bg-white/[0.04] px-1.5 py-0.5 rounded">
+                        <span className="text-xs font-semibold text-zinc-900 dark:text-[#f7f8f8]">{cfg.name}</span>
+                        <span className="w-px h-3 bg-black/10 dark:bg-white/10 mx-2" />
+                        <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase tracking-widest bg-black/[0.03] dark:bg-white/[0.04] px-1.5 py-0.5 rounded">
                           {cfg.role}
                         </span>
                       </div>
                       <div className="p-4">
-                        <p className="text-[#8a8f98] text-xs leading-relaxed mb-3">{cfg.description}</p>
-                        <p className="text-[9px] font-mono text-[#62666d]">AWAITING_INPUT_SIGNAL...</p>
+                        <p className="text-zinc-600 dark:text-[#8a8f98] text-xs leading-relaxed mb-3">{cfg.description}</p>
+                        <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d]">AWAITING_INPUT_SIGNAL...</p>
                       </div>
                     </motion.div>
                   );

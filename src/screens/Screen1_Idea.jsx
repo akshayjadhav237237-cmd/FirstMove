@@ -44,7 +44,7 @@ export default function Screen1_Idea({ isLoading }) {
         
         {/* Welcome Section */}
         <div className="text-center mb-8">
-          <span className="text-[10px] font-mono text-[#62666d] uppercase tracking-widest bg-white/[0.03] px-3 py-1 rounded-full border border-white/[0.04] inline-block mb-3">
+          <span className="text-[10px] font-mono text-zinc-550 dark:text-[#62666d] uppercase tracking-widest bg-black/[0.02] dark:bg-white/[0.03] px-3 py-1 rounded-full border border-black/[0.04] dark:border-white/[0.04] inline-block mb-3">
             INITIALIZE_IDEA_ANALYSIS
             <motion.span
               animate={{ opacity: [1, 0] }}
@@ -52,10 +52,10 @@ export default function Screen1_Idea({ isLoading }) {
               className="inline-block w-1.5 h-3.5 bg-[#EAB308]/60 align-middle ml-1"
             />
           </span>
-          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-[#f7f8f8] mb-2" style={{ letterSpacing: "-0.04em" }}>
+          <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-[#f7f8f8] mb-2" style={{ letterSpacing: "-0.04em" }}>
             Welcome back, Founder
           </h1>
-          <p className="text-[#8a8f98] text-sm max-w-md mx-auto leading-relaxed">
+          <p className="text-zinc-600 dark:text-[#8a8f98] text-sm max-w-md mx-auto leading-relaxed">
             Specify a rough project idea. Three autonomous agents will collaborate to build a de-risked blueprint.
           </p>
         </div>
@@ -63,9 +63,9 @@ export default function Screen1_Idea({ isLoading }) {
         {/* Input Card Chassis */}
         <div className="max-w-2xl w-full">
           <div
-            className="bg-[#1c1c1e] border border-white/[0.06] rounded-2xl p-6 shadow-2xl relative overflow-hidden"
+            className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.06] rounded-2xl p-6 shadow-xl relative overflow-hidden"
             style={{
-              boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.5)"
+              boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)"
             }}
           >
             {isLoading ? (
@@ -81,7 +81,7 @@ export default function Screen1_Idea({ isLoading }) {
                   value={idea}
                   onChange={(e) => setIdea(e.target.value)}
                   placeholder="Describe your startup concept or idea in a few sentences..."
-                  className="w-full bg-[#121318] border border-white/[0.04] hover:border-white/[0.12] rounded-xl p-4 text-[#d0d6e0] text-sm min-h-[140px] resize-none placeholder:text-[#62666d] leading-relaxed transition-all duration-150"
+                  className="w-full bg-[#f1f1f4] dark:bg-[#121318] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl p-4 text-zinc-800 dark:text-[#d0d6e0] text-sm min-h-[140px] resize-none placeholder:text-zinc-400 dark:placeholder:text-[#62666d] leading-relaxed transition-all duration-150"
                   onKeyDown={(e) => { if (e.key === "Enter" && e.metaKey) handleSubmit(); }}
                 />
 
@@ -92,7 +92,7 @@ export default function Screen1_Idea({ isLoading }) {
                       key={i}
                       type="button"
                       onClick={() => setIdea(chip)}
-                      className="border border-white/[0.04] hover:border-white/[0.12] rounded-full text-[#62666d] text-[11px] px-3.5 py-1.5 hover:text-[#8a8f98] hover:bg-white/[0.01] transition-all duration-200 text-left cursor-pointer"
+                      className="border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] bg-black/[0.01] dark:bg-white/[0.01] rounded-full text-zinc-500 dark:text-[#62666d] text-[11px] px-3.5 py-1.5 hover:text-zinc-900 dark:hover:text-[#8a8f98] hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-all duration-200 text-left cursor-pointer"
                     >
                       {chip}
                     </button>
@@ -100,7 +100,7 @@ export default function Screen1_Idea({ isLoading }) {
                 </div>
 
                 {state.error && (
-                  <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-400 text-xs font-mono mb-4">
+                  <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-500 dark:text-red-400 text-xs font-mono mb-4">
                     ERROR: {state.error}
                   </div>
                 )}

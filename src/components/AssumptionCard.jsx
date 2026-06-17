@@ -29,15 +29,15 @@ function getMomTestQuestion(dim, statement) {
 const DVF_STYLES = {
   DESIRABILITY: {
     label: "DESIRABILITY",
-    cls: "text-[#818CF8] bg-indigo-500/[0.08] border border-indigo-500/20",
+    cls: "text-indigo-600 dark:text-[#818CF8] bg-indigo-500/[0.06] dark:bg-indigo-500/[0.08] border border-indigo-500/15 dark:border-indigo-500/20",
   },
   VIABILITY: {
     label: "VIABILITY",
-    cls: "text-[#34D399] bg-emerald-500/[0.08] border border-emerald-500/20",
+    cls: "text-emerald-600 dark:text-[#34D399] bg-emerald-500/[0.06] dark:bg-emerald-500/[0.08] border border-emerald-500/15 dark:border-emerald-500/20",
   },
   FEASIBILITY: {
     label: "FEASIBILITY",
-    cls: "text-[#FB923C] bg-orange-500/[0.08] border border-orange-500/20",
+    cls: "text-orange-600 dark:text-[#FB923C] bg-orange-500/[0.06] dark:bg-orange-500/[0.08] border border-orange-500/15 dark:border-orange-500/20",
   },
 };
 
@@ -59,22 +59,22 @@ export default function AssumptionCard({ assumption, index = 0 }) {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.08, ...smoothSpring }}
-        className="bg-surface border border-white/[0.04] hover:border-white/[0.12] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden transition-all duration-200"
+        className="bg-white dark:bg-surface border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden transition-all duration-200"
         style={cardStyle}
       >
-        <div className="px-4 py-3 flex items-center justify-between border-b border-white/[0.04]">
+        <div className="px-4 py-3 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04]">
           <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
             {dvf.label}
           </span>
-          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/[0.08] border border-emerald-500/20 px-1.5 py-0.5 rounded">
+          <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/[0.06] dark:bg-emerald-500/[0.08] border border-emerald-500/20 px-1.5 py-0.5 rounded">
             NODE_VALIDATED
           </span>
         </div>
         <div className="px-4 py-3">
-          <p className="text-[#62666d] text-sm leading-relaxed line-through">{assumption_statement}</p>
+          <p className="text-zinc-400 dark:text-[#62666d] text-sm leading-relaxed line-through">{assumption_statement}</p>
           <button
             onClick={() => setView("collapsed")}
-            className="mt-3 text-[9px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+            className="mt-3 text-[9px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] transition-colors cursor-pointer"
           >
             MARK_UNTESTED →
           </button>
@@ -88,11 +88,11 @@ export default function AssumptionCard({ assumption, index = 0 }) {
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, ...smoothSpring }}
-      className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg mb-3 overflow-hidden transition-all duration-200"
+      className="bg-white dark:bg-surface border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-lg mb-3 overflow-hidden transition-all duration-200"
       style={cardStyle}
     >
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-white/[0.04] bg-white/[0.01]">
+      <div className="px-4 py-3 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] bg-black/[0.01] dark:bg-white/[0.01]">
         <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
           {dvf.label}
         </span>
@@ -101,7 +101,7 @@ export default function AssumptionCard({ assumption, index = 0 }) {
 
       {/* Body */}
       <div className="px-4 py-3">
-        <p className="text-[#d0d6e0] text-sm leading-relaxed">{assumption_statement}</p>
+        <p className="text-zinc-700 dark:text-[#d0d6e0] text-sm leading-relaxed">{assumption_statement}</p>
       </div>
 
       {/* Footer / expanded content */}
@@ -110,7 +110,7 @@ export default function AssumptionCard({ assumption, index = 0 }) {
           <div className="px-4 pb-3">
             <button
               onClick={() => setView("expanded")}
-              className="text-[9px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+              className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] transition-colors cursor-pointer"
             >
               EXPAND_ANALYSIS →
             </button>
@@ -125,24 +125,24 @@ export default function AssumptionCard({ assumption, index = 0 }) {
             className="overflow-hidden"
           >
             <div className="px-4 pb-4">
-              <p className="text-[9px] font-mono text-[#62666d] mb-3">
+              <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-3">
                 CONFIDENCE_SCORE: {confidence_score}/100
               </p>
 
               {/* Risk factors */}
-              <div className="bg-black/30 rounded-md p-3 mb-3 border border-white/[0.04]">
-                <p className="text-[9px] font-mono text-[#62666d] mb-2">RISK_FACTORS:</p>
+              <div className="bg-black/[0.02] dark:bg-black/30 rounded-md p-3 mb-3 border border-black/[0.06] dark:border-white/[0.04]">
+                <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-2 font-semibold">RISK_FACTORS:</p>
                 {(contributing_factors || []).map((f, i) => (
-                  <p key={i} className="text-[#8a8f98] text-xs font-mono leading-relaxed">
+                  <p key={i} className="text-zinc-650 dark:text-[#8a8f98] text-xs font-mono leading-relaxed">
                     {"  > "}{f}
                   </p>
                 ))}
               </div>
 
               {/* How to test */}
-              <div className="bg-black/30 rounded-md p-3 mb-3 border border-white/[0.04]">
-                <p className="text-[9px] font-mono text-[#62666d] mb-1">{`> HOW_TO_TEST:`}</p>
-                <p className="text-[#d0d6e0] text-xs leading-relaxed">
+              <div className="bg-black/[0.02] dark:bg-black/30 rounded-md p-3 mb-3 border border-black/[0.06] dark:border-white/[0.04]">
+                <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-1 font-semibold">{`> HOW_TO_TEST:`}</p>
+                <p className="text-zinc-700 dark:text-[#d0d6e0] text-xs leading-relaxed">
                   {getMomTestQuestion(dim, assumption_statement)}
                 </p>
               </div>
@@ -151,13 +151,13 @@ export default function AssumptionCard({ assumption, index = 0 }) {
               <div className="flex gap-2">
                 <button
                   onClick={() => setView("collapsed")}
-                  className="flex-1 h-7 text-[10px] font-mono text-[#62666d] hover:text-[#8a8f98] border border-white/[0.06] rounded-md transition-colors cursor-pointer"
+                  className="flex-1 h-7 text-[10px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] border border-black/[0.06] dark:border-white/[0.06] rounded-md transition-colors cursor-pointer"
                 >
                   COLLAPSE_NODE
                 </button>
                 <button
                   onClick={() => setView("tested")}
-                  className="flex-1 h-7 text-[10px] font-mono text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-500/[0.06] transition-colors cursor-pointer"
+                  className="flex-1 h-7 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-500/[0.06] transition-colors cursor-pointer"
                 >
                   MARK_TESTED ✓
                 </button>

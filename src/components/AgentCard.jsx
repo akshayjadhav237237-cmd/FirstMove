@@ -118,30 +118,30 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
       initial={{ opacity: 0, scale: 0.98, y: 8 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay, ...smoothSpring }}
-      className={`${cardBase} ${beamActive ? cfg.beamClass : "bg-surface border border-white/[0.04] hover:border-white/[0.12] transition-colors duration-200"}`}
+      className={`${cardBase} ${beamActive ? cfg.beamClass : "bg-white dark:bg-[#0c0d10] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] transition-colors duration-200"}`}
       style={{
         boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
         ...typingTintStyle
       }}
     >
       {/* ── Card Header ── */}
-      <div className="h-10 flex items-center justify-between px-4 bg-white/[0.01] border-b border-white/[0.04]">
+      <div className="h-10 flex items-center justify-between px-4 bg-black/[0.01] border-b border-black/[0.06] dark:border-white/[0.04]">
         <div className="flex items-center">
           <span
             className="w-3 h-3 rounded-sm mr-2.5 flex-shrink-0"
-            style={{ backgroundColor: cfg.color + "cc" }}
+            style={{ backgroundColor: cfg.color }}
           />
-          <span className="text-xs font-semibold text-[#f7f8f8]">{cfg.name}</span>
-          <span className="w-px h-3 bg-white/10 mx-2" />
-          <span className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest bg-white/[0.04] px-1.5 py-0.5 rounded">
+          <span className="text-xs font-semibold text-zinc-900 dark:text-[#f7f8f8]">{cfg.name}</span>
+          <span className="w-px h-3 bg-black/10 dark:bg-white/10 mx-2" />
+          <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase tracking-widest bg-black/[0.03] dark:bg-white/[0.04] px-1.5 py-0.5 rounded">
             {cfg.role}
           </span>
         </div>
 
         <div className="flex items-center">
           {isTyping && (
-            <span className="flex items-center gap-1.5 text-[9px] text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="flex items-center gap-1.5 text-[9px] text-emerald-600 dark:text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="w-1 h-1 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               RUNNING_NODE
             </span>
           )}
@@ -162,15 +162,15 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
       <div className="p-4">
         {isLoading ? (
           <div className="space-y-2">
-            <div className="skeleton-shimmer h-2.5 w-4/5 rounded" />
-            <div className="skeleton-shimmer h-2.5 w-full rounded" />
-            <div className="skeleton-shimmer h-2.5 w-3/4 rounded" />
-            <div className="skeleton-shimmer h-2.5 w-5/6 rounded" />
+            <div className="skeleton-shimmer h-2.5 w-4/5 rounded bg-black/[0.05] dark:bg-white/[0.05]" />
+            <div className="skeleton-shimmer h-2.5 w-full rounded bg-black/[0.05] dark:bg-white/[0.05]" />
+            <div className="skeleton-shimmer h-2.5 w-3/4 rounded bg-black/[0.05] dark:bg-white/[0.05]" />
+            <div className="skeleton-shimmer h-2.5 w-5/6 rounded bg-black/[0.05] dark:bg-white/[0.05]" />
           </div>
         ) : data ? (
           <div>
             {/* Verdict */}
-            <p className="text-[#8a8f98] text-xs leading-relaxed mb-0">
+            <p className="text-zinc-600 dark:text-[#8a8f98] text-xs leading-relaxed mb-0">
               {autoStart && started ? (
                 <WordByWordReveal text={data.verdict} onDone={() => setVerdictDone(true)} />
               ) : (
@@ -197,7 +197,7 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
                       transition={{ delay: i * 0.08, ...smoothSpring }}
                     >
                       <span className="text-xs shrink-0 mt-0.5" style={{ color: cfg.color }}>–</span>
-                      <p className="text-[#8a8f98] text-xs leading-relaxed">{point}</p>
+                      <p className="text-zinc-600 dark:text-[#8a8f98] text-xs leading-relaxed">{point}</p>
                     </motion.div>
                   ))}
                 </motion.div>
@@ -206,10 +206,10 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
 
             {/* Reasoning toggle */}
             {verdictDone && (
-              <div className="mt-3 pt-3 border-t border-white/[0.04]">
+              <div className="mt-3 pt-3 border-t border-black/[0.06] dark:border-white/[0.04]">
                 <button
                   onClick={() => setShowReasoning((v) => !v)}
-                  className="w-full flex items-center justify-between text-[10px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] transition-colors cursor-pointer"
                 >
                   <span>{showReasoning ? "HIDE_LOG ↑" : "DATA_LINEAGE_LOG ↓"}</span>
                 </button>
@@ -222,12 +222,12 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
                       transition={{ duration: 0.18 }}
                       className="overflow-hidden"
                     >
-                      <div className="bg-black/30 rounded-md p-3 mt-2 border border-white/[0.04]">
-                        <p className="font-mono text-xs text-[#62666d] leading-relaxed mb-2">
+                      <div className="bg-black/[0.02] dark:bg-black/30 rounded-md p-3 mt-2 border border-black/[0.06] dark:border-white/[0.04]">
+                        <p className="font-mono text-xs text-zinc-500 dark:text-[#62666d] leading-relaxed mb-2">
                           Contributing factors extracted from context window analysis...
                         </p>
                         {(data.key_points || []).map((pt, i) => (
-                          <p key={i} className="font-mono text-xs text-[#8a8f98] leading-relaxed mb-1">
+                          <p key={i} className="font-mono text-xs text-zinc-600 dark:text-[#8a8f98] leading-relaxed mb-1">
                             {"  > "}{pt}
                           </p>
                         ))}
@@ -239,7 +239,7 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
             )}
           </div>
         ) : (
-          <p className="text-[#62666d] text-xs font-mono">AWAITING_INPUT_SIGNAL...</p>
+          <p className="text-zinc-500 dark:text-[#62666d] text-xs font-mono">AWAITING_INPUT_SIGNAL...</p>
         )}
       </div>
     </motion.div>

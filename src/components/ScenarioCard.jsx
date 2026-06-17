@@ -28,12 +28,13 @@ export default function ScenarioCard({ type, data, delay = 0 }) {
   const probability = Math.round((data.probability || 0) * 100);
   const impact = Math.min(10, Math.max(0, data.impact_score || 0));
   const impactPct = (impact / 10) * 100;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, ...smoothSpring }}
-      className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-4 mb-3 transition-all duration-200"
+      className="bg-white dark:bg-surface border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-lg p-4 mb-3 transition-all duration-200"
       style={{
         boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
         borderLeft: `3px solid ${cfg.accent}`
@@ -41,34 +42,34 @@ export default function ScenarioCard({ type, data, delay = 0 }) {
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest">
+        <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase tracking-widest">
           {cfg.mono}
         </span>
-        <span className="text-[9px] font-mono text-[#8a8f98]">
+        <span className="text-[9px] font-mono text-zinc-600 dark:text-[#8a8f98]">
           {probability}% PROBABILITY
         </span>
       </div>
 
       {/* Headline */}
-      <p className="text-[#f7f8f8] text-sm font-medium leading-snug mt-2 mb-3">
+      <p className="text-zinc-900 dark:text-[#f7f8f8] text-sm font-semibold leading-snug mt-2 mb-3">
         {data.headline}
       </p>
 
       {/* Key conditions */}
       <div className="mb-3 space-y-1">
         {(data.key_conditions || []).map((cond, i) => (
-          <p key={i} className="text-[#8a8f98] text-xs">· {cond}</p>
+          <p key={i} className="text-zinc-600 dark:text-[#8a8f98] text-xs">· {cond}</p>
         ))}
       </div>
 
       {/* Bottom */}
-      <div className="border-t border-white/[0.04] pt-3 mt-2 flex items-center justify-between">
-        <span className="text-[9px] font-mono text-[#62666d]">
+      <div className="border-t border-black/[0.06] dark:border-white/[0.04] pt-3 mt-2 flex items-center justify-between">
+        <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d]">
           EST_TIMELINE: {data.estimated_timeline}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono text-[#62666d]">IMPACT</span>
-          <div className="w-16 h-1 rounded-full bg-white/[0.06] overflow-hidden">
+          <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d]">IMPACT</span>
+          <div className="w-16 h-1 rounded-full bg-black/[0.05] dark:bg-white/[0.06] overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${impactPct}%` }}
