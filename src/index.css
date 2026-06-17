@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Global Resets & Typography ─── */
+/* ─── Cyberpunk Reset & Typography ─── */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -15,52 +15,86 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #030014;
-  color: #FFFFFF;
+  background-color: #080710;
+  color: #E2E8F0;
   font-family: 'Inter', sans-serif;
 }
 
 /* Headings font styling */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: #FFFFFF;
 }
 
 /* Monospace Labels & Tags */
 .mono-label {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.4);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
 }
 
-/* ─── Glassmorphism Standard Cards ─── */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* ─── Matte Carbon Cards & Containers ─── */
+.cyber-panel {
+  background: #0d0e15;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-panel:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.15);
+.cyber-panel:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: #11121b;
 }
 
-/* Prominent Main Card on Screen 1 */
-.glass-panel-hero {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  box-shadow: 
-    0 0 0 1px rgba(108, 99, 255, 0.1),
-    0 32px 64px rgba(0, 0, 0, 0.4);
+/* ─── Primary Cyber Buttons ─── */
+@keyframes button-glow {
+  0%, 100% {
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(99, 102, 241, 0.5);
+  }
+}
+
+.btn-cyber {
+  background: #6366F1;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s ease;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.btn-cyber:hover:not(:disabled) {
+  background: #4F46E5;
+  animation: button-glow 1.5s ease-in-out infinite;
+  transform: translateY(-1px);
+}
+
+.btn-cyber:active:not(:disabled) {
+  transform: translateY(0px);
+}
+
+/* ─── Blinking Cursor & LEDs ─── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.led-green {
+  box-shadow: 0 0 8px #10B981;
+}
+
+.led-cyan {
+  box-shadow: 0 0 8px #06B6D4;
 }
 
 /* ─── Hide Scrollbars Globally ─── */
@@ -72,59 +106,20 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-width: none;
 }
 
-/* ─── Animations ─── */
-
-/* Blinking cursor */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
-}
-.cursor-blink {
-  animation: blink 1s step-end infinite;
-}
-
-/* Primary Button glow pulse */
-@keyframes glow-pulse {
-  0%, 100% { 
-    box-shadow: 0 0 40px rgba(108, 99, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); 
-  }
-  50% { 
-    box-shadow: 0 0 60px rgba(108, 99, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
-  }
-}
-.btn-primary-glow {
-  background: linear-gradient(135deg, #6C63FF, #8B5CF6, #A78BFA);
-  border: none;
-  box-shadow:
-    0 0 40px rgba(108, 99, 255, 0.5),
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
-}
-.btn-primary-glow:hover {
-  transform: scale(1.01);
-  animation: glow-pulse 2s ease-in-out infinite;
-}
-.btn-primary-glow:active {
-  transform: scale(0.99);
-}
-
-/* Word Reveal blur animation */
-@keyframes word-reveal {
+/* ─── Word reveal animations ─── */
+@keyframes word-reveal-fast {
   from {
     opacity: 0;
-    filter: blur(4px);
-    transform: translateY(2px);
+    filter: blur(2px);
   }
   to {
     opacity: 1;
     filter: blur(0px);
-    transform: translateY(0px);
   }
 }
 .reveal-word {
   display: inline-block;
-  animation: word-reveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: word-reveal-fast 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ─── Rotating Border Beam ─── */
@@ -139,15 +134,15 @@ h1, h2, h3, h4, h5, h6 {
 .border-beam {
   border: 1px solid transparent;
   background:
-    linear-gradient(#030014, #030014) padding-box,
+    linear-gradient(#0d0e15, #0d0e15) padding-box,
     conic-gradient(
       from var(--beam-angle),
       transparent 75%,
-      var(--beam-color, #6C63FF) 85%,
+      var(--beam-color, #6366F1) 85%,
       transparent 95%
     ) border-box;
   animation: rotate-beam 2.5s linear infinite;
 }
-.border-beam-strategist { --beam-color: #818CF8; }
+.border-beam-strategist { --beam-color: #6366F1; }
 .border-beam-risk       { --beam-color: #F87171; }
 .border-beam-devil      { --beam-color: #FB923C; }

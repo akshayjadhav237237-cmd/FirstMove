@@ -51,51 +51,18 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <div className="relative min-h-screen w-screen bg-[#030014] text-white overflow-hidden select-none font-sans">
+      <div className="relative min-h-screen w-screen bg-[#080710] text-[#E2E8F0] overflow-hidden select-none font-sans">
         
-        {/* Orb 1 (top-left) */}
+        {/* Top center spotlight */}
         <div 
-          className="absolute rounded-full pointer-events-none"
+          className="absolute w-full h-[400px] -top-[150px] left-0 pointer-events-none"
           style={{
-            width: "600px",
-            height: "600px",
-            top: "-200px",
-            left: "-200px",
-            background: "radial-gradient(circle, rgba(108, 99, 255, 0.35) 0%, transparent 70%)",
-            filter: "blur(80px)",
+            background: "radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1) 0%, transparent 60%)",
             zIndex: 0
           }}
         />
 
-        {/* Orb 2 (top-right) */}
-        <div 
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: "500px",
-            height: "500px",
-            top: "-100px",
-            right: "-100px",
-            background: "radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%)",
-            filter: "blur(100px)",
-            zIndex: 0
-          }}
-        />
-
-        {/* Orb 3 (bottom-left) */}
-        <div 
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: "400px",
-            height: "400px",
-            bottom: "-100px",
-            left: "30%",
-            background: "radial-gradient(circle, rgba(79, 70, 229, 0.2) 0%, transparent 70%)",
-            filter: "blur(80px)",
-            zIndex: 0
-          }}
-        />
-
-        {/* All content sits above these orbs using position: relative; z-index: 1 */}
+        {/* Content above the spotlight */}
         <div className="relative z-10 w-full min-h-screen flex flex-col">
           <AppRouter />
         </div>

@@ -43,7 +43,7 @@ const AGENT_KEYS = [
     initials: "LS",
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    color: "#818CF8",
+    color: "#6366F1",
     gradient: "linear-gradient(135deg, #4F46E5, #818CF8)",
     scoreKey: "opportunity_score",
     scoreLabel: "OPP_SCORE",
@@ -89,12 +89,12 @@ export default function Screen3_Workspace() {
 
   if (!blueprint || !debate) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-[#030014]">
+      <div className="h-screen w-screen flex items-center justify-center bg-[#080710]">
         <div className="text-center space-y-4">
           <p className="text-white/40 text-sm font-mono tracking-wider uppercase">NO_WORKSPACE_DATA</p>
           <button
             onClick={() => dispatch({ type: "RESET" })}
-            className="btn-primary-glow px-6 py-2.5 rounded-lg text-sm font-bold cursor-pointer"
+            className="btn-cyber px-6 py-2.5 rounded-lg text-sm font-bold cursor-pointer"
           >
             Restart Setup
           </button>
@@ -113,24 +113,24 @@ export default function Screen3_Workspace() {
   const riskData = scenarios.pessimistic || {};
 
   return (
-    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#030014] relative text-white">
+    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#080710] relative text-white">
       
       {/* ── HEADER BAR ── */}
-      <header className="h-14 flex items-center justify-between px-6 backdrop-blur-md bg-[#030014]/80 border-b border-white/8 z-20 flex-shrink-0">
+      <header className="h-14 flex items-center justify-between px-6 bg-[#080710] border-b border-white/5 z-20 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5 backdrop-blur-md shadow-sm">
+          <div className="px-3.5 py-1 rounded-full bg-[#0d0e15] border border-white/5 flex items-center gap-1.5">
             <span className="font-extrabold text-xs text-white tracking-tight">FM</span>
-            <span className="text-white/50 text-[10px] font-medium">· FirstMove</span>
+            <span className="text-white/45 text-[10px] font-mono uppercase tracking-wider">· FirstMove</span>
           </div>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 led-green animate-pulse" />
+          <span className="text-[10px] font-mono text-emerald-450 uppercase tracking-widest font-semibold">
             Analysis complete
           </span>
         </div>
 
         <button
           onClick={() => dispatch({ type: "RESET" })}
-          className="px-4 py-1.5 text-xs font-mono text-white/50 hover:text-white border border-white/5 hover:border-white/20 bg-white/2 rounded-full cursor-pointer transition-all duration-300"
+          className="px-4 py-1.5 text-xs font-mono text-white/50 hover:text-white border border-white/5 hover:border-white/10 bg-white/2 rounded-lg cursor-pointer transition-all duration-200"
         >
           Start over
         </button>
@@ -140,13 +140,13 @@ export default function Screen3_Workspace() {
       <main className="flex flex-1 gap-3 p-3 h-[calc(100vh-56px)] overflow-hidden z-10 min-h-0">
         
         {/* ══ LEFT PANEL: Workspace Blueprint Document (42% width) ══ */}
-        <div className="w-[42%] glass-panel overflow-y-auto p-6 flex flex-col max-h-full">
+        <div className="w-[42%] cyber-panel overflow-y-auto p-6 flex flex-col max-h-full">
           
           {/* Concept summary */}
           <span className="mono-label text-[10px] text-white/30 mb-3 block">
             Startup Idea Concept
           </span>
-          <div className="border-l-2 border-l-violet-500/50 pl-4 mb-8">
+          <div className="border-l-2 border-l-[#6366F1]/50 pl-4 mb-8">
             <p className="text-white/70 text-sm leading-relaxed">
               {state.rawIdea || "Untitled startup concept idea."}
             </p>
@@ -178,9 +178,9 @@ export default function Screen3_Workspace() {
                 
                 {/* Timeline Dot */}
                 <div 
-                  className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-[#030014] border border-violet-400/50 shadow-sm"
+                  className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-[#080710] border border-indigo-400/50 shadow-sm"
                 >
-                  <span className="text-[8px] font-bold text-violet-300">{idx + 1}</span>
+                  <span className="text-[8px] font-bold text-indigo-300">{idx + 1}</span>
                 </div>
 
                 <h3 className="text-white font-semibold text-xs leading-snug">
@@ -198,15 +198,15 @@ export default function Screen3_Workspace() {
 
           {/* FirstMove Card (special) */}
           <div 
-            className="rounded-2xl p-5 mt-6 border transition-all duration-300 flex flex-col justify-between"
+            className="rounded-xl p-5 mt-6 border transition-all duration-200 flex flex-col justify-between"
             style={{
-              background: "linear-gradient(135deg, rgba(108,99,255,0.15), rgba(139,92,246,0.08))",
-              borderColor: "rgba(108,99,255,0.3)",
-              boxShadow: "0 0 30px rgba(108,99,255,0.15)"
+              background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(139,92,246,0.05))",
+              borderColor: "rgba(99,102,241,0.25)",
+              boxShadow: "0 0 24px rgba(99,102,241,0.1)"
             }}
           >
             <div>
-              <span className="mono-label text-[8px] text-violet-300 block mb-2 font-bold tracking-widest">
+              <span className="mono-label text-[8px] text-indigo-300 block mb-2 font-bold tracking-widest">
                 &gt; Immediate Next Action Step
               </span>
               <h4 className="text-white font-bold text-base leading-snug">
@@ -228,7 +228,7 @@ export default function Screen3_Workspace() {
         <div className="w-[58%] flex flex-col gap-3 max-h-full">
           
           {/* TOP HALF: Agent Debate Grid (flex-1) */}
-          <div className="flex-1 glass-panel overflow-y-auto p-5 flex flex-col">
+          <div className="flex-1 cyber-panel overflow-y-auto p-5 flex flex-col">
             <span className="mono-label text-[10px] text-white/30 mb-5 block">
               Agent Debate
             </span>
@@ -238,16 +238,16 @@ export default function Screen3_Workspace() {
                 const data = debate[agent.key];
                 const score = data?.[agent.scoreKey];
                 return (
-                  <div key={agent.key} className="glass-panel p-4 flex flex-col">
+                  <div key={agent.key} className="cyber-panel p-4 flex flex-col bg-[#0d0e15]/40">
                     
                     {/* Top linear accent line */}
                     <div 
-                      className="h-0.5 w-full rounded-full mb-3"
+                      className="h-[2px] w-full rounded-full mb-3"
                       style={{ background: `linear-gradient(90deg, transparent, ${agent.color}, transparent)` }}
                     />
 
                     {/* Header Row */}
-                    <div className="flex items-center justify-between mb-3.5">
+                    <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         {/* Avatar */}
                         <div 
@@ -267,8 +267,8 @@ export default function Screen3_Workspace() {
                           className="text-[9px] font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border"
                           style={{ 
                             color: agent.color, 
-                            backgroundColor: `${agent.color}18`, 
-                            borderColor: `${agent.color}35` 
+                            backgroundColor: `${agent.color}15`, 
+                            borderColor: `${agent.color}30` 
                           }}
                         >
                           {agent.role}
@@ -316,10 +316,10 @@ export default function Screen3_Workspace() {
           <div className="h-[240px] flex gap-3 flex-shrink-0">
             
             {/* Optimistic */}
-            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+            <div className="flex-1 cyber-panel p-4 flex flex-col justify-between bg-[#0d0e15]/40">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 led-green animate-pulse" />
                   <h4 className="text-white font-semibold text-sm">Optimistic</h4>
                 </div>
                 <span className="text-white/30 text-[10px] font-mono">
@@ -338,10 +338,10 @@ export default function Screen3_Workspace() {
             </div>
 
             {/* Neutral */}
-            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+            <div className="flex-1 cyber-panel p-4 flex flex-col justify-between bg-[#0d0e15]/40">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                  <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
                   <h4 className="text-white font-semibold text-sm">Neutral</h4>
                 </div>
                 <span className="text-white/30 text-[10px] font-mono">
@@ -360,10 +360,10 @@ export default function Screen3_Workspace() {
             </div>
 
             {/* Risk / Pessimistic */}
-            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+            <div className="flex-1 cyber-panel p-4 flex flex-col justify-between bg-[#0d0e15]/40">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                  <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
                   <h4 className="text-white font-semibold text-sm">Risk Path</h4>
                 </div>
                 <span className="text-white/30 text-[10px] font-mono">

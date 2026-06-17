@@ -60,26 +60,26 @@ export default function Screen2_Questions({ isLoading }) {
     <div className="scrollable-screen w-full flex-1 flex flex-col lg:flex-row min-h-screen relative p-1 pb-4">
       
       {/* ── LEFT PANEL: Socratic Questions (44% width) ── */}
-      <div className="w-full lg:w-[44%] flex flex-col glass-panel p-8 m-4 lg:my-4 lg:mr-2 lg:ml-4 overflow-y-auto max-h-[calc(100vh-32px)]">
+      <div className="w-full lg:w-[44%] flex flex-col cyber-panel p-8 m-4 lg:my-4 lg:mr-2 lg:ml-4 overflow-y-auto max-h-[calc(100vh-32px)]">
         
         {/* Step Pill */}
-        <div className="self-start inline-flex items-center rounded-full bg-violet-500/20 border border-violet-500/30 px-3 py-1 text-xs text-violet-300 font-medium mb-6">
+        <div className="self-start inline-flex items-center rounded-full bg-violet-500/10 border border-violet-500/20 px-3 py-1 text-xs text-violet-300 font-mono tracking-wider mb-6">
           Step 2 of 3
         </div>
 
         {/* Heading */}
-        <h1 className="text-3xl font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.03em" }}>
+        <h1 className="text-3xl font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.02em" }}>
           A few questions
         </h1>
-        <p className="text-white/40 text-sm mb-8 tracking-tight">
-          Help our agent swarm align on your idea's target variables.
+        <p className="text-white/40 text-sm mb-8 tracking-tight font-mono uppercase text-[10px]">
+          Provide parameters for simulation nodes.
         </p>
 
         {/* Question blocks */}
         <div className="flex-1 space-y-6">
           {isLoading ? (
             <div className="space-y-4">
-              <p className="text-violet-400 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+              <p className="text-[#6366F1] text-[10px] font-mono uppercase tracking-widest animate-pulse">
                 PROCESSING_AGENT_PIPELINE...
               </p>
               <QuestionSkeleton />
@@ -87,7 +87,7 @@ export default function Screen2_Questions({ isLoading }) {
           ) : (
             state.socraticQuestions.map((q, i) => (
               <div key={q.id} className="flex flex-col">
-                <span className="mono-label text-[10px] text-white/30 mb-2 block">
+                <span className="mono-label text-[9px] text-white/30 mb-2 block font-semibold">
                   {q.target_variable || `VARIABLE_0${i + 1}`}
                 </span>
                 <h2 className="text-white text-sm font-semibold mb-1 leading-snug">
@@ -102,7 +102,7 @@ export default function Screen2_Questions({ isLoading }) {
                     setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                   }
                   placeholder="Type your response..."
-                  className="w-full bg-white/[0.02] border border-white/8 rounded-xl p-3 text-white text-sm min-h-[80px] resize-none placeholder:text-white/20 outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-all duration-300"
+                  className="w-full bg-[#080710] border border-white/5 rounded-xl p-3.5 text-white text-sm min-h-[80px] resize-none placeholder:text-white/15 outline-none focus:border-indigo-500/40 focus:ring-1 focus:ring-[#6366F1]/20 transition-all duration-200"
                 />
               </div>
             ))
@@ -110,7 +110,7 @@ export default function Screen2_Questions({ isLoading }) {
         </div>
 
         {/* Footer controls & Submit */}
-        <div className="pt-6 border-t border-white/8 mt-6 flex flex-col gap-4">
+        <div className="pt-6 border-t border-white/5 mt-6 flex flex-col gap-4">
           {state.error && (
             <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-red-400 text-xs font-mono">
               ERROR: {state.error}
@@ -129,7 +129,7 @@ export default function Screen2_Questions({ isLoading }) {
           <button
             onClick={handleSubmit}
             disabled={!allAnswered || isLoading}
-            className="btn-primary-glow w-full py-4.5 rounded-[14px] text-white font-bold text-base tracking-tight disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 uppercase"
+            className="btn-cyber w-full py-4 rounded-xl text-white font-bold text-sm tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 uppercase transition-all duration-200"
           >
             {isLoading ? (
               <>
@@ -157,7 +157,7 @@ export default function Screen2_Questions({ isLoading }) {
         {/* 3 Previews */}
         <div className="flex-1 space-y-4 overflow-y-auto pr-1">
           {AGENTS.map((agent) => (
-            <div key={agent.key} className="glass-panel p-5 flex items-center gap-4">
+            <div key={agent.key} className="cyber-panel p-5 flex items-center gap-4">
               
               {/* Gradient avatar */}
               <div 
@@ -185,18 +185,21 @@ export default function Screen2_Questions({ isLoading }) {
                   <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
                     {isLoading ? (
                       <motion.div 
-                        className="h-full bg-violet-400"
+                        className="h-full bg-indigo-400"
                         animate={{ x: ["-100%", "100%"] }}
                         transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                        style={{ width: "30%" }}
+                        style={{ width: "35%" }}
                       />
                     ) : (
-                      <div className="h-full bg-white/10 w-[5%]" />
+                      <div className="h-full bg-white/5 w-[5%]" />
                     )}
                   </div>
-                  <span className="text-white/20 text-[10px] font-mono uppercase tracking-wider">
-                    {isLoading ? "ANALYZING_VARIABLES..." : "AWAITING INPUT"}
-                  </span>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`w-1.5 h-1.5 rounded-full ${isLoading ? "bg-indigo-400 led-cyan animate-pulse" : "bg-emerald-400 led-green animate-pulse"}`} />
+                    <span className="text-white/20 text-[9px] font-mono uppercase tracking-wider">
+                      {isLoading ? "ANALYZING_VARIABLES..." : "AWAITING INPUT"}
+                    </span>
+                  </div>
                 </div>
               </div>
 

@@ -48,19 +48,19 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
 
   return (
     <div
-      className={`glass-panel mb-3 overflow-hidden transition-all duration-300 ${
+      className={`cyber-panel mb-3 overflow-hidden transition-all duration-200 ${
         isTested 
           ? "border-l-2 border-l-emerald-400/50 opacity-40" 
           : ""
       }`}
     >
       {/* Header */}
-      <div className="flex justify-between items-center p-4 border-b border-white/[0.06]">
-        <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full ${dvf.cls}`}>
+      <div className="flex justify-between items-center p-4 border-b border-white/5">
+        <span className={`text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full ${dvf.cls}`}>
           {dvf.label}
         </span>
         <span className="text-white/40 text-xs font-mono">
-          CONFIDENCE: {confidence_score}%
+          CONFIDENCE_METRIC: {confidence_score}%
         </span>
       </div>
 
@@ -78,10 +78,10 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
               className="overflow-hidden"
             >
-              <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3.5 mt-2 space-y-3">
+              <div className="bg-[#080710]/60 border border-white/5 rounded-xl p-3.5 mt-2 space-y-3">
                 {/* Contributing factors */}
                 <div>
                   <span className="mono-label text-[8px] text-white/30 block mb-1.5 font-bold">
