@@ -35,7 +35,7 @@ export default function DashboardChassis({ children, activeTab = "Workspace" }) 
           
           {/* Logo & Brand name */}
           <div className="flex items-center gap-3 border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] rounded-full px-5 py-2">
-            <div className="w-5 h-5 rounded-md bg-[#EAB308] flex items-center justify-center text-[10px] font-semibold text-black">
+            <div className="w-5 h-5 rounded-md bg-[#7C3AED] flex items-center justify-center text-[10px] font-semibold text-white">
               FM
             </div>
             <span className="font-mono text-sm font-semibold tracking-wider text-zinc-900 dark:text-[#f7f8f8]">
@@ -91,13 +91,13 @@ export default function DashboardChassis({ children, activeTab = "Workspace" }) 
               </button>
               <button className="w-8 h-8 rounded-full border border-black/[0.08] dark:border-white/[0.08] bg-black/[0.01] dark:bg-white/[0.02] flex items-center justify-center text-zinc-600 dark:text-[#8a8f98] hover:text-zinc-900 dark:hover:text-white hover:bg-black/[0.02] dark:hover:bg-white/[0.04] cursor-pointer transition-colors relative">
                 🔔
-                <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#EAB308]" />
+                <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#7C3AED]" />
               </button>
             </div>
 
             {/* Profile Avatar */}
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-[#EAB308]/80 flex-shrink-0 bg-neutral-800">
-              <div className="w-full h-full bg-gradient-to-tr from-yellow-600 to-amber-300" />
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-[#7C3AED]/80 flex-shrink-0 bg-neutral-800">
+              <div className="w-full h-full bg-gradient-to-tr from-[#7C3AED] to-indigo-400" />
             </div>
           </div>
         </div>

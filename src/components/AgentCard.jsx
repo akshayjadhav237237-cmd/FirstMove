@@ -8,9 +8,9 @@ const AGENT_CONFIG = {
   strategist: {
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    color: "#EAB308",
+    color: "#7C3AED",
     beamClass: "border-beam border-beam-strategist",
-    tintBg: "rgba(234,179,8,0.02)",
+    tintBg: "rgba(124,58,237,0.02)",
     scoreKey: "opportunity_score",
     scoreLabel: "OPP_SCORE",
   },

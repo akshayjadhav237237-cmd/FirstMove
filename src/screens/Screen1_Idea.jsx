@@ -49,13 +49,13 @@ export default function Screen1_Idea({ isLoading }) {
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ repeat: Infinity, duration: 1, ease: "steps(2)" }}
-              className="inline-block w-1.5 h-3.5 bg-[#EAB308]/60 align-middle ml-1"
+              className="inline-block w-1.5 h-3.5 bg-[#7C3AED]/60 align-middle ml-1"
             />
           </span>
           <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 dark:text-[#f7f8f8] mb-2" style={{ letterSpacing: "-0.04em" }}>
             Welcome back, Founder
           </h1>
-          <p className="text-zinc-600 dark:text-[#8a8f98] text-sm max-w-md mx-auto leading-relaxed">
+          <p className="text-zinc-650 dark:text-[#8a8f98] text-sm max-w-md mx-auto leading-relaxed">
             Specify a rough project idea. Three autonomous agents will collaborate to build a de-risked blueprint.
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function Screen1_Idea({ isLoading }) {
           >
             {isLoading ? (
               <div>
-                <p className="text-[#EAB308] text-[9px] font-mono uppercase tracking-widest text-center mb-6 animate-pulse">
+                <p className="text-[#7C3AED] text-[9px] font-mono uppercase tracking-widest text-center mb-6 animate-pulse">
                   SUMMONING_AI_AGENTS...
                 </p>
                 <QuestionSkeleton />
@@ -108,7 +108,7 @@ export default function Screen1_Idea({ isLoading }) {
                 <button
                   onClick={handleSubmit}
                   disabled={!idea.trim()}
-                  className="btn-accent w-full rounded-full py-3 px-6 text-black text-xs font-semibold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all duration-200"
+                  className="btn-accent w-full rounded-full py-3 px-6 text-white text-xs font-semibold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all duration-200"
                 >
                   Initiate Audit Sequence →
                 </button>

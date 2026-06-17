@@ -15,7 +15,7 @@ const AGENT_PREVIEWS = {
   strategist: {
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    color: "#EAB308",
+    color: "#7C3AED",
     description: "Will map the opportunity space and build the strongest case for your idea.",
   },
   risk_analyst: {
@@ -81,7 +81,7 @@ export default function Screen2_Questions({ isLoading }) {
             <span className="text-[10px] font-mono text-zinc-900 dark:text-[#f7f8f8] font-semibold uppercase tracking-widest">
               CLARIFICATION_PROTOCOL
             </span>
-            <span className="text-[9px] font-mono text-[#EAB308]">02 / 03</span>
+            <span className="text-[9px] font-mono text-[#7C3AED]">02 / 03</span>
           </div>
 
           {/* Questions scrollable */}
@@ -104,7 +104,7 @@ export default function Screen2_Questions({ isLoading }) {
                     className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl p-5 transition-all duration-200"
                     style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)" }}
                   >
-                    <p className="text-[9px] font-mono text-[#EAB308]/85 uppercase tracking-widest mb-2 font-semibold">
+                    <p className="text-[9px] font-mono text-[#7C3AED]/85 uppercase tracking-widest mb-2 font-semibold">
                       {q.target_variable}
                     </p>
                     <h2 className="text-zinc-900 dark:text-[#d0d6e0] text-sm font-semibold leading-snug mb-1">
@@ -145,11 +145,11 @@ export default function Screen2_Questions({ isLoading }) {
             <button
               onClick={handleSubmit}
               disabled={!allAnswered || isLoading}
-              className="btn-accent w-full rounded-full py-3 px-6 text-black text-xs font-semibold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
+              className="btn-accent w-full rounded-full py-3 px-6 text-white text-xs font-semibold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
             >
               {isLoading ? (
                 <>
-                  <span className="w-3.5 h-3.5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   <span className="font-mono text-[10px]">PIPELINE_RUNNING...</span>
                 </>
               ) : (
