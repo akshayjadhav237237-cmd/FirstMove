@@ -12,8 +12,8 @@ export default {
         card:        '#0c0d10',
         'card-el':   '#121318',
         'input-bg':  '#121318',
-        accent:      '#6C63FF',
-        'accent-hover': '#5A52E0',
+        accent:      '#EAB308',
+        'accent-hover': '#CA8A04',
         // Agent
         strategist:  '#818CF8',
         risk:        '#F87171',
