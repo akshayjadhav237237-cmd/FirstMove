@@ -51,18 +51,9 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <div className="relative min-h-screen w-screen bg-[#080710] text-[#E2E8F0] overflow-hidden select-none font-sans">
+      <div className="relative min-h-screen w-screen bg-[#F3F2EE] text-[#1A1A1A] overflow-hidden select-none font-sans">
         
-        {/* Top center spotlight */}
-        <div 
-          className="absolute w-full h-[400px] -top-[150px] left-0 pointer-events-none"
-          style={{
-            background: "radial-gradient(ellipse at top, rgba(99, 102, 241, 0.1) 0%, transparent 60%)",
-            zIndex: 0
-          }}
-        />
-
-        {/* Content above the spotlight */}
+        {/* Content sits above the solid pale background */}
         <div className="relative z-10 w-full min-h-screen flex flex-col">
           <AppRouter />
         </div>

@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;750;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Cyberpunk Reset & Typography ─── */
+/* ─── Neo-Brutalist Reset & Typography ─── */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -15,86 +15,80 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #080710;
-  color: #E2E8F0;
+  background-color: #F3F2EE;
+  color: #1A1A1A;
   font-family: 'Inter', sans-serif;
 }
 
 /* Headings font styling */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #FFFFFF;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #000000;
 }
 
 /* Monospace Labels & Tags */
 .mono-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #000000;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
-/* ─── Matte Carbon Cards & Containers ─── */
-.cyber-panel {
-  background: #0d0e15;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+/* ─── Neo-Brutalist Panels & Containers ─── */
+.brutal-panel {
+  background: #FFFFFF;
+  border: 3px solid #000000;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px #000000;
+  transition: all 0.15s ease-out;
 }
 
-.cyber-panel:hover {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: #11121b;
+.brutal-panel:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000000;
 }
 
-/* ─── Primary Cyber Buttons ─── */
-@keyframes button-glow {
-  0%, 100% {
-    box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 28px rgba(99, 102, 241, 0.5);
-  }
-}
-
-.btn-cyber {
-  background: #6366F1;
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
-  transition: all 0.2s ease;
+/* ─── Neo-Brutalist Buttons ─── */
+.btn-brutal {
+  background: #A5B4FC; /* Indigo accent */
+  color: #000000;
+  border: 3px solid #000000;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px #000000;
   font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.01em;
+  transition: all 0.1s ease-out;
 }
 
-.btn-cyber:hover:not(:disabled) {
-  background: #4F46E5;
-  animation: button-glow 1.5s ease-in-out infinite;
-  transform: translateY(-1px);
+.btn-brutal:hover:not(:disabled) {
+  background: #818CF8;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #000000;
+  cursor: pointer;
 }
 
-.btn-cyber:active:not(:disabled) {
-  transform: translateY(0px);
+.btn-brutal:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
 }
 
-/* ─── Blinking Cursor & LEDs ─── */
+.btn-brutal:disabled {
+  background: #D1D5DB;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── Blinking Cursor ─── */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0; }
 }
 .cursor-blink {
   animation: blink 1s step-end infinite;
-}
-
-.led-green {
-  box-shadow: 0 0 8px #10B981;
-}
-
-.led-cyan {
-  box-shadow: 0 0 8px #06B6D4;
 }
 
 /* ─── Hide Scrollbars Globally ─── */
@@ -110,39 +104,17 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes word-reveal-fast {
   from {
     opacity: 0;
-    filter: blur(2px);
   }
   to {
     opacity: 1;
-    filter: blur(0px);
   }
 }
 .reveal-word {
   display: inline-block;
-  animation: word-reveal-fast 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: word-reveal-fast 0.15s step-end forwards;
 }
 
-/* ─── Rotating Border Beam ─── */
-@property --beam-angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
-}
-@keyframes rotate-beam {
-  to { --beam-angle: 360deg; }
-}
+/* ─── Custom Rotating Border Beam for Brutalism (Fallback/Legacy support) ─── */
 .border-beam {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(#0d0e15, #0d0e15) padding-box,
-    conic-gradient(
-      from var(--beam-angle),
-      transparent 75%,
-      var(--beam-color, #6366F1) 85%,
-      transparent 95%
-    ) border-box;
-  animation: rotate-beam 2.5s linear infinite;
+  border: 3px solid #000000;
 }
-.border-beam-strategist { --beam-color: #6366F1; }
-.border-beam-risk       { --beam-color: #F87171; }
-.border-beam-devil      { --beam-color: #FB923C; }

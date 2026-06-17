@@ -10,6 +10,8 @@ const CHIPS = [
   "A tool for solo founders to validate startup ideas quickly",
 ];
 
+const CHIP_COLORS = ["bg-[#C7D2FE]", "bg-[#A7F3D0]", "bg-[#FDE68A]"];
+
 export default function Screen1_Idea({ isLoading }) {
   const { state, dispatch } = useSession();
   const [idea, setIdea] = useState(state.rawIdea || "");
@@ -37,35 +39,35 @@ export default function Screen1_Idea({ isLoading }) {
       
       {/* Logo Row */}
       <div className="mb-10">
-        <div className="px-4 py-1.5 rounded-full bg-[#0d0e15] border border-white/5 inline-flex items-center gap-2">
-          <span className="font-extrabold text-xs text-white tracking-tight">FM</span>
-          <span className="text-white/40 text-[10px] font-mono uppercase tracking-wider">· FirstMove</span>
+        <div className="px-4 py-2 border-3 border-black bg-[#FDE68A] shadow-[3px_3px_0px_#000] rounded-lg inline-flex items-center gap-2">
+          <span className="font-extrabold text-sm text-black tracking-tight">FM</span>
+          <span className="text-black/60 text-xs font-mono uppercase tracking-wider font-semibold">· FirstMove</span>
         </div>
       </div>
 
       {/* Headline Console Section */}
       <div className="text-center max-w-3xl mb-8">
-        <span className="mono-label text-[10px] text-violet-400 block mb-3 font-semibold">
+        <span className="mono-label text-[11px] text-black bg-[#A5B4FC] border-2 border-black px-3 py-1 rounded shadow-[2px_2px_0px_#000] inline-block mb-4">
           INITIALIZE::FIRSTMOVE_PROTOCOL
           <motion.span
             animate={{ opacity: [1, 0] }}
             transition={{ repeat: Infinity, duration: 1, ease: "steps(2)" }}
-            className="inline-block w-1.5 h-3 bg-violet-400 align-middle ml-1"
+            className="inline-block w-1.5 h-3 bg-black align-middle ml-1"
           />
         </span>
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-3" style={{ letterSpacing: "-0.02em" }}>
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-black mb-3" style={{ letterSpacing: "-0.03em" }}>
           What is your startup concept?
         </h1>
-        <p className="text-white/40 text-sm sm:text-base font-mono uppercase tracking-wide">
+        <p className="text-black/65 text-sm sm:text-base font-mono uppercase tracking-wide font-bold">
           Three autonomous agents will dissect and validate your core thesis.
         </p>
       </div>
 
-      {/* Main Console Box */}
+      {/* Main Brutalist Box */}
       <div className="max-w-2xl w-full">
         {isLoading ? (
-          <div className="cyber-panel p-8 flex flex-col gap-6">
-            <p className="text-violet-400 text-[10px] font-mono uppercase tracking-widest text-center animate-pulse">
+          <div className="brutal-panel p-8 flex flex-col gap-6">
+            <p className="text-black text-[10px] font-mono uppercase tracking-widest text-center animate-pulse font-bold">
               SUMMONING_AI_AGENTS...
             </p>
             <QuestionSkeleton />
@@ -73,12 +75,12 @@ export default function Screen1_Idea({ isLoading }) {
         ) : (
           <div className="w-full flex flex-col gap-4">
             
-            {/* The Textarea is the cyber panel */}
+            {/* The Textarea is the brutal panel */}
             <textarea
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
               placeholder="Describe your startup concept or idea in a few sentences..."
-              className="w-full cyber-panel p-6 text-white text-base min-h-[180px] resize-none placeholder:text-white/15 leading-relaxed outline-none focus:border-indigo-500/40 focus:ring-1 focus:ring-[#6366F1]/25 transition-all duration-200"
+              className="w-full brutal-panel p-6 text-black text-base min-h-[180px] resize-none placeholder:text-black/30 leading-relaxed outline-none focus:bg-white focus:translate-x-[-1px] focus:translate-y-[-1px] focus:shadow-[5px_5px_0px_#000] transition-all duration-150"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.metaKey) {
                   handleSubmit();
@@ -93,7 +95,7 @@ export default function Screen1_Idea({ isLoading }) {
                   key={i}
                   type="button"
                   onClick={() => setIdea(chip)}
-                  className="cyber-panel rounded-full px-3.5 py-1.5 text-white/40 hover:text-white/75 border-white/5 hover:border-white/10 text-xs transition-all duration-200 cursor-pointer"
+                  className={`border-2 border-black rounded-lg px-3.5 py-1.5 text-black font-semibold text-xs transition-all duration-200 cursor-pointer shadow-[2px_2px_0px_#000] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#000] ${CHIP_COLORS[i % 3]}`}
                 >
                   {chip}
                 </button>
@@ -101,16 +103,16 @@ export default function Screen1_Idea({ isLoading }) {
             </div>
 
             {state.error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-red-400 text-xs font-mono mb-2">
+              <div className="bg-[#FCA5A5] border-2 border-black rounded-lg p-3.5 text-black text-xs font-mono font-bold shadow-[2px_2px_0px_#000] mb-2">
                 ERROR: {state.error}
               </div>
             )}
 
-            {/* Gradient button with cyan/indigo accent styles */}
+            {/* Brutalist trigger button */}
             <button
               onClick={handleSubmit}
               disabled={!idea.trim()}
-              className="btn-cyber w-full py-4 rounded-xl text-white font-bold text-sm tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer uppercase transition-all duration-200"
+              className="btn-brutal w-full py-4 rounded-lg text-black font-extrabold text-sm tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer uppercase transition-all duration-200"
             >
               Initiate Audit Sequence →
             </button>
@@ -122,16 +124,16 @@ export default function Screen1_Idea({ isLoading }) {
       {!isLoading && (
         <div className="mt-14 flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1]" />
-            <span className="text-[9px] font-mono text-white/25 uppercase tracking-wider">Lead Strategist</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#A5B4FC] border-2 border-black" />
+            <span className="text-[9px] font-mono text-black/50 uppercase tracking-wider font-bold">Lead Strategist</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F87171]" />
-            <span className="text-[9px] font-mono text-white/25 uppercase tracking-wider">Risk Analyst</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FCA5A5] border-2 border-black" />
+            <span className="text-[9px] font-mono text-black/50 uppercase tracking-wider font-bold">Risk Analyst</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FB923C]" />
-            <span className="text-[9px] font-mono text-white/25 uppercase tracking-wider">Devil's Advocate</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#FDBA74] border-2 border-black" />
+            <span className="text-[9px] font-mono text-black/50 uppercase tracking-wider font-bold">Devil's Advocate</span>
           </div>
         </div>
       )}
