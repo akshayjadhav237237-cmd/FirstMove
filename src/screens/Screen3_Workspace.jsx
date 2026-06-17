@@ -43,7 +43,8 @@ const AGENT_KEYS = [
     initials: "LS",
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    color: "#A5B4FC",
+    color: "#818CF8",
+    gradient: "linear-gradient(135deg, #4F46E5, #818CF8)",
     scoreKey: "opportunity_score",
     scoreLabel: "OPP_SCORE",
   },
@@ -52,7 +53,8 @@ const AGENT_KEYS = [
     initials: "RA",
     name: "Risk Analyst",
     role: "THREAT_ASSESSMENT",
-    color: "#FCA5A5",
+    color: "#F87171",
+    gradient: "linear-gradient(135deg, #DC2626, #F87171)",
     scoreKey: "risk_score",
     scoreLabel: "RISK_SCORE",
   },
@@ -61,7 +63,8 @@ const AGENT_KEYS = [
     initials: "DA",
     name: "Devil's Advocate",
     role: "CHALLENGE_ASSESSMENT",
-    color: "#FDBA74",
+    color: "#FB923C",
+    gradient: "linear-gradient(135deg, #EA580C, #FB923C)",
     scoreKey: "challenge_score",
     scoreLabel: "CHAL_SCORE",
   },
@@ -86,12 +89,12 @@ export default function Screen3_Workspace() {
 
   if (!blueprint || !debate) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-[#F3F2EE]">
+      <div className="h-screen w-screen flex items-center justify-center bg-[#0c0c16]">
         <div className="text-center space-y-4">
-          <p className="text-black/55 text-sm font-mono tracking-wider uppercase">NO_WORKSPACE_DATA</p>
+          <p className="text-white/40 text-sm font-mono tracking-wider uppercase">NO_WORKSPACE_DATA</p>
           <button
             onClick={() => dispatch({ type: "RESET" })}
-            className="btn-brutal px-6 py-2.5 rounded-lg text-sm font-bold cursor-pointer"
+            className="btn-spatial-pill px-6 py-2.5 rounded-full text-sm font-bold cursor-pointer"
           >
             Restart Setup
           </button>
@@ -110,24 +113,24 @@ export default function Screen3_Workspace() {
   const riskData = scenarios.pessimistic || {};
 
   return (
-    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#F3F2EE] relative text-black">
+    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#0c0c16] relative text-white">
       
       {/* ── HEADER BAR ── */}
-      <header className="h-14 flex items-center justify-between px-6 bg-white border-b-3 border-black z-20 flex-shrink-0">
+      <header className="h-14 flex items-center justify-between px-6 backdrop-blur-md bg-white/[0.03] border-b border-white/10 z-20 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="px-3.5 py-1.5 rounded bg-[#FAF9F6] border-2 border-black flex items-center gap-1.5 shadow-[2px_2px_0px_#000]">
-            <span className="font-extrabold text-xs text-black tracking-tight">FM</span>
-            <span className="text-black/75 text-[10px] font-mono uppercase tracking-wider font-bold">· FirstMove</span>
+          <div className="px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5">
+            <span className="font-extrabold text-xs text-white tracking-tight">FM</span>
+            <span className="text-white/50 text-[10px] font-mono uppercase tracking-wider font-semibold">· FirstMove</span>
           </div>
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 border border-black animate-pulse" />
-          <span className="text-[10px] font-mono text-black uppercase tracking-widest font-extrabold">
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" style={{ boxShadow: "0 0 6px #fff" }} />
+          <span className="text-[10px] font-mono text-white uppercase tracking-widest font-semibold">
             Analysis complete
           </span>
         </div>
 
         <button
           onClick={() => dispatch({ type: "RESET" })}
-          className="px-4 py-1.5 text-xs font-mono text-black hover:bg-[#FAF9F6] border-2 border-black rounded cursor-pointer transition-all duration-100 shadow-[2px_2px_0px_#000]"
+          className="px-4 py-1.5 text-xs font-mono text-white/50 hover:text-white border border-white/5 hover:border-white/15 bg-white/2 rounded-full cursor-pointer transition-all duration-300"
         >
           Start over
         </button>
@@ -137,20 +140,20 @@ export default function Screen3_Workspace() {
       <main className="flex flex-1 gap-3 p-3 h-[calc(100vh-56px)] overflow-hidden z-10 min-h-0">
         
         {/* ══ LEFT PANEL: Workspace Blueprint Document (42% width) ══ */}
-        <div className="w-[42%] brutal-panel overflow-y-auto p-6 flex flex-col max-h-full">
+        <div className="w-[42%] glass-spatial overflow-y-auto p-6 flex flex-col max-h-full">
           
           {/* Concept summary */}
-          <span className="mono-label text-[10px] text-black/50 mb-3 block font-bold">
+          <span className="mono-label text-[10px] text-white/30 mb-3 block">
             Startup Idea Concept
           </span>
-          <div className="border-l-3 border-black pl-4 mb-8">
-            <p className="text-black/75 text-sm leading-relaxed font-semibold">
+          <div className="border-l-2 border-white/20 pl-4 mb-8">
+            <p className="text-white/70 text-sm leading-relaxed font-medium">
               {state.rawIdea || "Untitled startup concept idea."}
             </p>
           </div>
 
           {/* Assumptions Swarm Matrix */}
-          <span className="mono-label text-[10px] text-black/50 mb-3 block font-bold">
+          <span className="mono-label text-[10px] text-white/30 mb-3 block">
             Assumptions Swarm Matrix
           </span>
           <div className="mb-8 space-y-3">
@@ -166,27 +169,27 @@ export default function Screen3_Workspace() {
           </div>
 
           {/* Prioritized Roadmap steps */}
-          <span className="mono-label text-[10px] text-black/50 mb-4 block font-bold">
+          <span className="mono-label text-[10px] text-white/30 mb-4 block">
             Prioritized Roadmap
           </span>
-          <div className="mb-4 relative border-l-2 border-black pl-6 ml-3 space-y-6">
+          <div className="mb-4 relative border-l border-white/10 pl-6 ml-3 space-y-6">
             {(blueprint.prioritized_roadmap || []).map((step, idx) => (
               <div key={idx} className="relative flex flex-col">
                 
                 {/* Timeline Dot */}
                 <div 
-                  className="absolute -left-[31px] top-0.5 w-4.5 h-4.5 rounded-full flex items-center justify-center bg-[#FDE68A] border-2 border-black shadow-[1.5px_1.5px_0px_#000]"
+                  className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-[#0c0c16] border border-white/30 shadow-sm"
                 >
-                  <span className="text-[8px] font-extrabold text-black">{idx + 1}</span>
+                  <span className="text-[8px] font-bold text-white/80">{idx + 1}</span>
                 </div>
 
-                <h3 className="text-black font-extrabold text-xs leading-snug">
+                <h3 className="text-white font-semibold text-xs leading-snug">
                   {step.mitigation_action}
                 </h3>
-                <p className="text-black/75 text-xs mt-1.5 leading-relaxed font-medium">
+                <p className="text-white/60 text-xs mt-1.5 leading-relaxed font-medium">
                   {step.test_metrics}
                 </p>
-                <span className="text-black/45 text-[9px] font-mono mt-1.5 uppercase tracking-wide font-bold">
+                <span className="text-white/30 text-[9px] font-mono mt-1.5 uppercase tracking-wide">
                   TIMELINE_WEEK: {step.estimated_week || `WEEK_0${idx + 1}`}
                 </span>
               </div>
@@ -195,25 +198,26 @@ export default function Screen3_Workspace() {
 
           {/* FirstMove Card (special) */}
           <div 
-            className="rounded-lg p-5 mt-6 border-3 border-black flex flex-col justify-between"
+            className="rounded-2xl p-5 mt-6 border transition-all duration-300 flex flex-col justify-between"
             style={{
-              background: "linear-gradient(135deg, rgba(165,180,252,0.2), rgba(167,243,208,0.15))",
-              boxShadow: "4px 4px 0px #000"
+              background: "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
+              borderColor: "rgba(255,255,255,0.22)",
+              boxShadow: "0 0 24px rgba(255,255,255,0.1)"
             }}
           >
             <div>
-              <span className="mono-label text-[9px] text-black block mb-2 font-extrabold tracking-widest">
+              <span className="mono-label text-[8px] text-white/60 block mb-2 font-bold tracking-widest">
                 &gt; Immediate Next Action Step
               </span>
-              <h4 className="text-black font-extrabold text-base leading-snug">
+              <h4 className="text-white font-bold text-base leading-snug">
                 {blueprint.immediate_next_step?.action_item || "Validate core value premise first."}
               </h4>
-              <p className="text-black/70 text-xs mt-2 leading-relaxed font-semibold">
+              <p className="text-white/50 text-xs mt-2 leading-relaxed">
                 Objective: {blueprint.immediate_next_step?.rationale_objective || "Observe user friction under manual testing conditions."}
               </p>
             </div>
 
-            <p className="text-black/45 text-[10px] font-mono italic mt-6 border-t border-black/10 pt-4 font-bold">
+            <p className="text-white/25 text-[10px] font-mono italic mt-6 border-t border-white/5 pt-4">
               DISCLAIMER: FirstMove is an AI tool. All insights, metrics, and roadmaps are probabilistic models. The final decision remains with the founder.
             </p>
           </div>
@@ -224,8 +228,8 @@ export default function Screen3_Workspace() {
         <div className="w-[58%] flex flex-col gap-3 max-h-full">
           
           {/* TOP HALF: Agent Debate Grid (flex-1) */}
-          <div className="flex-1 brutal-panel overflow-y-auto p-5 flex flex-col">
-            <span className="mono-label text-[10px] text-black/50 mb-5 block font-bold">
+          <div className="flex-1 glass-spatial overflow-y-auto p-5 flex flex-col">
+            <span className="mono-label text-[10px] text-white/30 mb-5 block">
               Agent Debate
             </span>
 
@@ -234,34 +238,37 @@ export default function Screen3_Workspace() {
                 const data = debate[agent.key];
                 const score = data?.[agent.scoreKey];
                 return (
-                  <div key={agent.key} className="border-2 border-black rounded-lg p-4 bg-[#FAF9F6]/20 shadow-[2px_2px_0px_#000] mb-3">
+                  <div key={agent.key} className="glass-spatial p-4 flex flex-col bg-white/5">
                     
-                    {/* Top Accent line */}
+                    {/* Top linear accent line */}
                     <div 
-                      className="h-1.5 w-full rounded-full border border-black mb-3"
-                      style={{ backgroundColor: agent.color }}
+                      className="h-[2px] w-full rounded-full mb-3"
+                      style={{ background: `linear-gradient(90deg, transparent, ${agent.color}, transparent)` }}
                     />
 
                     {/* Header Row */}
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between mb-3.5">
                       <div className="flex items-center gap-3">
                         {/* Avatar */}
                         <div 
-                          className={`w-8 h-8 rounded border-2 border-black flex items-center justify-center flex-shrink-0 shadow-[1.5px_1.5px_0px_#000] ${agent.key === 'strategist' ? 'bg-[#A5B4FC]' : agent.key === 'risk_analyst' ? 'bg-[#FCA5A5]' : 'bg-[#FDBA74]'}`}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-inner border border-white/10"
+                          style={{ background: agent.gradient }}
                         >
-                          <span className="font-extrabold text-black text-xs tracking-tight">
+                          <span className="font-bold text-white text-xs tracking-tight">
                             {agent.initials}
                           </span>
                         </div>
                         <div>
-                          <h4 className="text-black font-extrabold text-sm leading-none">
+                          <h4 className="text-white font-semibold text-sm leading-none">
                             {agent.name}
                           </h4>
                         </div>
                         <span 
-                          className="text-[9px] font-mono uppercase tracking-wider rounded border-2 border-black px-2.5 py-0.5 shadow-[1.5px_1.5px_0px_#000]"
+                          className="text-[9px] font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border"
                           style={{ 
-                            backgroundColor: agent.color, 
+                            color: agent.color, 
+                            backgroundColor: `${agent.color}15`, 
+                            borderColor: `${agent.color}25` 
                           }}
                         >
                           {agent.role}
@@ -269,29 +276,29 @@ export default function Screen3_Workspace() {
                       </div>
 
                       {score !== undefined && (
-                        <span className="text-black/60 text-[10px] font-mono font-bold">
+                        <span className="text-white/50 text-[10px] font-mono">
                           {agent.scoreLabel}: {score}%
                         </span>
                       )}
                     </div>
 
                     {/* Verdict WordReveal */}
-                    <p className="text-black/70 text-xs leading-relaxed mt-1 font-semibold">
+                    <p className="text-white/60 text-xs leading-relaxed mt-1">
                       <WordByWordReveal text={data?.verdict || "Awaiting simulation signal..."} />
                     </p>
 
                     {/* Key points */}
                     {data?.key_points && (
-                      <div className="mt-3.5 pt-3 border-t border-black/10 space-y-2">
+                      <div className="mt-3.5 pt-3 border-t border-white/5 space-y-2">
                         {data.key_points.map((pt, i) => (
                           <div key={i} className="flex items-start gap-2">
                             <span 
-                              className="text-[11px] leading-none shrink-0 font-extrabold" 
-                              style={{ color: "#000" }}
+                              className="text-[11px] leading-none shrink-0" 
+                              style={{ color: `${agent.color}aa` }}
                             >
                               ▸
                             </span>
-                            <p className="text-black/60 text-[11px] leading-relaxed font-semibold">
+                            <p className="text-white/40 text-[11px] leading-relaxed">
                               {pt}
                             </p>
                           </div>
@@ -309,68 +316,68 @@ export default function Screen3_Workspace() {
           <div className="h-[240px] flex gap-3 flex-shrink-0">
             
             {/* Optimistic */}
-            <div className="flex-1 brutal-panel p-4 flex flex-col justify-between bg-white">
+            <div className="flex-1 glass-spatial p-4 flex flex-col justify-between bg-white/5">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 border border-black" />
-                  <h4 className="text-black font-extrabold text-sm">Optimistic</h4>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" style={{ boxShadow: "0 0 6px #34d399" }} />
+                  <h4 className="text-white font-semibold text-sm">Optimistic</h4>
                 </div>
-                <span className="text-black/40 text-[10px] font-mono font-bold">
+                <span className="text-white/30 text-[10px] font-mono">
                   {Math.round((optimismData.probability || 0) * 100)}% LIKELY
                 </span>
-                <p className="text-black/70 text-xs leading-snug mt-2 font-semibold">
+                <p className="text-white/60 text-xs leading-snug mt-2">
                   {optimismData.headline || "Premise achieves positive viral loops."}
                 </p>
               </div>
               <div>
-                <span className="text-black/35 text-[10px] font-mono font-bold">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {optimismData.estimated_timeline || "N/A"}
                 </span>
-                <div className="h-1 mt-3 bg-emerald-400 w-full rounded border-t-2 border-black" />
+                <div className="h-0.5 rounded-full mt-3 bg-emerald-400/60 w-full" />
               </div>
             </div>
 
             {/* Neutral */}
-            <div className="flex-1 brutal-panel p-4 flex flex-col justify-between bg-white">
+            <div className="flex-1 glass-spatial p-4 flex flex-col justify-between bg-white/5">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-450 border border-black" />
-                  <h4 className="text-black font-extrabold text-sm">Neutral</h4>
+                  <span className="w-2 h-2 rounded-full bg-yellow-400" style={{ boxShadow: "0 0 6px #fbbf24" }} />
+                  <h4 className="text-white font-semibold text-sm">Neutral</h4>
                 </div>
-                <span className="text-black/40 text-[10px] font-mono font-bold">
+                <span className="text-white/30 text-[10px] font-mono">
                   {Math.round((neutralData.probability || 0) * 100)}% LIKELY
                 </span>
-                <p className="text-black/70 text-xs leading-snug mt-2 font-semibold">
+                <p className="text-white/60 text-xs leading-snug mt-2">
                   {neutralData.headline || "Growth scales at typical industry baseline."}
                 </p>
               </div>
               <div>
-                <span className="text-black/35 text-[10px] font-mono font-bold">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {neutralData.estimated_timeline || "N/A"}
                 </span>
-                <div className="h-1 mt-3 bg-white w-full rounded border-t-2 border-black" />
+                <div className="h-0.5 rounded-full mt-3 bg-white/20 w-full" />
               </div>
             </div>
 
             {/* Risk / Pessimistic */}
-            <div className="flex-1 brutal-panel p-4 flex flex-col justify-between bg-white">
+            <div className="flex-1 glass-spatial p-4 flex flex-col justify-between bg-white/5">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-400 border border-black" />
-                  <h4 className="text-black font-extrabold text-sm">Risk Path</h4>
+                  <span className="w-2 h-2 rounded-full bg-red-400" style={{ boxShadow: "0 0 6px #f87171" }} />
+                  <h4 className="text-white font-semibold text-sm">Risk Path</h4>
                 </div>
-                <span className="text-black/40 text-[10px] font-mono font-bold">
+                <span className="text-white/30 text-[10px] font-mono">
                   {Math.round((riskData.probability || 0) * 100)}% LIKELY
                 </span>
-                <p className="text-black/70 text-xs leading-snug mt-2 font-semibold">
+                <p className="text-white/60 text-xs leading-snug mt-2">
                   {riskData.headline || "High churn levels or low initial response rate."}
                 </p>
               </div>
               <div>
-                <span className="text-black/35 text-[10px] font-mono font-bold">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {riskData.estimated_timeline || "N/A"}
                 </span>
-                <div className="h-1 mt-3 bg-red-400 w-full rounded border-t-2 border-black" />
+                <div className="h-0.5 rounded-full mt-3 bg-red-400/60 w-full" />
               </div>
             </div>
 

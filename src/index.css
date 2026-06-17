@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;750;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Neo-Brutalist Reset & Typography ─── */
+/* ─── Spatial Reset & Typography ─── */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -15,74 +15,80 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #F3F2EE;
-  color: #1A1A1A;
+  background-color: #0c0c16;
+  color: #F8FAFC;
   font-family: 'Inter', sans-serif;
 }
 
 /* Headings font styling */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: #000000;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #FFFFFF;
 }
 
 /* Monospace Labels & Tags */
 .mono-label {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 10px;
-  color: #000000;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.15em;
 }
 
-/* ─── Neo-Brutalist Panels & Containers ─── */
-.brutal-panel {
-  background: #FFFFFF;
-  border: 3px solid #000000;
-  border-radius: 4px;
-  box-shadow: 4px 4px 0px #000000;
-  transition: all 0.15s ease-out;
+/* ─── Frosted Spatial Glass Card ─── */
+.glass-spatial {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.brutal-panel:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+.glass-spatial:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* ─── Neo-Brutalist Buttons ─── */
-.btn-brutal {
-  background: #A5B4FC; /* Indigo accent */
-  color: #000000;
-  border: 3px solid #000000;
-  border-radius: 4px;
-  box-shadow: 4px 4px 0px #000000;
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  transition: all 0.1s ease-out;
+/* ─── Pill shaped buttons ─── */
+.btn-spatial-pill {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0c0c16;
+  border-radius: 9999px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.btn-brutal:hover:not(:disabled) {
-  background: #818CF8;
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+.btn-spatial-pill:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 16px rgba(255, 255, 255, 0.45);
+  transform: scale(1.01);
   cursor: pointer;
 }
 
-.btn-brutal:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0px #000000;
+.btn-spatial-pill:active:not(:disabled) {
+  transform: scale(0.99);
 }
 
-.btn-brutal:disabled {
-  background: #D1D5DB;
-  opacity: 0.6;
+.btn-spatial-pill:disabled {
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.4);
   cursor: not-allowed;
 }
 
-/* ─── Blinking Cursor ─── */
+/* ─── Blinking cursor ─── */
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0; }
@@ -104,17 +110,41 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes word-reveal-fast {
   from {
     opacity: 0;
+    filter: blur(4px);
+    transform: translateY(2px);
   }
   to {
     opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
   }
 }
 .reveal-word {
   display: inline-block;
-  animation: word-reveal-fast 0.15s step-end forwards;
+  animation: word-reveal-fast 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* ─── Custom Rotating Border Beam for Brutalism (Fallback/Legacy support) ─── */
-.border-beam {
-  border: 3px solid #000000;
+/* ─── Rotating Border Beam for Spatial (Soft Glow) ─── */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
+@keyframes rotate-beam {
+  to { --beam-angle: 360deg; }
+}
+.border-beam {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#0c0c16, #0c0c16) padding-box,
+    conic-gradient(
+      from var(--beam-angle),
+      transparent 75%,
+      var(--beam-color, rgba(255, 255, 255, 0.3)) 85%,
+      transparent 95%
+    ) border-box;
+  animation: rotate-beam 2.5s linear infinite;
+}
+.border-beam-strategist { --beam-color: rgba(99, 102, 241, 0.5); }
+.border-beam-risk       { --beam-color: rgba(248, 113, 113, 0.5); }
+.border-beam-devil      { --beam-color: rgba(251, 146, 60, 0.5); }

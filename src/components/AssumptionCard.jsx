@@ -26,15 +26,15 @@ function getMomTestQuestion(dim, statement) {
 const DVF_STYLES = {
   DESIRABILITY: {
     label: "DESIRABILITY",
-    cls: "text-black bg-[#C7D2FE] border-2 border-black shadow-[1px_1px_0px_#000]",
+    cls: "text-indigo-300 bg-indigo-500/10 border border-indigo-400/20",
   },
   VIABILITY: {
     label: "VIABILITY",
-    cls: "text-black bg-[#A7F3D0] border-2 border-black shadow-[1px_1px_0px_#000]",
+    cls: "text-emerald-300 bg-emerald-500/10 border border-emerald-400/20",
   },
   FEASIBILITY: {
     label: "FEASIBILITY",
-    cls: "text-black bg-[#FDE68A] border-2 border-black shadow-[1px_1px_0px_#000]",
+    cls: "text-orange-300 bg-orange-500/10 border border-orange-400/20",
   },
 };
 
@@ -48,25 +48,25 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
 
   return (
     <div
-      className={`brutal-panel mb-3 overflow-hidden transition-all duration-150 ${
+      className={`glass-spatial mb-3 overflow-hidden transition-all duration-300 ${
         isTested 
-          ? "border-l-4 border-l-emerald-500 opacity-45" 
+          ? "border-l-2 border-l-emerald-400/50 opacity-40" 
           : ""
       }`}
     >
       {/* Header */}
-      <div className="flex justify-between items-center p-4 border-b-2 border-black">
-        <span className={`text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded ${dvf.cls}`}>
+      <div className="flex justify-between items-center p-4 border-b border-white/[0.06]">
+        <span className={`text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full ${dvf.cls}`}>
           {dvf.label}
         </span>
-        <span className="text-black/50 text-xs font-mono font-bold">
-          CONFIDENCE_SCORE: {confidence_score}%
+        <span className="text-white/40 text-xs font-mono font-semibold">
+          CONFIDENCE: {confidence_score}%
         </span>
       </div>
 
       {/* Body */}
       <div className="p-4 flex flex-col gap-3">
-        <p className={`text-black/85 text-xs leading-relaxed font-semibold ${isTested ? "line-through" : ""}`}>
+        <p className={`text-white/70 text-xs leading-relaxed ${isTested ? "line-through" : ""}`}>
           {assumption_statement}
         </p>
 
@@ -78,18 +78,18 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
               className="overflow-hidden"
             >
-              <div className="bg-[#F3F2EE] border-2 border-black rounded p-3.5 mt-2 space-y-3 shadow-[2px_2px_0px_#000]">
+              <div className="bg-white/5 border border-white/5 rounded-2xl p-3.5 mt-2 space-y-3">
                 {/* Contributing factors */}
                 <div>
-                  <span className="mono-label text-[8px] text-black/50 block mb-1.5 font-extrabold">
+                  <span className="mono-label text-[8px] text-white/30 block mb-1.5 font-bold">
                     Risk Factors
                   </span>
                   <div className="space-y-1">
                     {(contributing_factors || []).map((factor, i) => (
-                      <div key={i} className="text-black/70 text-[10px] font-mono font-semibold leading-relaxed">
+                      <div key={i} className="text-white/50 text-[10px] font-mono leading-relaxed">
                         {"▸ "}{factor}
                       </div>
                     ))}
@@ -97,11 +97,11 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
                 </div>
 
                 {/* Mom Test method */}
-                <div className="border-t border-black/10 pt-2.5">
-                  <span className="mono-label text-[8px] text-black/50 block mb-1.5 font-extrabold">
+                <div className="border-t border-white/5 pt-2.5">
+                  <span className="mono-label text-[8px] text-white/30 block mb-1.5 font-bold">
                     Validation Method (Mom Test)
                   </span>
-                  <p className="text-black/85 text-[10px] leading-relaxed font-medium">
+                  <p className="text-white/60 text-[10px] leading-relaxed">
                     {getMomTestQuestion(dim, assumption_statement)}
                   </p>
                 </div>
@@ -110,17 +110,17 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
                 <div className="flex gap-2 pt-2">
                   <button
                     onClick={() => onToggleTested(id)}
-                    className={`flex-1 py-1.5 text-[9px] font-mono rounded border-2 border-black font-extrabold transition-all cursor-pointer shadow-[2px_2px_0px_#000] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#000] ${
+                    className={`flex-1 py-1.5 text-[9px] font-mono rounded-full border transition-colors cursor-pointer ${
                       isTested
-                        ? "bg-[#FDE68A] text-black"
-                        : "bg-[#A7F3D0] text-black"
+                        ? "bg-amber-500/10 text-amber-300 border-amber-500/20 hover:bg-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20"
                     }`}
                   >
                     {isTested ? "MARK_UNTESTED" : "MARK_TESTED ✓"}
                   </button>
                   <button
                     onClick={() => setExpanded(false)}
-                    className="px-3 py-1.5 text-[9px] font-mono text-black/60 hover:text-black border-2 border-black rounded transition-all cursor-pointer shadow-[2px_2px_0px_#000]"
+                    className="px-3 py-1.5 text-[9px] font-mono text-white/40 hover:text-white/70 border border-white/10 rounded-full transition-colors cursor-pointer"
                   >
                     Collapse
                   </button>
@@ -131,13 +131,13 @@ export default function AssumptionCard({ assumption, isTested, onToggleTested, i
             <div className="flex justify-between items-center mt-1">
               <button
                 onClick={() => setExpanded(true)}
-                className="text-black/40 text-[10px] font-mono hover:text-black hover:underline cursor-pointer transition-colors"
+                className="text-white/25 text-[10px] font-mono hover:text-white/50 cursor-pointer transition-colors"
               >
                 Expand Analysis →
               </button>
               <button
                 onClick={() => onToggleTested(id)}
-                className="text-black/45 hover:text-emerald-600 hover:underline text-[10px] font-mono cursor-pointer transition-colors font-semibold"
+                className="text-white/25 hover:text-emerald-400 text-[10px] font-mono cursor-pointer transition-colors font-semibold"
               >
                 {isTested ? "Mark Untested" : "Quick Validated ✓"}
               </button>
