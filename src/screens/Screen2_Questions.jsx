@@ -1,48 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import React, { useState } from "react";
 import { useSession } from "../context/SessionContext";
 import { resilientFetch } from "../utils/resilientFetch";
 import { QuestionSkeleton } from "../components/SkeletonLoader";
-import AgentCard from "../components/AgentCard";
-import SystemHeader from "../components/SystemHeader";
-import DashboardChassis from "../components/DashboardChassis";
 
-const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
-
-const AGENT_KEYS = ["strategist", "risk_analyst", "devils_advocate"];
-
-const AGENT_PREVIEWS = {
-  strategist: {
+const AGENTS = [
+  {
+    key: "strategist",
+    initials: "LS",
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    color: "#7C3AED",
-    description: "Will map the opportunity space and build the strongest case for your idea.",
+    gradient: "linear-gradient(135deg, #4F46E5, #818CF8)",
   },
-  risk_analyst: {
+  {
+    key: "risk_analyst",
+    initials: "RA",
     name: "Risk Analyst",
     role: "THREAT_ASSESSMENT",
-    color: "#F87171",
-    description: "Will surface every assumption that can kill your idea before you build it.",
+    gradient: "linear-gradient(135deg, #DC2626, #F87171)",
   },
-  devils_advocate: {
+  {
+    key: "devils_advocate",
+    initials: "DA",
     name: "Devil's Advocate",
     role: "CHALLENGE_ASSESSMENT",
-    color: "#FB923C",
-    description: "Will challenge your core premise and find the weakest point in your logic.",
+    gradient: "linear-gradient(135deg, #EA580C, #FB923C)",
   },
-};
+];
 
 export default function Screen2_Questions({ isLoading }) {
   const { state, dispatch } = useSession();
   const [answers, setAnswers] = useState(state.userAnswers || {});
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const allAnswered =
     state.socraticQuestions.length > 0 &&
@@ -70,148 +57,155 @@ export default function Screen2_Questions({ isLoading }) {
   };
 
   return (
-    <DashboardChassis activeTab="Workspace">
-      <SystemHeader />
+    <div className="scrollable-screen w-full flex-1 flex flex-col lg:flex-row min-h-screen relative p-1 pb-4">
+      
+      {/* ── LEFT PANEL: Socratic Questions (44% width) ── */}
+      <div className="w-full lg:w-[44%] flex flex-col glass-panel p-8 m-4 lg:my-4 lg:mr-2 lg:ml-4 overflow-y-auto max-h-[calc(100vh-32px)]">
+        
+        {/* Step Pill */}
+        <div className="self-start inline-flex items-center rounded-full bg-violet-500/20 border border-violet-500/30 px-3 py-1 text-xs text-violet-300 font-medium mb-6">
+          Step 2 of 3
+        </div>
 
-      <div className={`flex flex-1 min-h-0 gap-6 ${isMobile ? "flex-col overflow-y-auto" : ""}`}>
-        {/* ── LEFT PANEL: Questions ── */}
-        <div className={`${isMobile ? "w-full" : "w-[45%]"} flex flex-col`}>
-          {/* Panel header */}
-          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] mb-3">
-            <span className="text-[10px] font-mono text-zinc-900 dark:text-[#f7f8f8] font-semibold uppercase tracking-widest">
-              CLARIFICATION_PROTOCOL
-            </span>
-            <span className="text-[9px] font-mono text-[#7C3AED]">02 / 03</span>
-          </div>
+        {/* Heading */}
+        <h1 className="text-3xl font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.03em" }}>
+          A few questions
+        </h1>
+        <p className="text-white/40 text-sm mb-8 tracking-tight">
+          Help our agent swarm align on your idea's target variables.
+        </p>
 
-          {/* Questions scrollable */}
-          <div className={`flex-1 ${isMobile ? "" : "overflow-y-auto pr-2"} space-y-4`}>
-            {isLoading ? (
-              <>
-                <p className="text-zinc-500 dark:text-[#62666d] text-[9px] font-mono uppercase tracking-widest animate-pulse mb-5">
-                  PROCESSING_AGENT_PIPELINE...
-                </p>
-                <QuestionSkeleton />
-              </>
-            ) : (
-              <div className="space-y-4">
-                {state.socraticQuestions.map((q, i) => (
-                  <motion.div
-                    key={q.id}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.08, ...smoothSpring }}
-                    className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl p-5 transition-all duration-200"
-                    style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)" }}
-                  >
-                    <p className="text-[9px] font-mono text-[#7C3AED]/85 uppercase tracking-widest mb-2 font-semibold">
-                      {q.target_variable}
-                    </p>
-                    <h2 className="text-zinc-900 dark:text-[#d0d6e0] text-sm font-semibold leading-snug mb-1">
-                      {q.question_text}
-                    </h2>
-                    <p className="text-zinc-500 dark:text-[#62666d] text-[10px] font-mono italic mb-4">
-                      {q.contextual_rationale}
-                    </p>
-                    <textarea
-                      value={answers[q.id] || ""}
-                      onChange={(e) =>
-                        setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
-                      }
-                      placeholder="Type your response..."
-                      className="bg-[#f1f1f4] dark:bg-[#121318] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-lg p-3 text-zinc-800 dark:text-[#d0d6e0] text-sm w-full min-h-[90px] resize-none placeholder:text-zinc-400 dark:placeholder:text-[#62666d] transition-all duration-150"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Footer controls */}
-          <div className="flex-shrink-0 pt-4 border-t border-black/[0.06] dark:border-white/[0.04] mt-3">
-            {state.error && (
-              <div className="bg-red-500/[0.06] border border-red-500/20 rounded-lg p-3 text-red-500 dark:text-red-400 text-xs font-mono mb-3">
-                ERROR: {state.error}
-              </div>
-            )}
-            <div className="flex justify-between items-center mb-3">
-              <button
-                onClick={() => dispatch({ type: "RESET" })}
-                className="text-zinc-500 dark:text-[#62666d] hover:text-zinc-950 dark:hover:text-[#8a8f98] text-[10px] font-mono transition-colors cursor-pointer"
-              >
-                ← RESTART
-              </button>
+        {/* Question blocks */}
+        <div className="flex-1 space-y-6">
+          {isLoading ? (
+            <div className="space-y-4">
+              <p className="text-violet-400 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                PROCESSING_AGENT_PIPELINE...
+              </p>
+              <QuestionSkeleton />
             </div>
+          ) : (
+            state.socraticQuestions.map((q, i) => (
+              <div key={q.id} className="flex flex-col">
+                <span className="mono-label text-[10px] text-white/30 mb-2 block">
+                  {q.target_variable || `VARIABLE_0${i + 1}`}
+                </span>
+                <h2 className="text-white text-sm font-semibold mb-1 leading-snug">
+                  {q.question_text}
+                </h2>
+                <p className="text-white/30 text-xs italic mb-3">
+                  {q.contextual_rationale}
+                </p>
+                <textarea
+                  value={answers[q.id] || ""}
+                  onChange={(e) =>
+                    setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
+                  }
+                  placeholder="Type your response..."
+                  className="w-full bg-white/[0.02] border border-white/8 rounded-xl p-3 text-white text-sm min-h-[80px] resize-none placeholder:text-white/20 outline-none focus:border-violet-500/40 focus:ring-1 focus:ring-violet-500/20 transition-all duration-300"
+                />
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Footer controls & Submit */}
+        <div className="pt-6 border-t border-white/8 mt-6 flex flex-col gap-4">
+          {state.error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-red-400 text-xs font-mono">
+              ERROR: {state.error}
+            </div>
+          )}
+
+          <div className="flex justify-between items-center">
             <button
-              onClick={handleSubmit}
-              disabled={!allAnswered || isLoading}
-              className="btn-accent w-full rounded-full py-3 px-6 text-white text-xs font-semibold uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
+              onClick={() => dispatch({ type: "RESET" })}
+              className="text-white/30 hover:text-white/70 text-[10px] font-mono tracking-wider transition-colors cursor-pointer uppercase"
             >
-              {isLoading ? (
-                <>
-                  <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  <span className="font-mono text-[10px]">PIPELINE_RUNNING...</span>
-                </>
-              ) : (
-                "Launch Agent Pipeline →"
-              )}
+              ← Restart
             </button>
           </div>
-        </div>
 
-        {/* ── RIGHT PANEL: Agent Previews ── */}
-        <div className={`${isMobile ? "w-full" : "w-[55%]"} flex flex-col`}>
-          {/* Panel header */}
-          <div className="h-10 flex-shrink-0 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] mb-3">
-            <span className="text-[10px] font-mono text-zinc-900 dark:text-[#f7f8f8] font-semibold uppercase tracking-widest">
-              AGENT_MANIFEST
-            </span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-[#62666d]" />
-              <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase">STANDBY</span>
-            </div>
-          </div>
-
-          <div className={`flex-1 ${isMobile ? "" : "overflow-y-auto pr-2"} space-y-4`}>
+          <button
+            onClick={handleSubmit}
+            disabled={!allAnswered || isLoading}
+            className="btn-primary-glow w-full py-4.5 rounded-[14px] text-white font-bold text-base tracking-tight disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 uppercase"
+          >
             {isLoading ? (
-              <div className="space-y-4">
-                {AGENT_KEYS.map((key, i) => (
-                  <AgentCard key={key} agentKey={key} data={null} isLoading={true} delay={i * 0.12} />
-                ))}
-              </div>
+              <>
+                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                <span className="font-mono text-xs tracking-wider">PIPELINE_RUNNING...</span>
+              </>
             ) : (
-              <div className="space-y-4">
-                {AGENT_KEYS.map((key, i) => {
-                  const cfg = AGENT_PREVIEWS[key];
-                  return (
-                    <motion.div
-                      key={key}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08, ...smoothSpring }}
-                      className="bg-white dark:bg-[#1c1c1e] border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-xl overflow-hidden transition-all duration-200 shadow-md"
-                      style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 12px 24px -4px rgba(0,0,0,0.15)" }}
-                    >
-                      <div className="h-10 flex items-center px-4 bg-black/[0.01] dark:bg-white/[0.01] border-b border-black/[0.06] dark:border-white/[0.04]">
-                        <span className="w-3 h-3 rounded-sm mr-2.5 flex-shrink-0" style={{ backgroundColor: cfg.color }} />
-                        <span className="text-xs font-semibold text-zinc-900 dark:text-[#f7f8f8]">{cfg.name}</span>
-                        <span className="w-px h-3 bg-black/10 dark:bg-white/10 mx-2" />
-                        <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] uppercase tracking-widest bg-black/[0.03] dark:bg-white/[0.04] px-1.5 py-0.5 rounded">
-                          {cfg.role}
-                        </span>
-                      </div>
-                      <div className="p-4">
-                        <p className="text-zinc-600 dark:text-[#8a8f98] text-xs leading-relaxed mb-3">{cfg.description}</p>
-                        <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d]">AWAITING_INPUT_SIGNAL...</p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+              "Launch Agent Pipeline →"
             )}
-          </div>
+          </button>
         </div>
+
       </div>
-    </DashboardChassis>
+
+      {/* ── RIGHT PANEL: Agent Previews (56% width) ── */}
+      <div className="w-full lg:w-[56%] flex flex-col m-4 lg:my-4 lg:ml-2 lg:mr-4 max-h-[calc(100vh-32px)]">
+        
+        {/* Section Heading */}
+        <div className="mt-8 mb-4 pl-2">
+          <span className="mono-label text-xs tracking-widest text-white/40">
+            Agents standing by
+          </span>
+        </div>
+
+        {/* 3 Previews */}
+        <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+          {AGENTS.map((agent) => (
+            <div key={agent.key} className="glass-panel p-5 flex items-center gap-4">
+              
+              {/* Gradient avatar */}
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 select-none shadow-inner"
+                style={{ background: agent.gradient }}
+              >
+                <span className="font-bold text-white text-base tracking-tight">
+                  {agent.initials}
+                </span>
+              </div>
+
+              {/* Identity & Status */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="text-white font-semibold text-sm truncate">
+                    {agent.name}
+                  </h3>
+                  <span className="mono-label text-[9px] text-white/20 tracking-wider">
+                    {agent.role}
+                  </span>
+                </div>
+
+                {/* Status Bar */}
+                <div className="mt-4 flex flex-col gap-1.5">
+                  <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+                    {isLoading ? (
+                      <motion.div 
+                        className="h-full bg-violet-400"
+                        animate={{ x: ["-100%", "100%"] }}
+                        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                        style={{ width: "30%" }}
+                      />
+                    ) : (
+                      <div className="h-full bg-white/10 w-[5%]" />
+                    )}
+                  </div>
+                  <span className="text-white/20 text-[10px] font-mono uppercase tracking-wider">
+                    {isLoading ? "ANALYZING_VARIABLES..." : "AWAITING INPUT"}
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
+
+    </div>
   );
 }

@@ -1,59 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "../context/SessionContext";
-import SystemHeader from "../components/SystemHeader";
-import DashboardChassis from "../components/DashboardChassis";
-import ConfidenceRing from "../components/ConfidenceRing";
+import AssumptionCard from "../components/AssumptionCard";
 
-const AGENT_KEYS = ["strategist", "risk_analyst", "devils_advocate"];
-const SCENARIO_KEYS = ["optimistic", "neutral", "pessimistic"];
+function WordByWordReveal({ text }) {
+  const words = text ? text.split(/(\s+)/) : [];
+  const [revealedCount, setRevealedCount] = useState(0);
 
-function getMomTestQuestion(dim, statement) {
-  const s = (statement || "").toLowerCase();
-  if (s.includes("landlord")) {
-    if (dim === "DESIRABILITY") return "Ask Pune landlords: 'How did you find your last remote tenant? Walk me through the process from listing to signing.'";
-    if (dim === "VIABILITY") return "Ask landlords: 'What paid listing platforms do you currently use? What makes that cost acceptable?'";
-    return "Film a room video in 3 lighting setups. Ask tenants: 'Would you lease this flat solely based on this preview?'";
-  }
-  if (s.includes("student") || s.includes("internship")) {
-    if (dim === "DESIRABILITY") return "Ask students: 'How did you track applications last semester? What happened when you forgot a follow-up deadline?'";
-    if (dim === "VIABILITY") return "Ask students: 'What productivity tools do you currently pay for yourself? Why did you pay for those?'";
-    return "Provide a Notion/Sheets tracker to 5 students. Observe if they keep it updated with active listings.";
-  }
-  if (dim === "DESIRABILITY") {
-    return "Ask target users: 'Walk me through the last time you faced this issue. What did you do, and what was most frustrating?'";
-  }
-  if (dim === "VIABILITY") {
-    return "Ask target users: 'What are you currently spending to deal with this? What else have you tried that failed?'";
-  }
-  return "Run a manual test (a Concierge or Wizard of Oz test) for one user. Ask: 'Did this manual result solve your problem?'";
+  useEffect(() => {
+    if (!text || words.length === 0) return;
+    setRevealedCount(0);
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setRevealedCount(i);
+      if (i >= words.length) {
+        clearInterval(interval);
+      }
+    }, 20);
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return (
+    <span>
+      {words.map((word, idx) => {
+        const revealed = idx < revealedCount;
+        return (
+          <span
+            key={idx}
+            className={revealed ? "reveal-word" : "opacity-0"}
+          >
+            {word}
+          </span>
+        );
+      })}
+    </span>
+  );
 }
 
-// June 2025 Calendar Grid: June 1st is Sunday.
-// Prev month days: May 26 - May 31.
-const CALENDAR_DAYS = [
-  { date: 26, current: false },
-  { date: 27, current: false },
-  { date: 28, current: false },
-  { date: 29, current: false },
-  { date: 30, current: false },
-  { date: 31, current: false },
-  ...Array.from({ length: 30 }, (_, i) => ({ date: i + 1, current: true }))
+const AGENT_KEYS = [
+  {
+    key: "strategist",
+    initials: "LS",
+    name: "Lead Strategist",
+    role: "OPPORTUNITY_ANALYSIS",
+    color: "#818CF8",
+    gradient: "linear-gradient(135deg, #4F46E5, #818CF8)",
+    scoreKey: "opportunity_score",
+    scoreLabel: "OPP_SCORE",
+  },
+  {
+    key: "risk_analyst",
+    initials: "RA",
+    name: "Risk Analyst",
+    role: "THREAT_ASSESSMENT",
+    color: "#F87171",
+    gradient: "linear-gradient(135deg, #DC2626, #F87171)",
+    scoreKey: "risk_score",
+    scoreLabel: "RISK_SCORE",
+  },
+  {
+    key: "devils_advocate",
+    initials: "DA",
+    name: "Devil's Advocate",
+    role: "CHALLENGE_ASSESSMENT",
+    color: "#FB923C",
+    gradient: "linear-gradient(135deg, #EA580C, #FB923C)",
+    scoreKey: "challenge_score",
+    scoreLabel: "CHAL_SCORE",
+  },
 ];
 
 export default function Screen3_Workspace() {
   const { state, dispatch } = useSession();
   const { debate, blueprint } = state;
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Manage validation state locally (validated / tested)
+  // Manage tested state locally for assumptions
   const [testedState, setTestedState] = useState({});
 
-  // Initialize local tested state from assumptions matrix
   useEffect(() => {
     if (blueprint?.assumptions_matrix) {
       const initial = {};
       blueprint.assumptions_matrix.forEach((asm) => {
-        initial[asm.id] = false; // default untested
+        initial[asm.id] = false;
       });
       setTestedState(initial);
     }
@@ -61,19 +89,17 @@ export default function Screen3_Workspace() {
 
   if (!blueprint || !debate) {
     return (
-      <DashboardChassis activeTab="Workspace">
-        <div className="h-screen flex items-center justify-center bg-canvas">
-          <div className="text-center">
-            <p className="text-zinc-500 dark:text-[#8a8f98] text-sm font-mono mb-4">NO_PLAN_DATA</p>
-            <button
-              onClick={() => dispatch({ type: "RESET" })}
-              className="btn-accent text-black px-6 py-2 rounded-lg text-sm font-semibold cursor-pointer"
-            >
-              RESTART →
-            </button>
-          </div>
+      <div className="h-screen w-screen flex items-center justify-center bg-[#030014]">
+        <div className="text-center space-y-4">
+          <p className="text-white/40 text-sm font-mono tracking-wider uppercase">NO_WORKSPACE_DATA</p>
+          <button
+            onClick={() => dispatch({ type: "RESET" })}
+            className="btn-primary-glow px-6 py-2.5 rounded-lg text-sm font-bold cursor-pointer"
+          >
+            Restart Setup
+          </button>
         </div>
-      </DashboardChassis>
+      </div>
     );
   }
 
@@ -81,339 +107,286 @@ export default function Screen3_Workspace() {
     setTestedState((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Calculate Average Rating
-  const strategistScore = debate.strategist?.opportunity_score || 75;
-  const riskScore = debate.risk_analyst?.risk_score || 75;
-  const devilScore = debate.devils_advocate?.challenge_score || 75;
-  const avgScore = Math.round((strategistScore + (100 - riskScore) + (100 - devilScore)) / 3);
-
-  // Selected assumption details
-  const activeAsm = blueprint.assumptions_matrix?.[selectedIndex] || blueprint.assumptions_matrix?.[0];
-  const activeRoadmapStep = blueprint.prioritized_roadmap?.[selectedIndex] || blueprint.prioritized_roadmap?.[0];
+  const scenarios = blueprint?.scenarios || {};
+  const optimismData = scenarios.optimistic || {};
+  const neutralData = scenarios.neutral || {};
+  const riskData = scenarios.pessimistic || {};
 
   return (
-    <DashboardChassis activeTab="Workspace">
-      <SystemHeader />
+    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#030014] relative text-white">
+      
+      {/* ── HEADER BAR ── */}
+      <header className="h-14 flex items-center justify-between px-6 backdrop-blur-md bg-[#030014]/80 border-b border-white/8 z-20 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10 flex items-center gap-1.5 backdrop-blur-md shadow-sm">
+            <span className="font-extrabold text-xs text-white tracking-tight">FM</span>
+            <span className="text-white/50 text-[10px] font-medium">· FirstMove</span>
+          </div>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-semibold">
+            Analysis complete
+          </span>
+        </div>
 
-      {/* ── 12-Column Bento Grid Container ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-0 flex-1 mt-4">
+        <button
+          onClick={() => dispatch({ type: "RESET" })}
+          className="px-4 py-1.5 text-xs font-mono text-white/50 hover:text-white border border-white/5 hover:border-white/20 bg-white/2 rounded-full cursor-pointer transition-all duration-300"
+        >
+          Start over
+        </button>
+      </header>
+
+      {/* ── MAIN AREA ── */}
+      <main className="flex flex-1 gap-3 p-3 h-[calc(100vh-56px)] overflow-hidden z-10 min-h-0">
         
-        {/* ── Tile 1: Hero Metrics & Welcome (col-span-12 lg:col-span-8) ── */}
-        <div className="col-span-12 lg:col-span-8 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl p-6 shadow-md backdrop-blur-md flex flex-col justify-between transition-colors duration-300">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* ══ LEFT PANEL: Workspace Blueprint Document (42% width) ══ */}
+        <div className="w-[42%] glass-panel overflow-y-auto p-6 flex flex-col max-h-full">
+          
+          {/* Concept summary */}
+          <span className="mono-label text-[10px] text-white/30 mb-3 block">
+            Startup Idea Concept
+          </span>
+          <div className="border-l-2 border-l-violet-500/50 pl-4 mb-8">
+            <p className="text-white/70 text-sm leading-relaxed">
+              {state.rawIdea || "Untitled startup concept idea."}
+            </p>
+          </div>
+
+          {/* Assumptions Swarm Matrix */}
+          <span className="mono-label text-[10px] text-white/30 mb-3 block">
+            Assumptions Swarm Matrix
+          </span>
+          <div className="mb-8 space-y-3">
+            {(blueprint.assumptions_matrix || []).map((asm, idx) => (
+              <AssumptionCard
+                key={asm.id || idx}
+                assumption={asm}
+                isTested={testedState[asm.id]}
+                onToggleTested={toggleTested}
+                index={idx}
+              />
+            ))}
+          </div>
+
+          {/* Prioritized Roadmap steps */}
+          <span className="mono-label text-[10px] text-white/30 mb-4 block">
+            Prioritized Roadmap
+          </span>
+          <div className="mb-4 relative border-l border-white/5 pl-6 ml-3 space-y-6">
+            {(blueprint.prioritized_roadmap || []).map((step, idx) => (
+              <div key={idx} className="relative flex flex-col">
+                
+                {/* Timeline Dot */}
+                <div 
+                  className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-[#030014] border border-violet-400/50 shadow-sm"
+                >
+                  <span className="text-[8px] font-bold text-violet-300">{idx + 1}</span>
+                </div>
+
+                <h3 className="text-white font-semibold text-xs leading-snug">
+                  {step.mitigation_action}
+                </h3>
+                <p className="text-white/60 text-xs mt-1.5 leading-relaxed">
+                  {step.test_metrics}
+                </p>
+                <span className="text-white/30 text-[9px] font-mono mt-1.5 uppercase tracking-wide">
+                  TIMELINE_WEEK: {step.estimated_week || `WEEK_0${idx + 1}`}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* FirstMove Card (special) */}
+          <div 
+            className="rounded-2xl p-5 mt-6 border transition-all duration-300 flex flex-col justify-between"
+            style={{
+              background: "linear-gradient(135deg, rgba(108,99,255,0.15), rgba(139,92,246,0.08))",
+              borderColor: "rgba(108,99,255,0.3)",
+              boxShadow: "0 0 30px rgba(108,99,255,0.15)"
+            }}
+          >
             <div>
-              <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-[#f7f8f8]">
-                Welcome to Workspace, Founder
-              </h1>
-              <p className="text-zinc-500 dark:text-[#8a8f98] text-xs mt-0.5">
-                Audit protocol and validation roadmap for: <span className="font-mono text-[#7C3AED]">{state.rawIdea ? `"${state.rawIdea.substring(0, 40)}..."` : "Untitled Idea"}</span>
+              <span className="mono-label text-[8px] text-violet-300 block mb-2 font-bold tracking-widest">
+                &gt; Immediate Next Action Step
+              </span>
+              <h4 className="text-white font-bold text-base leading-snug">
+                {blueprint.immediate_next_step?.action_item || "Validate core value premise first."}
+              </h4>
+              <p className="text-white/50 text-xs mt-2 leading-relaxed">
+                Objective: {blueprint.immediate_next_step?.rationale_objective || "Observe user friction under manual testing conditions."}
               </p>
             </div>
-            <button
-              onClick={() => dispatch({ type: "RESET" })}
-              className="btn-accent rounded-full py-1.5 px-4 text-white text-xs font-semibold uppercase tracking-wider cursor-pointer transition-all duration-200 self-start md:self-auto"
-            >
-              New Idea
-            </button>
-          </div>
 
-          {/* Metrics row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-5 border-t border-black/[0.06] dark:border-white/[0.04]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg border border-black/[0.08] dark:border-zinc-800/60 flex items-center justify-center text-[#7C3AED] text-sm font-semibold bg-[#7C3AED]/5">
-                ↗
-              </div>
-              <div>
-                <div className="text-zinc-400 dark:text-[#8a8f98] uppercase tracking-wide text-[9px] font-mono">Socratic Questions</div>
-                <div className="text-lg font-semibold text-zinc-900 dark:text-[#f7f8f8]">3</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg border border-black/[0.08] dark:border-zinc-800/60 flex items-center justify-center text-[#7C3AED] text-sm font-semibold bg-[#7C3AED]/5">
-                ↗
-              </div>
-              <div>
-                <div className="text-zinc-400 dark:text-[#8a8f98] uppercase tracking-wide text-[9px] font-mono">Audited Nodes</div>
-                <div className="text-lg font-semibold text-zinc-900 dark:text-[#f7f8f8]">3</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg border border-black/[0.08] dark:border-zinc-800/60 flex items-center justify-center text-[#7C3AED] text-sm font-semibold bg-[#7C3AED]/5">
-                ↗
-              </div>
-              <div>
-                <div className="text-zinc-400 dark:text-[#8a8f98] uppercase tracking-wide text-[9px] font-mono">Roadmap Steps</div>
-                <div className="text-lg font-semibold text-zinc-900 dark:text-[#f7f8f8]">3</div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg border border-[#7C3AED]/20 bg-[#7C3AED]/10 flex items-center justify-center text-[#7C3AED] text-sm font-semibold">
-                ★
-              </div>
-              <div>
-                <div className="text-zinc-400 dark:text-[#8a8f98] uppercase tracking-wide text-[9px] font-mono">Total Rating</div>
-                <div className="text-lg font-semibold text-[#7C3AED]">{avgScore}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Tile 2: Agent Portrait / Feed Widget (col-span-12 lg:col-span-4 lg:row-span-2) ── */}
-        <div className="col-span-12 lg:col-span-4 lg:row-span-2 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl overflow-hidden relative shadow-md backdrop-blur-md flex flex-col justify-between min-h-[300px] transition-colors duration-300">
-          <div className="relative w-full h-full min-h-[300px]">
-            <img
-              src="/agent_preview.png"
-              alt="Strategist Advisor"
-              className="w-full h-full object-cover opacity-85 dark:opacity-80 absolute inset-0"
-            />
-            {/* Subtle gradient vignette overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-
-            {/* Top-left capsule badge */}
-            <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md border border-white/10 rounded-full px-3.5 py-1.5 text-[9px] font-mono text-white flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              SIMULATION_ACTIVE
-            </div>
-            
-            {/* Top-right menu trigger */}
-            <div className="absolute top-4 right-4 w-7 h-7 rounded-full bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white text-xs cursor-pointer hover:bg-black/60 transition-colors">
-              •••
-            </div>
-
-            {/* Bottom overlays */}
-            <div className="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
-              <div>
-                <span className="text-xs font-mono text-white/60 tracking-widest block uppercase text-[8px]">ACTIVE_MONITOR</span>
-                <span className="text-sm font-semibold tracking-wide">Lead Strategist Node</span>
-              </div>
-              <span className="bg-black/50 border border-white/10 hover:bg-black/70 text-white rounded-full px-3.5 py-1 text-[9px] font-mono transition-colors cursor-pointer uppercase">
-                Active
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Tile 3: Assumptions Matrix Table (col-span-12 lg:col-span-8 lg:row-span-2) ── */}
-        <div className="col-span-12 lg:col-span-8 lg:row-span-2 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl p-6 shadow-md backdrop-blur-md flex flex-col min-h-[320px] transition-colors duration-300">
-          <span className="text-[10px] font-mono text-zinc-500 dark:text-[#8a8f98] uppercase tracking-wider mb-4 block">
-            Assumptions Matrix
-          </span>
-
-          <div className="overflow-y-auto w-full flex-1 pr-1">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-black/[0.06] dark:border-white/[0.04] text-[9px] font-mono text-zinc-400 dark:text-[#62666d] uppercase tracking-wider">
-                  <th className="pb-2">Dimension</th>
-                  <th className="pb-2">Assumption</th>
-                  <th className="pb-2">Status</th>
-                  <th className="pb-2 text-right">Confidence</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/[0.04] dark:divide-white/[0.04]">
-                {(blueprint.assumptions_matrix || []).map((asm, i) => {
-                  const isSelected = selectedIndex === i;
-                  const isTested = testedState[asm.id];
-                  return (
-                    <tr
-                      key={asm.id}
-                      onClick={() => setSelectedIndex(i)}
-                      className={`cursor-pointer transition-colors hover:bg-black/[0.01] dark:hover:bg-white/[0.02] ${
-                        isSelected ? "bg-[#7C3AED]/5 dark:bg-[#7C3AED]/10 border-l-2 border-l-[#7C3AED]" : ""
-                      }`}
-                    >
-                      <td className="py-3 pl-2 font-semibold text-zinc-900 dark:text-[#f7f8f8]">{asm.dimension}</td>
-                      <td className={`py-3 max-w-[180px] truncate text-zinc-500 dark:text-[#8a8f98] ${isTested ? "line-through text-zinc-400 dark:text-[#62666d]" : ""}`}>
-                        {asm.assumption_statement}
-                      </td>
-                      <td className="py-3">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleTested(asm.id);
-                          }}
-                          className={`px-2 py-0.5 rounded text-[8px] font-mono border transition-all cursor-pointer uppercase ${
-                            isTested
-                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-                              : "bg-[#7C3AED]/10 text-[#7C3AED] border-[#7C3AED]/20"
-                          }`}
-                        >
-                          {isTested ? "VALIDATED" : "STANDBY"}
-                        </button>
-                      </td>
-                      <td className="py-3 flex justify-end">
-                        <div className="scale-75 origin-right">
-                          <ConfidenceRing score={asm.confidence_assessment?.confidence_score} />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* ── Tile 5: Guidelines & Mitigation (col-span-12 lg:col-span-8 lg:row-span-2) ── */}
-        <div className="col-span-12 lg:col-span-8 lg:row-span-2 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl p-6 shadow-md backdrop-blur-md flex flex-col justify-between min-h-[360px] transition-colors duration-300">
-          <div>
-            <span className="text-[10px] font-mono text-zinc-500 dark:text-[#8a8f98] uppercase tracking-wider mb-4 block">
-              Validation Guidelines
-            </span>
-
-            {activeAsm && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Mom test block */}
-                <div className="bg-black/[0.02] dark:bg-black/25 border border-black/[0.06] dark:border-white/[0.04] rounded-xl p-4 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[8px] font-mono text-[#7C3AED] block mb-2 tracking-wider uppercase">
-                      &gt; HOW_TO_INTERVIEW (MOM TEST)
-                    </span>
-                    <p className="text-zinc-800 dark:text-[#f7f8f8] text-xs leading-relaxed">
-                      {getMomTestQuestion(activeAsm.dimension, activeAsm.assumption_statement)}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Roadmap step block */}
-                <div className="bg-black/[0.02] dark:bg-black/25 border border-black/[0.06] dark:border-white/[0.04] rounded-xl p-4 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[8px] font-mono text-emerald-550 block mb-2 tracking-wider uppercase">
-                      &gt; MITIGATION_ACTION
-                    </span>
-                    <p className="text-zinc-650 dark:text-[#8a8f98] text-xs leading-relaxed mb-2">
-                      {activeRoadmapStep?.mitigation_action}
-                    </p>
-                  </div>
-                  <div className="border-t border-black/[0.04] dark:border-white/[0.04] pt-2 mt-2">
-                    <span className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] block uppercase">
-                      TARGET GOAL: {activeRoadmapStep?.test_metrics}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Immediate Next step block */}
-                <div className="col-span-1 md:col-span-2 bg-black/[0.02] dark:bg-black/25 border border-black/[0.06] dark:border-white/[0.04] rounded-xl p-4">
-                  <span className="text-[8px] font-mono text-[#7C3AED] block mb-2 tracking-wider uppercase">
-                    &gt; IMMEDIATE_START
-                  </span>
-                  <p className="text-zinc-850 dark:text-[#d0d6e0] text-xs leading-relaxed font-semibold">
-                    {blueprint.immediate_next_step?.action_item}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Sticky legal disclaimer footer positioned permanently inside Guidelines Widget */}
-          <div className="border-t border-black/[0.06] dark:border-white/[0.04] pt-4 mt-6">
-            <p className="text-[9px] font-mono text-zinc-450 dark:text-[#62666d] leading-relaxed text-center uppercase">
+            <p className="text-white/25 text-[10px] font-mono italic mt-6 border-t border-white/5 pt-4">
               DISCLAIMER: FirstMove is an AI tool. All insights, metrics, and roadmaps are probabilistic models. The final decision remains with the founder.
             </p>
           </div>
+
         </div>
 
-        {/* ── Tile 4: Calendar Timeline Widget (col-span-12 lg:col-span-4) ── */}
-        <div className="col-span-12 lg:col-span-4 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl p-5 shadow-md backdrop-blur-md flex flex-col gap-3 transition-colors duration-300">
-          <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 dark:text-[#8a8f98] uppercase">
-            <span>←</span>
-            <span className="font-semibold tracking-widest text-zinc-900 dark:text-[#f7f8f8]">June 2025</span>
-            <span>→</span>
-          </div>
+        {/* ══ RIGHT PANEL: Agent Debate & Scenarios (58% width) ══ */}
+        <div className="w-[58%] flex flex-col gap-3 max-h-full">
           
-          {/* Weekdays */}
-          <div className="grid grid-cols-7 text-center text-[9px] font-mono text-zinc-400 dark:text-[#62666d] border-b border-black/[0.06] dark:border-white/[0.04] pb-1.5">
-            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
-          </div>
-
-          {/* Dates Grid */}
-          <div className="grid grid-cols-7 gap-y-1.5 text-center text-xs font-mono text-zinc-650 dark:text-[#8a8f98]">
-            {CALENDAR_DAYS.map((day, idx) => {
-              const isStep1 = day.current && day.date === 2;
-              const isStep2 = day.current && day.date === 15;
-              const isStep3 = day.current && day.date === 26;
-              const isToday = day.current && day.date === 20;
-
-              return (
-                <div key={idx} className="relative flex flex-col items-center justify-center py-1">
-                  <span className={`w-6 h-6 flex items-center justify-center rounded-full transition-colors ${
-                    isToday 
-                      ? "bg-[#7C3AED] text-white font-semibold" 
-                      : day.current 
-                        ? "text-zinc-800 dark:text-[#d0d6e0]" 
-                        : "text-zinc-300 dark:text-[#62666d]/40"
-                  }`}>
-                    {day.date}
-                  </span>
-                  
-                  {/* Small dot beneath step milestones */}
-                  {(isStep1 || isStep2 || isStep3) && (
-                    <span className="absolute bottom-0 w-1 h-1 rounded-full bg-[#7C3AED]" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ── Tile 6: Confidence Line Chart (col-span-12 lg:col-span-4) ── */}
-        <div className="col-span-12 lg:col-span-4 bg-white/95 dark:bg-[#18181b]/60 border border-black/[0.06] dark:border-zinc-800/60 rounded-2xl p-5 shadow-md backdrop-blur-md flex flex-col justify-between transition-colors duration-300">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono text-zinc-500 dark:text-[#8a8f98] uppercase tracking-wider">
-              Confidence Matrix
+          {/* TOP HALF: Agent Debate Grid (flex-1) */}
+          <div className="flex-1 glass-panel overflow-y-auto p-5 flex flex-col">
+            <span className="mono-label text-[10px] text-white/30 mb-5 block">
+              Agent Debate
             </span>
-            <div className="flex gap-1 bg-black/[0.02] dark:bg-white/[0.02] border border-black/[0.06] dark:border-white/[0.08] rounded-full p-0.5 text-[8px] font-mono">
-              <button className="text-zinc-400 dark:text-[#62666d] px-1.5 py-0.5">1D</button>
-              <button className="bg-[#7C3AED] text-white rounded-full px-2 py-0.5 font-semibold">7D</button>
-              <button className="text-zinc-400 dark:text-[#62666d] px-1.5 py-0.5">30D</button>
+
+            <div className="space-y-4 flex-1">
+              {AGENT_KEYS.map((agent) => {
+                const data = debate[agent.key];
+                const score = data?.[agent.scoreKey];
+                return (
+                  <div key={agent.key} className="glass-panel p-4 flex flex-col">
+                    
+                    {/* Top linear accent line */}
+                    <div 
+                      className="h-0.5 w-full rounded-full mb-3"
+                      style={{ background: `linear-gradient(90deg, transparent, ${agent.color}, transparent)` }}
+                    />
+
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between mb-3.5">
+                      <div className="flex items-center gap-3">
+                        {/* Avatar */}
+                        <div 
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-inner"
+                          style={{ background: agent.gradient }}
+                        >
+                          <span className="font-bold text-white text-xs tracking-tight">
+                            {agent.initials}
+                          </span>
+                        </div>
+                        <div>
+                          <h4 className="text-white font-semibold text-sm leading-none">
+                            {agent.name}
+                          </h4>
+                        </div>
+                        <span 
+                          className="text-[9px] font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border"
+                          style={{ 
+                            color: agent.color, 
+                            backgroundColor: `${agent.color}18`, 
+                            borderColor: `${agent.color}35` 
+                          }}
+                        >
+                          {agent.role}
+                        </span>
+                      </div>
+
+                      {score !== undefined && (
+                        <span className="text-white/50 text-[10px] font-mono">
+                          {agent.scoreLabel}: {score}%
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Verdict WordReveal */}
+                    <p className="text-white/60 text-xs leading-relaxed mt-1">
+                      <WordByWordReveal text={data?.verdict || "Awaiting simulation signal..."} />
+                    </p>
+
+                    {/* Key points */}
+                    {data?.key_points && (
+                      <div className="mt-3.5 pt-3 border-t border-white/5 space-y-2">
+                        {data.key_points.map((pt, i) => (
+                          <div key={i} className="flex items-start gap-2">
+                            <span 
+                              className="text-[11px] leading-none shrink-0" 
+                              style={{ color: `${agent.color}aa` }}
+                            >
+                              ▸
+                            </span>
+                            <p className="text-white/40 text-[11px] leading-relaxed">
+                              {pt}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          {/* SVG Line Chart */}
-          <div className="relative w-full h-28 mt-3">
-            {/* Tooltip floating */}
-            <div
-              className="absolute bg-zinc-900 dark:bg-white text-white dark:text-black text-[9px] font-semibold font-mono rounded-full px-3 py-1 shadow-md"
-              style={{ top: "10px", left: "155px", transform: "translateX(-50%)" }}
-            >
-              {activeAsm ? `${activeAsm.confidence_assessment?.confidence_score}% - ${activeAsm.dimension}` : "75% - Score"}
+          {/* BOTTOM HALF: 3 Scenarios side by side (240px fixed) */}
+          <div className="h-[240px] flex gap-3 flex-shrink-0">
+            
+            {/* Optimistic */}
+            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                  <h4 className="text-white font-semibold text-sm">Optimistic</h4>
+                </div>
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((optimismData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-white/60 text-xs leading-snug mt-2">
+                  {optimismData.headline || "Premise achieves positive viral loops."}
+                </p>
+              </div>
+              <div>
+                <span className="text-white/25 text-[10px] font-mono">
+                  TIMELINE: {optimismData.estimated_timeline || "N/A"}
+                </span>
+                <div className="h-0.5 rounded-full mt-3 bg-emerald-400/60 w-full" />
+              </div>
             </div>
 
-            <svg className="w-full h-full -scale-y-1" viewBox="0 0 300 100" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="chartGrad" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="#7C3AED" stopOpacity="0.0" />
-                </linearGradient>
-              </defs>
-              {/* Grid guidelines */}
-              <line x1="0" y1="10" x2="300" y2="10" stroke="rgba(0,0,0,0.03)" className="dark:stroke-white/[0.02]" strokeWidth="1" />
-              <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(0,0,0,0.03)" className="dark:stroke-white/[0.02]" strokeWidth="1" />
-              <line x1="0" y1="90" x2="300" y2="90" stroke="rgba(0,0,0,0.03)" className="dark:stroke-white/[0.02]" strokeWidth="1" />
-              
-              {/* Area under line */}
-              <path d="M 0 10 Q 75 35, 150 78 T 300 65 L 300 0 L 0 0 Z" fill="url(#chartGrad)" />
-              
-              {/* Main line */}
-              <path d="M 0 10 Q 75 35, 150 78 T 300 65" fill="none" stroke="#7C3AED" strokeWidth="2.5" />
-              
-              {/* Active value pointer */}
-              <circle cx="150" cy="78" r="4.5" fill="#7C3AED" stroke="#ffffff" className="dark:stroke-[#1c1c1e]" strokeWidth="2" />
-              <line x1="150" y1="0" x2="150" y2="78" stroke="rgba(0,0,0,0.12)" className="dark:stroke-white/[0.12]" strokeWidth="1" strokeDasharray="3,3" />
-            </svg>
+            {/* Neutral */}
+            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                  <h4 className="text-white font-semibold text-sm">Neutral</h4>
+                </div>
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((neutralData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-white/60 text-xs leading-snug mt-2">
+                  {neutralData.headline || "Growth scales at typical industry baseline."}
+                </p>
+              </div>
+              <div>
+                <span className="text-white/25 text-[10px] font-mono">
+                  TIMELINE: {neutralData.estimated_timeline || "N/A"}
+                </span>
+                <div className="h-0.5 rounded-full mt-3 bg-white/20 w-full" />
+              </div>
+            </div>
+
+            {/* Risk / Pessimistic */}
+            <div className="flex-1 glass-panel p-4 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                  <h4 className="text-white font-semibold text-sm">Risk Path</h4>
+                </div>
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((riskData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-white/60 text-xs leading-snug mt-2">
+                  {riskData.headline || "High churn levels or low initial response rate."}
+                </p>
+              </div>
+              <div>
+                <span className="text-white/25 text-[10px] font-mono">
+                  TIMELINE: {riskData.estimated_timeline || "N/A"}
+                </span>
+                <div className="h-0.5 rounded-full mt-3 bg-red-400/60 w-full" />
+              </div>
+            </div>
+
           </div>
 
-          {/* X-Axis Labels */}
-          <div className="flex justify-between items-center text-[9px] font-mono text-[#62666d] mt-2 border-t border-black/[0.06] dark:border-white/[0.04] pt-2">
-            <span>Desirability</span>
-            <span>Viability</span>
-            <span>Feasibility</span>
-          </div>
         </div>
 
-      </div>
-    </DashboardChassis>
+      </main>
+
+    </div>
   );
 }

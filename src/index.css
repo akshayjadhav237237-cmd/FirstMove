@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Global reset ─── */
+/* ─── Global Resets & Typography ─── */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -15,60 +15,116 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f6;
-  color: #18181b;
+  background-color: #030014;
+  color: #FFFFFF;
   font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-html.dark, html.dark body, html.dark #root {
-  background-color: #09090b;
-  color: #f7f8f8;
+/* Headings font styling */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
 }
 
-/* ─── Elevation shadow mixin helpers ─── */
-.shadow-card {
+/* Monospace Labels & Tags */
+.mono-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* ─── Glassmorphism Standard Cards ─── */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Prominent Main Card on Screen 1 */
+.glass-panel-hero {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 
+    0 0 0 1px rgba(108, 99, 255, 0.1),
+    0 32px 64px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Hide Scrollbars Globally ─── */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+* {
+  scrollbar-width: none;
+}
+
+/* ─── Animations ─── */
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Primary Button glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 40px rgba(108, 99, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2); 
+  }
+  50% { 
+    box-shadow: 0 0 60px rgba(108, 99, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3); 
+  }
+}
+.btn-primary-glow {
+  background: linear-gradient(135deg, #6C63FF, #8B5CF6, #A78BFA);
+  border: none;
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.6),
-    0 1px 2px rgba(0,0,0,0.05),
-    0 12px 24px -4px rgba(0,0,0,0.06);
-  transition: box-shadow 0.3s ease;
+    0 0 40px rgba(108, 99, 255, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
-html.dark .shadow-card {
-  box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.05),
-    0 1px 2px rgba(0,0,0,0.5),
-    0 12px 24px -4px rgba(0,0,0,0.4);
+.btn-primary-glow:hover {
+  transform: scale(1.01);
+  animation: glow-pulse 2s ease-in-out infinite;
 }
-.shadow-inset-top {
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.04);
-}
-html.dark .shadow-inset-top {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.shadow-inset-subtle {
-  box-shadow: inset 0 1px 0 rgba(0,0,0,0.03);
-}
-html.dark .shadow-inset-subtle {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+.btn-primary-glow:active {
+  transform: scale(0.99);
 }
 
-/* ─── Shimmer Skeleton ─── */
-@keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+/* Word Reveal blur animation */
+@keyframes word-reveal {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+  }
 }
-.skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.02) 0%,
-    rgba(255,255,255,0.05) 50%,
-    rgba(255,255,255,0.02) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s ease-in-out infinite;
-  border-radius: 4px;
+.reveal-word {
+  display: inline-block;
+  animation: word-reveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ─── Rotating Border Beam ─── */
@@ -83,7 +139,7 @@ html.dark .shadow-inset-subtle {
 .border-beam {
   border: 1px solid transparent;
   background:
-    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(#030014, #030014) padding-box,
     conic-gradient(
       from var(--beam-angle),
       transparent 75%,
@@ -92,100 +148,6 @@ html.dark .shadow-inset-subtle {
     ) border-box;
   animation: rotate-beam 2.5s linear infinite;
 }
-html.dark .border-beam {
-  background:
-    linear-gradient(#0c0d10, #0c0d10) padding-box,
-    conic-gradient(
-      from var(--beam-angle),
-      transparent 75%,
-      var(--beam-color, #6C63FF) 85%,
-      transparent 95%
-    ) border-box;
-}
-.border-beam-strategist { --beam-color: #7C3AED; }
+.border-beam-strategist { --beam-color: #818CF8; }
 .border-beam-risk       { --beam-color: #F87171; }
 .border-beam-devil      { --beam-color: #FB923C; }
-
-/* ─── Typing Indicator Dots ─── */
-@keyframes dot-bounce {
-  0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
-  40%           { transform: translateY(-3px); opacity: 1;   }
-}
-.typing-dot {
-  display: inline-block;
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  animation: dot-bounce 1.2s ease-in-out infinite;
-}
-.typing-dot:nth-child(2) { animation-delay: 0.1s; }
-.typing-dot:nth-child(3) { animation-delay: 0.2s; }
-
-/* ─── LIVE Badge Pulse ─── */
-@keyframes live-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.45; }
-}
-.live-badge { animation: live-pulse 2s ease-in-out infinite; }
-
-/* ─── Blinking cursor ─── */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
-}
-.cursor-blink { animation: blink 1s step-end infinite; }
-
-/* ─── Scrollbars ─── */
-::-webkit-scrollbar       { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.12);
-  border-radius: 2px;
-}
-html.dark ::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.06);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-/* ─── Focus rings ─── */
-textarea:focus, input:focus {
-  outline: none;
-  border-color: rgba(124,58,237,0.40) !important;
-  box-shadow: 0 0 0 1px rgba(124,58,237,0.20);
-}
-
-/* ─── Panel utilities ─── */
-.panel-scroll { overflow-y: auto; height: 100%; }
-.h-screen-fill { height: 100%; }
-
-/* ─── Button glow ─── */
-.btn-accent {
-  background: #7C3AED;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.2),
-    0 0 20px rgba(124,58,237,0.2);
-  transition: all 0.2s ease;
-  color: #fff;
-}
-.btn-accent:hover {
-  background: #6D28D9;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.2),
-    0 0 30px rgba(124,58,237,0.3);
-}
-
-/* ─── Cyber Violet Backdrop Glow ─── */
-.dashboard-glow-bg {
-  position: absolute;
-  bottom: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 250px;
-  background: radial-gradient(circle, rgba(124,58,237,0.20) 0%, rgba(6,182,212,0.06) 55%, rgba(0,0,0,0) 80%);
-  filter: blur(80px);
-  pointer-events: none;
-  z-index: 0;
-  border-radius: 50%;
-}

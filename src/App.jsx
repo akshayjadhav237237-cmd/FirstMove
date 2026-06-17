@@ -40,7 +40,7 @@ function AppRouter() {
         animate="animate"
         exit="exit"
         transition={gentleSpring}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", flex: 1 }}
       >
         {ScreenComponent}
       </motion.div>
@@ -51,7 +51,56 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <AppRouter />
+      <div className="relative min-h-screen w-screen bg-[#030014] text-white overflow-hidden select-none font-sans">
+        
+        {/* Orb 1 (top-left) */}
+        <div 
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: "600px",
+            height: "600px",
+            top: "-200px",
+            left: "-200px",
+            background: "radial-gradient(circle, rgba(108, 99, 255, 0.35) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            zIndex: 0
+          }}
+        />
+
+        {/* Orb 2 (top-right) */}
+        <div 
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: "500px",
+            height: "500px",
+            top: "-100px",
+            right: "-100px",
+            background: "radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%)",
+            filter: "blur(100px)",
+            zIndex: 0
+          }}
+        />
+
+        {/* Orb 3 (bottom-left) */}
+        <div 
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            width: "400px",
+            height: "400px",
+            bottom: "-100px",
+            left: "30%",
+            background: "radial-gradient(circle, rgba(79, 70, 229, 0.2) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            zIndex: 0
+          }}
+        />
+
+        {/* All content sits above these orbs using position: relative; z-index: 1 */}
+        <div className="relative z-10 w-full min-h-screen flex flex-col">
+          <AppRouter />
+        </div>
+
+      </div>
     </SessionProvider>
   );
 }

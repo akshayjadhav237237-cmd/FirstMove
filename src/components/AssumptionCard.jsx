@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import ConfidenceRing from "./ConfidenceRing";
-
-const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 function getMomTestQuestion(dim, statement) {
   const s = (statement || "").toLowerCase();
@@ -29,143 +26,126 @@ function getMomTestQuestion(dim, statement) {
 const DVF_STYLES = {
   DESIRABILITY: {
     label: "DESIRABILITY",
-    cls: "text-indigo-600 dark:text-[#818CF8] bg-indigo-500/[0.06] dark:bg-indigo-500/[0.08] border border-indigo-500/15 dark:border-indigo-500/20",
+    cls: "text-indigo-300 bg-indigo-500/10 border border-indigo-400/20",
   },
   VIABILITY: {
     label: "VIABILITY",
-    cls: "text-emerald-600 dark:text-[#34D399] bg-emerald-500/[0.06] dark:bg-emerald-500/[0.08] border border-emerald-500/15 dark:border-emerald-500/20",
+    cls: "text-emerald-300 bg-emerald-500/10 border border-emerald-400/20",
   },
   FEASIBILITY: {
     label: "FEASIBILITY",
-    cls: "text-orange-600 dark:text-[#FB923C] bg-orange-500/[0.06] dark:bg-orange-500/[0.08] border border-orange-500/15 dark:border-orange-500/20",
+    cls: "text-orange-300 bg-orange-500/10 border border-orange-400/20",
   },
 };
 
-export default function AssumptionCard({ assumption, index = 0 }) {
-  const [view, setView] = useState("collapsed"); // collapsed | expanded | tested
-  const { dimension, assumption_statement, confidence_assessment } = assumption;
+export default function AssumptionCard({ assumption, isTested, onToggleTested, index = 0 }) {
+  const [expanded, setExpanded] = useState(false);
+  const { id, dimension, assumption_statement, confidence_assessment } = assumption;
   const { confidence_score, contributing_factors } = confidence_assessment || {};
 
   const dim = (dimension || "DESIRABILITY").toUpperCase();
   const dvf = DVF_STYLES[dim] || DVF_STYLES.DESIRABILITY;
 
-  const cardStyle = {
-    boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
-  };
-
-  if (view === "tested") {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.08, ...smoothSpring }}
-        className="bg-white dark:bg-surface border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden transition-all duration-200"
-        style={cardStyle}
-      >
-        <div className="px-4 py-3 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04]">
-          <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
-            {dvf.label}
-          </span>
-          <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/[0.06] dark:bg-emerald-500/[0.08] border border-emerald-500/20 px-1.5 py-0.5 rounded">
-            NODE_VALIDATED
-          </span>
-        </div>
-        <div className="px-4 py-3">
-          <p className="text-zinc-400 dark:text-[#62666d] text-sm leading-relaxed line-through">{assumption_statement}</p>
-          <button
-            onClick={() => setView("collapsed")}
-            className="mt-3 text-[9px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] transition-colors cursor-pointer"
-          >
-            MARK_UNTESTED →
-          </button>
-        </div>
-      </motion.div>
-    );
-  }
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.08, ...smoothSpring }}
-      className="bg-white dark:bg-surface border border-black/[0.06] dark:border-white/[0.04] hover:border-black/[0.12] dark:hover:border-white/[0.12] rounded-lg mb-3 overflow-hidden transition-all duration-200"
-      style={cardStyle}
+    <div
+      className={`glass-panel mb-3 overflow-hidden transition-all duration-300 ${
+        isTested 
+          ? "border-l-2 border-l-emerald-400/50 opacity-40" 
+          : ""
+      }`}
     >
       {/* Header */}
-      <div className="px-4 py-3 flex items-center justify-between border-b border-black/[0.06] dark:border-white/[0.04] bg-black/[0.01] dark:bg-white/[0.01]">
-        <span className={`text-[9px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded ${dvf.cls}`}>
+      <div className="flex justify-between items-center p-4 border-b border-white/[0.06]">
+        <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full ${dvf.cls}`}>
           {dvf.label}
         </span>
-        <ConfidenceRing score={confidence_score} />
+        <span className="text-white/40 text-xs font-mono">
+          CONFIDENCE: {confidence_score}%
+        </span>
       </div>
 
       {/* Body */}
-      <div className="px-4 py-3">
-        <p className="text-zinc-700 dark:text-[#d0d6e0] text-sm leading-relaxed">{assumption_statement}</p>
+      <div className="p-4 flex flex-col gap-3">
+        <p className={`text-white/60 text-xs leading-relaxed ${isTested ? "line-through" : ""}`}>
+          {assumption_statement}
+        </p>
+
+        {/* Collapsed / Expanded sections */}
+        <AnimatePresence initial={false}>
+          {expanded ? (
+            <motion.div
+              key="expanded"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="overflow-hidden"
+            >
+              <div className="bg-white/[0.03] border border-white/5 rounded-xl p-3.5 mt-2 space-y-3">
+                {/* Contributing factors */}
+                <div>
+                  <span className="mono-label text-[8px] text-white/30 block mb-1.5 font-bold">
+                    Risk Factors
+                  </span>
+                  <div className="space-y-1">
+                    {(contributing_factors || []).map((factor, i) => (
+                      <div key={i} className="text-white/50 text-[10px] font-mono leading-relaxed">
+                        {"▸ "}{factor}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mom Test method */}
+                <div className="border-t border-white/5 pt-2.5">
+                  <span className="mono-label text-[8px] text-white/30 block mb-1.5 font-bold">
+                    Validation Method (Mom Test)
+                  </span>
+                  <p className="text-white/60 text-[10px] leading-relaxed">
+                    {getMomTestQuestion(dim, assumption_statement)}
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={() => onToggleTested(id)}
+                    className={`flex-1 py-1.5 text-[9px] font-mono rounded border transition-colors cursor-pointer ${
+                      isTested
+                        ? "bg-amber-500/10 text-amber-300 border-amber-500/20 hover:bg-amber-500/20"
+                        : "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 hover:bg-emerald-500/20"
+                    }`}
+                  >
+                    {isTested ? "MARK_UNTESTED" : "MARK_TESTED ✓"}
+                  </button>
+                  <button
+                    onClick={() => setExpanded(false)}
+                    className="px-3 py-1.5 text-[9px] font-mono text-white/40 hover:text-white/70 border border-white/10 rounded transition-colors cursor-pointer"
+                  >
+                    Collapse
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="flex justify-between items-center mt-1">
+              <button
+                onClick={() => setExpanded(true)}
+                className="text-white/25 text-[10px] font-mono hover:text-white/50 cursor-pointer transition-colors"
+              >
+                Expand Analysis →
+              </button>
+              <button
+                onClick={() => onToggleTested(id)}
+                className="text-white/25 hover:text-emerald-400 text-[10px] font-mono cursor-pointer transition-colors"
+              >
+                {isTested ? "Mark Untested" : "Quick Validated ✓"}
+              </button>
+            </div>
+          )}
+        </AnimatePresence>
       </div>
 
-      {/* Footer / expanded content */}
-      <AnimatePresence mode="wait">
-        {view === "collapsed" ? (
-          <div className="px-4 pb-3">
-            <button
-              onClick={() => setView("expanded")}
-              className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] transition-colors cursor-pointer"
-            >
-              EXPAND_ANALYSIS →
-            </button>
-          </div>
-        ) : (
-          <motion.div
-            key="expanded"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <div className="px-4 pb-4">
-              <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-3">
-                CONFIDENCE_SCORE: {confidence_score}/100
-              </p>
-
-              {/* Risk factors */}
-              <div className="bg-black/[0.02] dark:bg-black/30 rounded-md p-3 mb-3 border border-black/[0.06] dark:border-white/[0.04]">
-                <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-2 font-semibold">RISK_FACTORS:</p>
-                {(contributing_factors || []).map((f, i) => (
-                  <p key={i} className="text-zinc-650 dark:text-[#8a8f98] text-xs font-mono leading-relaxed">
-                    {"  > "}{f}
-                  </p>
-                ))}
-              </div>
-
-              {/* How to test */}
-              <div className="bg-black/[0.02] dark:bg-black/30 rounded-md p-3 mb-3 border border-black/[0.06] dark:border-white/[0.04]">
-                <p className="text-[9px] font-mono text-zinc-500 dark:text-[#62666d] mb-1 font-semibold">{`> HOW_TO_TEST:`}</p>
-                <p className="text-zinc-700 dark:text-[#d0d6e0] text-xs leading-relaxed">
-                  {getMomTestQuestion(dim, assumption_statement)}
-                </p>
-              </div>
-
-              {/* Action row */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setView("collapsed")}
-                  className="flex-1 h-7 text-[10px] font-mono text-zinc-500 dark:text-[#62666d] hover:text-zinc-900 dark:hover:text-[#8a8f98] border border-black/[0.06] dark:border-white/[0.06] rounded-md transition-colors cursor-pointer"
-                >
-                  COLLAPSE_NODE
-                </button>
-                <button
-                  onClick={() => setView("tested")}
-                  className="flex-1 h-7 text-[10px] font-mono text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 rounded-md hover:bg-emerald-500/[0.06] transition-colors cursor-pointer"
-                >
-                  MARK_TESTED ✓
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
