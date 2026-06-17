@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { useSession } from "../context/SessionContext";
 import { resilientFetch } from "../utils/resilientFetch";
@@ -6,7 +6,7 @@ import { QuestionSkeleton } from "../components/SkeletonLoader";
 import AgentCard from "../components/AgentCard";
 import SystemHeader from "../components/SystemHeader";
 
-const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
+const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 const AGENT_KEYS = ["strategist", "risk_analyst", "devils_advocate"];
 
@@ -34,6 +34,14 @@ const AGENT_PREVIEWS = {
 export default function Screen2_Questions({ isLoading }) {
   const { state, dispatch } = useSession();
   const [answers, setAnswers] = useState(state.userAnswers || {});
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const allAnswered =
     state.socraticQuestions.length > 0 &&
@@ -64,9 +72,9 @@ export default function Screen2_Questions({ isLoading }) {
     <div className="flex flex-col w-screen h-screen bg-canvas overflow-hidden">
       <SystemHeader />
 
-      <div className="flex flex-1 min-h-0">
+      <div className={`flex flex-1 min-h-0 ${isMobile ? "flex-col overflow-y-auto" : ""}`}>
         {/* ── LEFT PANEL ── */}
-        <div className="w-[45%] flex flex-col border-r border-white/[0.06]">
+        <div className={`${isMobile ? "w-full border-b" : "w-[45%] border-r"} flex flex-col border-white/[0.04]`}>
           {/* Panel header */}
           <div
             className="h-10 flex-shrink-0 flex items-center justify-between px-4 bg-white/[0.01] border-b border-white/[0.06]"
@@ -94,8 +102,8 @@ export default function Screen2_Questions({ isLoading }) {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.08, ...smoothSpring }}
-                    className="bg-surface border border-white/[0.06] rounded-lg p-5"
-                    style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+                    className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-5 transition-all duration-200"
+                    style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)" }}
                   >
                     <p className="text-[9px] font-mono text-[#62666d] uppercase tracking-widest mb-2">
                       {q.target_variable}
@@ -112,7 +120,7 @@ export default function Screen2_Questions({ isLoading }) {
                         setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                       }
                       placeholder="Your answer..."
-                      className="bg-surface-2 border border-white/[0.06] rounded-lg p-3 text-[#d0d6e0] text-sm w-full min-h-[90px] resize-none placeholder:text-[#62666d] transition-all duration-150"
+                      className="bg-surface-2 border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-3 text-[#d0d6e0] text-sm w-full min-h-[90px] resize-none placeholder:text-[#62666d] transition-all duration-150"
                     />
                   </motion.div>
                 ))}
@@ -153,7 +161,7 @@ export default function Screen2_Questions({ isLoading }) {
         </div>
 
         {/* ── RIGHT PANEL ── */}
-        <div className="w-[55%] flex flex-col bg-panel-r">
+        <div className={`${isMobile ? "w-full" : "w-[55%]"} flex flex-col bg-panel-r`}>
           {/* Panel header */}
           <div className="h-10 flex-shrink-0 flex items-center justify-between px-4 bg-white/[0.01] border-b border-white/[0.06]">
             <span className="text-[10px] font-mono text-[#f7f8f8] font-semibold uppercase tracking-widest">
@@ -182,8 +190,8 @@ export default function Screen2_Questions({ isLoading }) {
                       initial={{ opacity: 0, y: 6 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.08, ...smoothSpring }}
-                      className="bg-surface border border-white/[0.06] rounded-lg overflow-hidden mb-3"
-                      style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+                      className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg overflow-hidden mb-3 transition-all duration-200"
+                      style={{ boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)" }}
                     >
                       <div className="h-10 flex items-center px-4 bg-white/[0.01] border-b border-white/[0.04]">
                         <span className="w-3 h-3 rounded-sm mr-2.5 flex-shrink-0" style={{ backgroundColor: cfg.color + "cc" }} />

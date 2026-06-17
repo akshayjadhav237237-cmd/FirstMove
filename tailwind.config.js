@@ -4,13 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas:      '#08090a',
-        surface:     '#0a0a0c',
-        'surface-2': '#0e0f11',
+        canvas:      '#050507',
+        'left-panel':'#08090b',
         'panel-r':   '#06060a',
-        card:        '#0a0a0c',
-        'card-el':   '#0e0f11',
-        'input-bg':  '#0e0f11',
+        surface:     '#0c0d10',
+        'surface-2': '#121318',
+        card:        '#0c0d10',
+        'card-el':   '#121318',
+        'input-bg':  '#121318',
         accent:      '#6C63FF',
         'accent-hover': '#5A52E0',
         // Agent

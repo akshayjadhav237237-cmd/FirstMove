@@ -5,7 +5,7 @@ import { resilientFetch } from "../utils/resilientFetch";
 import { QuestionSkeleton } from "../components/SkeletonLoader";
 import SystemHeader from "../components/SystemHeader";
 
-const gentleSpring = { type: "spring", stiffness: 200, damping: 20, restSpeed: 0.1 };
+const gentleSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 const CHIPS = [
   "An app that gives affordable 3D tours of rental flats in Pune",
@@ -67,10 +67,10 @@ export default function Screen1_Idea({ isLoading }) {
           {/* Card */}
           <div className="max-w-2xl w-full">
             <div
-              className="bg-surface border border-white/[0.06] rounded-xl p-6"
+              className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-xl p-6 transition-all duration-200"
               style={{
                 boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,0.06), 0 0 0 1px rgba(255,255,255,0.03), 0 20px 40px rgba(0,0,0,0.4)",
+                  "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
               }}
             >
               {isLoading ? (
@@ -86,7 +86,7 @@ export default function Screen1_Idea({ isLoading }) {
                     value={idea}
                     onChange={(e) => setIdea(e.target.value)}
                     placeholder="Describe your idea in a sentence or two..."
-                    className="w-full bg-surface-2 border border-white/[0.06] rounded-lg p-4 text-[#d0d6e0] text-sm min-h-[140px] resize-none placeholder:text-[#62666d] leading-relaxed transition-all duration-150"
+                    className="w-full bg-surface-2 border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-4 text-[#d0d6e0] text-sm min-h-[140px] resize-none placeholder:text-[#62666d] leading-relaxed transition-all duration-150"
                     onKeyDown={(e) => { if (e.key === "Enter" && e.metaKey) handleSubmit(); }}
                   />
 
@@ -97,7 +97,7 @@ export default function Screen1_Idea({ isLoading }) {
                         key={i}
                         type="button"
                         onClick={() => setIdea(chip)}
-                        className="border border-white/[0.08] rounded-full text-[#62666d] text-xs px-3 py-1.5 hover:border-white/[0.14] hover:text-[#8a8f98] hover:bg-white/[0.02] transition-all duration-200 text-left cursor-pointer"
+                        className="border border-white/[0.04] rounded-full text-[#62666d] text-xs px-3 py-1.5 hover:border-white/[0.12] hover:text-[#8a8f98] hover:bg-white/[0.02] transition-all duration-200 text-left cursor-pointer"
                       >
                         {chip}
                       </button>

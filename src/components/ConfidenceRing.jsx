@@ -3,10 +3,10 @@ import React from "react";
 const radius = 12;
 const circumference = 2 * Math.PI * radius;
 
-export default function ConfidenceRing({ score }) {
+export default function ConfidenceRing({ score, strokeColor }) {
   const s = typeof score === "number" ? score : 0;
   const offset = circumference - (s / 100) * circumference;
-  const color = s >= 80 ? "#10B981" : s >= 60 ? "#F59E0B" : "#EF4444";
+  const color = strokeColor || (s >= 80 ? "#10B981" : s >= 60 ? "#F59E0B" : "#EF4444");
 
   return (
     <div className="relative w-8 h-8 flex items-center justify-center flex-shrink-0">

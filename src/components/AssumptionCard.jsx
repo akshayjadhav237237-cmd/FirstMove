@@ -2,7 +2,29 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import ConfidenceRing from "./ConfidenceRing";
 
-const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
+const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
+
+function getMomTestQuestion(dim, statement) {
+  const s = (statement || "").toLowerCase();
+  if (s.includes("landlord")) {
+    if (dim === "DESIRABILITY") return "Talk to 3 landlords. Ask: 'How did you find your last remote tenant? Walk me through the process from listing to contract.'";
+    if (dim === "VIABILITY") return "Talk to 3 landlords. Ask: 'What tools or packages do you currently pay for to list or manage your properties? What does it cost?'";
+    return "Film a quick video of your own room under 3 lighting conditions. Ask: 'Is this quality clear enough to make a rental decision?'";
+  }
+  if (s.includes("student") || s.includes("internship")) {
+    if (dim === "DESIRABILITY") return "Talk to 3 students. Ask: 'How do you keep track of your internship applications today? What happened the last time you missed a deadline?'";
+    if (dim === "VIABILITY") return "Talk to 3 students. Ask: 'What productivity tools (like Notion or Spotify) do you pay for yourself? What would make this tool worth paying for?'";
+    return "Build a single-page tracker in Notion/Sheets. Send it to 5 students and observe if they use it for their active listings.";
+  }
+  
+  if (dim === "DESIRABILITY") {
+    return `Talk to 3 target users. Ask: "Walk me through the last time you faced this problem. What did you do to solve it? (Do not mention your idea)."`;
+  }
+  if (dim === "VIABILITY") {
+    return `Talk to 3 target users. Ask: "What are you currently spending (in time or money) to deal with this? What makes that cost acceptable or unacceptable?"`;
+  }
+  return `Run a manual test (a Concierge or Wizard of Oz test) for one user. Ask: "Did the manual workflow solve your core problem?"`;
+}
 
 const DVF_STYLES = {
   DESIRABILITY: {
@@ -28,7 +50,7 @@ export default function AssumptionCard({ assumption, index = 0 }) {
   const dvf = DVF_STYLES[dim] || DVF_STYLES.DESIRABILITY;
 
   const cardStyle = {
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+    boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
   };
 
   if (view === "tested") {
@@ -37,7 +59,7 @@ export default function AssumptionCard({ assumption, index = 0 }) {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.08, ...smoothSpring }}
-        className="bg-surface border border-white/[0.06] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden"
+        className="bg-surface border border-white/[0.04] hover:border-white/[0.12] border-l-[3px] border-l-emerald-500/60 rounded-lg mb-3 overflow-hidden transition-all duration-200"
         style={cardStyle}
       >
         <div className="px-4 py-3 flex items-center justify-between border-b border-white/[0.04]">
@@ -66,7 +88,7 @@ export default function AssumptionCard({ assumption, index = 0 }) {
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, ...smoothSpring }}
-      className="bg-surface border border-white/[0.06] rounded-lg mb-3 overflow-hidden"
+      className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg mb-3 overflow-hidden transition-all duration-200"
       style={cardStyle}
     >
       {/* Header */}
@@ -119,9 +141,9 @@ export default function AssumptionCard({ assumption, index = 0 }) {
 
               {/* How to test */}
               <div className="bg-black/30 rounded-md p-3 mb-3 border border-white/[0.04]">
-                <p className="text-[9px] font-mono text-[#62666d] mb-1">HOW_TO_TEST:</p>
+                <p className="text-[9px] font-mono text-[#62666d] mb-1">{`> HOW_TO_TEST:`}</p>
                 <p className="text-[#d0d6e0] text-xs leading-relaxed">
-                  Talk to 3 real people who match your target. Ask: "Walk me through the last time you had this problem. What did you do?" Don't mention your idea.
+                  {getMomTestQuestion(dim, assumption_statement)}
                 </p>
               </div>
 

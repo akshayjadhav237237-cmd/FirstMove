@@ -5,7 +5,7 @@ import Screen1_Idea from "./screens/Screen1_Idea";
 import Screen2_Questions from "./screens/Screen2_Questions";
 import Screen3_Workspace from "./screens/Screen3_Workspace";
 
-const gentleSpring = { type: "spring", stiffness: 200, damping: 20, restSpeed: 0.1 };
+const gentleSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 const pageVariants = {
   initial: { opacity: 0, y: 8 },

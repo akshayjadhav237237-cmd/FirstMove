@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import ConfidenceRing from "./ConfidenceRing";
 
-const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
+const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 const AGENT_CONFIG = {
   strategist: {
@@ -62,10 +63,10 @@ function WordByWordReveal({ text, onDone }) {
         return (
           <motion.span
             key={idx}
-            className="inline"
-            initial={{ opacity: 0, filter: "blur(4px)" }}
-            animate={revealed ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(4px)" }}
-            transition={{ type: "spring", stiffness: 450, damping: 28, delay: 0 }}
+            className="inline-block"
+            initial={{ opacity: 0, filter: "blur(4px)", y: 2 }}
+            animate={revealed ? { opacity: 1, filter: "blur(0px)", y: 0 } : { opacity: 0, filter: "blur(4px)", y: 2 }}
+            transition={{ type: "spring", stiffness: 450, damping: 32, mass: 1 }}
           >
             {word}
           </motion.span>
@@ -110,9 +111,6 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
   const beamActive = isLoading || isTyping;
 
   const cardBase = "rounded-lg overflow-hidden mb-4";
-  const cardStyle = {
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.5)",
-  };
   const typingTintStyle = isTyping ? { background: cfg.tintBg } : {};
 
   return (
@@ -120,8 +118,11 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
       initial={{ opacity: 0, scale: 0.98, y: 8 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay, ...smoothSpring }}
-      className={`${cardBase} ${beamActive ? cfg.beamClass : "bg-surface border border-white/[0.06]"}`}
-      style={{ ...cardStyle, ...typingTintStyle }}
+      className={`${cardBase} ${beamActive ? cfg.beamClass : "bg-surface border border-white/[0.04] hover:border-white/[0.12] transition-colors duration-200"}`}
+      style={{
+        boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
+        ...typingTintStyle
+      }}
     >
       {/* ── Card Header ── */}
       <div className="h-10 flex items-center justify-between px-4 bg-white/[0.01] border-b border-white/[0.04]">
@@ -145,7 +146,7 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
             </span>
           )}
           {!isTyping && data && score !== undefined && (
-            <span className="text-[9px] font-mono text-[#8a8f98]">{score}/100</span>
+            <ConfidenceRing score={score} strokeColor={cfg.color} />
           )}
           {isLoading && (
             <span className="flex gap-0.5">
@@ -210,7 +211,7 @@ export default function AgentCard({ agentKey, data, isLoading = false, autoStart
                   onClick={() => setShowReasoning((v) => !v)}
                   className="w-full flex items-center justify-between text-[10px] font-mono text-[#62666d] hover:text-[#8a8f98] transition-colors cursor-pointer"
                 >
-                  <span>{showReasoning ? "HIDE_LOG ↑" : "VIEW_REASONING_LOG ↓"}</span>
+                  <span>{showReasoning ? "HIDE_LOG ↑" : "DATA_LINEAGE_LOG ↓"}</span>
                 </button>
                 <AnimatePresence>
                   {showReasoning && (

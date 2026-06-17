@@ -1,26 +1,23 @@
 import React from "react";
 import { motion } from "motion/react";
 
-const smoothSpring = { type: "spring", stiffness: 300, damping: 25, restSpeed: 0.1 };
+const smoothSpring = { type: "spring", stiffness: 450, damping: 32, mass: 1 };
 
 const SCENARIO_CONFIG = {
   optimistic: {
     mono:   "OPTIMISTIC_PATH",
     accent: "#10B981",
-    borderCls: "border-l-emerald-500",
     barCls: "bg-emerald-500",
   },
   neutral: {
     mono:   "NEUTRAL_PATH",
     accent: "#9CA3AF",
-    borderCls: "border-l-gray-500",
-    barCls: "bg-gray-500",
+    barCls: "bg-gray-400",
   },
   pessimistic: {
     mono:   "RISK_PATH",
-    accent: "#EF4444",
-    borderCls: "border-l-red-500",
-    barCls: "bg-red-500",
+    accent: "#DC2626",
+    barCls: "bg-[#DC2626]",
   },
 };
 
@@ -31,14 +28,16 @@ export default function ScenarioCard({ type, data, delay = 0 }) {
   const probability = Math.round((data.probability || 0) * 100);
   const impact = Math.min(10, Math.max(0, data.impact_score || 0));
   const impactPct = (impact / 10) * 100;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay, ...smoothSpring }}
-      className={`bg-surface border border-white/[0.06] border-l-[3px] ${cfg.borderCls} rounded-lg p-4 mb-3`}
-      style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)" }}
+      className="bg-surface border border-white/[0.04] hover:border-white/[0.12] rounded-lg p-4 mb-3 transition-all duration-200"
+      style={{
+        boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.5), 0 12px 24px -4px rgba(0,0,0,0.4)",
+        borderLeft: `3px solid ${cfg.accent}`
+      }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
