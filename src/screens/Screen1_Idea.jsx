@@ -33,48 +33,52 @@ export default function Screen1_Idea({ isLoading }) {
   };
 
   return (
-    <div className="scrollable-screen w-full flex-1 flex flex-col items-center justify-center min-h-screen px-4 py-12 relative font-mono">
+    <div className="scrollable-screen w-full flex-1 flex flex-col items-center justify-center min-h-screen px-4 py-12 relative font-sans">
       
       {/* Logo Row */}
       <div className="mb-10">
-        <div className="px-4 py-1.5 bg-[#0a1a0a] border border-[#1b4d1b] inline-flex items-center gap-2 shadow-[0_0_6px_rgba(51,255,51,0.15)]">
-          <span className="font-extrabold text-xs text-[#33ff33]">FM</span>
-          <span className="text-[#33ff33]/50 text-[10px] uppercase tracking-wider font-semibold">// FIRSTMOVE_OS_v1.0</span>
+        <div className="px-4 py-1.5 rounded-lg bg-white/5 border border-white/10 inline-flex items-center gap-2 backdrop-blur-md shadow-sm">
+          <span className="font-extrabold text-xs text-[#00f0ff] tracking-tight">FM</span>
+          <span className="text-white/50 text-[10px] font-mono uppercase tracking-wider font-semibold">· FirstMove</span>
         </div>
       </div>
 
       {/* Headline Console Section */}
       <div className="text-center max-w-3xl mb-8">
-        <span className="text-[11px] text-[#33ff33]/60 block mb-3 font-semibold uppercase">
-          LOAD_PROTOCOL::STARTUP_THESIS_AUDIT
-          <span className="cursor-blink inline-block w-2 h-3.5 bg-[#33ff33] align-middle ml-1" />
+        <span className="mono-label text-[#ff007f] block mb-3 font-semibold uppercase">
+          INITIALIZE::FIRSTMOVE_PROTOCOL
+          <motion.span
+            animate={{ opacity: [1, 0] }}
+            transition={{ repeat: Infinity, duration: 1, ease: "steps(2)" }}
+            className="inline-block w-1.5 h-3 bg-[#00f0ff] align-middle ml-1"
+          />
         </span>
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-[#33ff33] mb-4 uppercase">
-          Enter Concept Thesis
+        <h1 className="heading-display font-semibold text-[#f7f8f8] mb-3 uppercase">
+          What is your startup concept?
         </h1>
-        <p className="text-[#33ff33]/60 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-          SYSTEM_ALERT: Three autonomous simulation agent processes are ready to analyze core business assumptions.
+        <p className="text-[#d0d6e0] text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+          Three autonomous agents will dissect and validate your core thesis.
         </p>
       </div>
 
-      {/* Main Box */}
+      {/* Main Glass Box */}
       <div className="max-w-2xl w-full">
         {isLoading ? (
-          <div className="terminal-panel p-8 flex flex-col gap-6">
-            <p className="text-[#33ff33] text-xs font-mono uppercase tracking-widest text-center animate-pulse">
-              &gt;&gt; STAGING_AI_AGENT_PROCESSSORS... [RUNNING]
+          <div className="synthwave-panel p-8 flex flex-col gap-6">
+            <p className="text-[#00f0ff] text-[10px] font-mono uppercase tracking-widest text-center animate-pulse">
+              SUMMONING_AI_AGENTS...
             </p>
             <QuestionSkeleton />
           </div>
         ) : (
           <div className="w-full flex flex-col gap-4">
             
-            {/* Monospace terminal input area */}
+            {/* The Textarea is the glass panel */}
             <textarea
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
-              placeholder="Describe your concept in detail here... C:\FIRSTMOVE> _"
-              className="w-full terminal-panel p-6 text-[#33ff33] text-sm min-h-[180px] resize-none placeholder:text-[#33ff33]/20 leading-relaxed outline-none focus:border-[#33ff33] focus:shadow-[0_0_12px_rgba(51,255,51,0.2)] transition-all duration-300 bg-[#050905]"
+              placeholder="Describe your startup concept or idea in a few sentences..."
+              className="w-full synthwave-panel p-6 text-[#f7f8f8] text-sm sm:text-base min-h-[180px] resize-none placeholder:text-white/15 leading-relaxed outline-none focus:border-[#00f0ff] focus:shadow-[0_0_15px_rgba(0,240,255,0.25)] bg-[#0d021a]/40 transition-all duration-300"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.metaKey) {
                   handleSubmit();
@@ -82,33 +86,33 @@ export default function Screen1_Idea({ isLoading }) {
               }}
             />
 
-            {/* CLI Suggestion flags */}
+            {/* Starter Suggestion Chips */}
             <div className="flex flex-wrap gap-2 mt-1 mb-6 justify-center">
               {CHIPS.map((chip, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setIdea(chip)}
-                  className="border border-[#1b4d1b] bg-[#050c05] px-3.5 py-1 text-[#33ff33]/50 hover:text-[#33ff33] hover:border-[#33ff33] text-[10px] transition-all duration-200 cursor-pointer"
+                  className="border border-[#00f0ff]/20 bg-[#0d021a]/50 text-[#00f0ff]/70 hover:text-[#00f0ff] hover:border-[#00f0ff] hover:shadow-[0_0_10px_rgba(0,240,255,0.15)] rounded-lg px-4 py-1.5 text-xs transition-all duration-300 cursor-pointer"
                 >
-                  --param-"{chip.toLowerCase().split(' ').slice(0, 3).join('-')}"
+                  {chip}
                 </button>
               ))}
             </div>
 
             {state.error && (
-              <div className="bg-red-950/20 border border-red-500/30 rounded-none p-3.5 text-red-500 text-xs font-mono">
-                [SYSTEM_ERROR]: {state.error}
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3.5 text-red-400 text-xs font-mono">
+                ERROR: {state.error}
               </div>
             )}
 
-            {/* Terminal prompt execute button */}
+            {/* Primary Action Button */}
             <button
               onClick={handleSubmit}
               disabled={!idea.trim()}
-              className="btn-terminal w-full py-4 text-sm font-extrabold uppercase disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-all duration-200"
+              className="btn-synthwave w-full py-4 uppercase font-semibold tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all duration-200"
             >
-              [ RUN AUDIT SIMULATION PROTOCOL ]
+              Initiate Audit Sequence →
             </button>
           </div>
         )}
@@ -116,24 +120,18 @@ export default function Screen1_Idea({ isLoading }) {
 
       {/* Bottom agent indicators */}
       {!isLoading && (
-        <div className="mt-14 flex items-center gap-6 text-[10px]">
+        <div className="mt-14 flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="text-[#33ff33]/40">[</span>
-            <span className="text-[#33ff33] font-bold">LS</span>
-            <span className="text-[#33ff33]/40">]</span>
-            <span className="text-[#33ff33]/50 uppercase">Lead Strategist</span>
+            <span className="w-2 h-2 rounded-full bg-[#818CF8]" />
+            <span className="mono-label uppercase font-semibold">Lead Strategist</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[#33ff33]/40">[</span>
-            <span className="text-[#33ff33] font-bold">RA</span>
-            <span className="text-[#33ff33]/40">]</span>
-            <span className="text-[#33ff33]/50 uppercase">Risk Analyst</span>
+            <span className="w-2 h-2 rounded-full bg-[#F87171]" />
+            <span className="mono-label uppercase font-semibold">Risk Analyst</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[#33ff33]/40">[</span>
-            <span className="text-[#33ff33] font-bold">DA</span>
-            <span className="text-[#33ff33]/40">]</span>
-            <span className="text-[#33ff33]/50 uppercase">Devil's Advocate</span>
+            <span className="w-2 h-2 rounded-full bg-[#FB923C]" />
+            <span className="mono-label uppercase font-semibold">Devil's Advocate</span>
           </div>
         </div>
       )}

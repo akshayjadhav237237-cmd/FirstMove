@@ -27,7 +27,7 @@ function WordByWordReveal({ text }) {
         return (
           <span
             key={idx}
-            className={revealed ? "reveal-word text-[#33ff33]" : "opacity-0"}
+            className={revealed ? "reveal-word" : "opacity-0"}
           >
             {word}
           </span>
@@ -37,19 +37,14 @@ function WordByWordReveal({ text }) {
   );
 }
 
-function getASCIIProgressBar(probability) {
-  const totalBlocks = 16;
-  const filledBlocks = Math.min(totalBlocks, Math.max(0, Math.round((probability || 0) * totalBlocks)));
-  const emptyBlocks = totalBlocks - filledBlocks;
-  return `[${"█".repeat(filledBlocks)}${"░".repeat(emptyBlocks)}]`;
-}
-
 const AGENT_KEYS = [
   {
     key: "strategist",
     initials: "LS",
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
+    color: "#00f0ff",
+    gradient: "linear-gradient(135deg, #ff007f, #bd00ff)",
     scoreKey: "opportunity_score",
     scoreLabel: "OPP_SCORE",
   },
@@ -58,6 +53,8 @@ const AGENT_KEYS = [
     initials: "RA",
     name: "Risk Analyst",
     role: "THREAT_ASSESSMENT",
+    color: "#ff007f",
+    gradient: "linear-gradient(135deg, #ff007f, #818CF8)",
     scoreKey: "risk_score",
     scoreLabel: "RISK_SCORE",
   },
@@ -66,6 +63,8 @@ const AGENT_KEYS = [
     initials: "DA",
     name: "Devil's Advocate",
     role: "CHALLENGE_ASSESSMENT",
+    color: "#bd00ff",
+    gradient: "linear-gradient(135deg, #bd00ff, #00f0ff)",
     scoreKey: "challenge_score",
     scoreLabel: "CHAL_SCORE",
   },
@@ -90,14 +89,14 @@ export default function Screen3_Workspace() {
 
   if (!blueprint || !debate) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-[#050805] font-mono">
+      <div className="h-screen w-screen flex items-center justify-center bg-[#0d021a] font-sans">
         <div className="text-center space-y-4">
-          <p className="text-[#33ff33]/40 text-sm tracking-wider uppercase">[ NO_CORE_SIMULATION_DATA_FOUND ]</p>
+          <p className="text-white/40 text-sm font-mono tracking-wider uppercase">NO_WORKSPACE_DATA</p>
           <button
             onClick={() => dispatch({ type: "RESET" })}
-            className="btn-terminal px-6 py-2.5 text-sm cursor-pointer"
+            className="btn-synthwave px-6 py-2.5 rounded-lg text-sm font-bold cursor-pointer"
           >
-            [ REBOOT SETUP PROTOCOL ]
+            Restart Setup
           </button>
         </div>
       </div>
@@ -114,26 +113,26 @@ export default function Screen3_Workspace() {
   const riskData = scenarios.pessimistic || {};
 
   return (
-    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#050805] relative text-[#33ff33] font-mono">
+    <div className="w-full flex-1 flex flex-col h-screen overflow-hidden bg-[#0d021a] relative text-white font-sans">
       
       {/* ── HEADER BAR ── */}
-      <header className="h-14 flex items-center justify-between px-6 bg-[#050905] border-b border-[#1b4d1b] z-20 flex-shrink-0 shadow-[0_0_8px_rgba(51,255,51,0.15)]">
+      <header className="h-14 flex items-center justify-between px-6 backdrop-blur-md bg-white/[0.02] border-b border-[#00f0ff]/20 z-20 flex-shrink-0 shadow-md">
         <div className="flex items-center gap-3">
-          <div className="px-3 py-1 bg-[#050c05] border border-[#1b4d1b] flex items-center gap-1.5">
-            <span className="font-bold text-xs text-[#33ff33]">FM</span>
-            <span className="text-[#33ff33]/50 text-[10px] uppercase tracking-wider font-semibold">:: SYSTEM_CONSOLE</span>
+          <div className="px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 flex items-center gap-1.5">
+            <span className="font-extrabold text-xs text-[#00f0ff] tracking-tight">FM</span>
+            <span className="text-white/50 text-[10px] font-mono uppercase tracking-wider font-semibold">· FirstMove</span>
           </div>
-          <span className="w-1.5 h-1.5 bg-[#33ff33] animate-pulse" style={{ boxShadow: "0 0 6px #33ff33" }} />
-          <span className="text-[10px] text-[#33ff33] uppercase tracking-widest font-semibold">
-            [ AUDIT_RUN_COMPLETE ]
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" style={{ boxShadow: "0 0 6px #00f0ff" }} />
+          <span className="text-[10px] font-mono text-white uppercase tracking-widest font-semibold">
+            Analysis complete
           </span>
         </div>
 
         <button
           onClick={() => dispatch({ type: "RESET" })}
-          className="px-4 py-1.5 text-xs text-[#33ff33]/70 hover:text-[#33ff33] border border-[#1b4d1b] hover:border-[#33ff33] bg-[#050c05] cursor-pointer transition-all duration-300"
+          className="px-4 py-1.5 text-xs font-mono text-white/50 hover:text-white border border-white/10 hover:border-[#ff007f]/40 bg-white/2 rounded-lg cursor-pointer transition-all duration-300"
         >
-          [ REBOOT_SYSTEM ]
+          Start over
         </button>
       </header>
 
@@ -141,21 +140,21 @@ export default function Screen3_Workspace() {
       <main className="flex flex-1 gap-3 p-3 h-[calc(100vh-56px)] overflow-hidden z-10 min-h-0">
         
         {/* ══ LEFT PANEL: Workspace Blueprint Document (42% width) ══ */}
-        <div className="w-[42%] terminal-panel overflow-y-auto p-6 flex flex-col max-h-full bg-[#050905]">
+        <div className="w-[42%] synthwave-panel overflow-y-auto p-6 flex flex-col max-h-full bg-[#0d021a]/55">
           
           {/* Concept summary */}
-          <span className="text-[10px] text-[#33ff33]/40 mb-3 block uppercase">
-            // INPUT_RAW_IDEA_MEM_DUMP:
+          <span className="mono-label text-[10px] text-white/30 mb-3 block uppercase">
+            Startup Idea Concept
           </span>
-          <div className="border border-[#1b4d1b] bg-[#050c05] p-4 mb-8">
-            <p className="text-[#33ff33]/85 text-xs leading-relaxed">
+          <div className="border-l-2 border-[#00f0ff] pl-4 mb-8">
+            <p className="text-[#d0d6e0] text-sm leading-relaxed font-medium">
               {state.rawIdea || "Untitled startup concept idea."}
             </p>
           </div>
 
           {/* Assumptions Swarm Matrix */}
-          <span className="text-[10px] text-[#33ff33]/40 mb-3 block uppercase">
-            // ASSUMPTION_MATRIX_NODES:
+          <span className="mono-label text-[10px] text-white/30 mb-3 block uppercase">
+            Assumptions Swarm Matrix
           </span>
           <div className="mb-8 space-y-3">
             {(blueprint.assumptions_matrix || []).map((asm, idx) => (
@@ -170,27 +169,27 @@ export default function Screen3_Workspace() {
           </div>
 
           {/* Prioritized Roadmap steps */}
-          <span className="text-[10px] text-[#33ff33]/40 mb-4 block uppercase">
-            // STEPWISE_MITIGATION_ROADMAP:
+          <span className="mono-label text-[10px] text-white/30 mb-4 block uppercase">
+            Prioritized Roadmap
           </span>
-          <div className="mb-4 relative border-l border-[#1b4d1b] pl-6 ml-3 space-y-6">
+          <div className="mb-4 relative border-l border-white/10 pl-6 ml-3 space-y-6">
             {(blueprint.prioritized_roadmap || []).map((step, idx) => (
               <div key={idx} className="relative flex flex-col">
                 
-                {/* Timeline Dot Bracket */}
+                {/* Timeline Dot */}
                 <div 
-                  className="absolute -left-[32px] top-0.5 w-5 h-5 rounded-none flex items-center justify-center bg-[#050805] border border-[#1b4d1b] text-[9px] font-bold text-[#33ff33]"
+                  className="absolute -left-[30px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center bg-[#0d021a] border border-[#ff007f] shadow-sm"
                 >
-                  {idx + 1}
+                  <span className="text-[8px] font-bold text-[#ff007f]">{idx + 1}</span>
                 </div>
 
-                <h3 className="text-[#33ff33] font-bold text-xs leading-snug uppercase">
-                  &gt;&gt; {step.mitigation_action}
+                <h3 className="text-white font-semibold text-xs leading-snug">
+                  {step.mitigation_action}
                 </h3>
-                <p className="text-[#33ff33]/70 text-xs mt-1.5 leading-relaxed font-mono">
-                  METRICS: {step.test_metrics}
+                <p className="text-[#d0d6e0]/60 text-xs mt-1.5 leading-relaxed font-medium">
+                  {step.test_metrics}
                 </p>
-                <span className="text-[#33ff33]/40 text-[9px] font-mono mt-1.5 uppercase tracking-wide">
+                <span className="text-white/30 text-[9px] font-mono mt-1.5 uppercase tracking-wide">
                   TIMELINE_WEEK: {step.estimated_week || `WEEK_0${idx + 1}`}
                 </span>
               </div>
@@ -198,21 +197,28 @@ export default function Screen3_Workspace() {
           </div>
 
           {/* FirstMove Card (special) */}
-          <div className="border border-[#33ff33] bg-[#050c05] p-5 mt-6 transition-all duration-300 flex flex-col justify-between shadow-[0_0_8px_rgba(51,255,51,0.1)]">
+          <div 
+            className="rounded-xl p-5 mt-6 border transition-all duration-300 flex flex-col justify-between"
+            style={{
+              background: "linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))",
+              borderColor: "rgba(0, 240, 255, 0.22)",
+              boxShadow: "0 0 20px rgba(0, 240, 255, 0.08)"
+            }}
+          >
             <div>
-              <span className="text-[9px] text-[#33ff33] block mb-2 font-bold tracking-widest uppercase">
-                &gt; PRIORITY_NEXT_ACTION_STEP:
+              <span className="mono-label text-[8px] text-white/60 block mb-2 font-bold tracking-widest uppercase">
+                &gt; Immediate Next Action Step
               </span>
-              <h4 className="text-[#33ff33] font-bold text-sm leading-snug uppercase">
+              <h4 className="text-[#00f0ff] font-semibold text-base leading-snug">
                 {blueprint.immediate_next_step?.action_item || "Validate core value premise first."}
               </h4>
-              <p className="text-[#33ff33]/70 text-xs mt-2 leading-relaxed font-mono">
-                OBJECTIVE: {blueprint.immediate_next_step?.rationale_objective || "Observe user friction under manual testing conditions."}
+              <p className="text-[#d0d6e0]/50 text-xs mt-2 leading-relaxed">
+                Objective: {blueprint.immediate_next_step?.rationale_objective || "Observe user friction under manual testing conditions."}
               </p>
             </div>
 
-            <p className="text-[#33ff33]/30 text-[9px] font-mono italic mt-6 border-t border-[#1b4d1b]/40 pt-4">
-              /* SYSTEM_WARNING: FirstMove insights are generated probabilistically using agent nodes. The human operator retains responsibility for execution. */
+            <p className="text-[#d0d6e0]/25 text-[10px] font-mono italic mt-6 border-t border-white/5 pt-4">
+              DISCLAIMER: FirstMove is an AI tool. All insights, metrics, and roadmaps are probabilistic models. The final decision remains with the founder.
             </p>
           </div>
 
@@ -222,9 +228,9 @@ export default function Screen3_Workspace() {
         <div className="w-[58%] flex flex-col gap-3 max-h-full">
           
           {/* TOP HALF: Agent Debate Grid (flex-1) */}
-          <div className="flex-1 terminal-panel overflow-y-auto p-5 flex flex-col bg-[#050905]">
-            <span className="text-[10px] text-[#33ff33]/40 mb-5 block uppercase">
-              // AGENT_SIMULATOR_DEBATE_LOGS:
+          <div className="flex-1 synthwave-panel overflow-y-auto p-5 flex flex-col bg-[#0d021a]/55">
+            <span className="mono-label text-[10px] text-white/30 mb-5 block uppercase">
+              Agent Debate
             </span>
 
             <div className="space-y-4 flex-1">
@@ -232,46 +238,67 @@ export default function Screen3_Workspace() {
                 const data = debate[agent.key];
                 const score = data?.[agent.scoreKey];
                 return (
-                  <div key={agent.key} className="border border-[#1b4d1b] p-4 flex flex-col bg-[#050705]">
+                  <div key={agent.key} className="synthwave-panel p-4 flex flex-col bg-white/5">
                     
+                    {/* Top linear accent line */}
+                    <div 
+                      className="h-[2px] w-full rounded-full mb-3"
+                      style={{ background: `linear-gradient(90deg, transparent, ${agent.color}, transparent)` }}
+                    />
+
                     {/* Header Row */}
-                    <div className="flex items-center justify-between mb-3 border-b border-[#1b4d1b]/40 pb-2">
+                    <div className="flex items-center justify-between mb-3.5 border-b border-white/[0.04] pb-2">
                       <div className="flex items-center gap-3">
-                        {/* Avatar Box */}
-                        <div className="w-8 h-8 border border-[#1b4d1b] flex items-center justify-center flex-shrink-0 bg-[#050c05] font-bold text-[#33ff33]">
-                          {agent.initials}
+                        {/* Avatar */}
+                        <div 
+                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-inner border border-white/10"
+                          style={{ background: agent.gradient }}
+                        >
+                          <span className="font-bold text-white text-xs tracking-tight">
+                            {agent.initials}
+                          </span>
                         </div>
                         <div>
-                          <h4 className="text-[#33ff33] font-bold text-xs uppercase leading-none">
+                          <h4 className="text-white font-semibold text-sm leading-none">
                             {agent.name}
                           </h4>
                         </div>
-                        <span className="text-[9px] font-mono uppercase tracking-wider rounded-none px-2 py-0.5 border border-[#1b4d1b] bg-[#050c05] text-[#33ff33]">
+                        <span 
+                          className="text-[9px] font-mono uppercase tracking-wider rounded-full px-2 py-0.5 border"
+                          style={{ 
+                            color: agent.color, 
+                            backgroundColor: `${agent.color}15`, 
+                            borderColor: `${agent.color}25` 
+                          }}
+                        >
                           {agent.role}
                         </span>
                       </div>
 
                       {score !== undefined && (
-                        <span className="text-[#33ff33]/60 text-[10px]">
+                        <span className="text-white/50 text-[10px] font-mono">
                           [{agent.scoreLabel}: {score}%]
                         </span>
                       )}
                     </div>
 
                     {/* Verdict WordReveal */}
-                    <p className="text-[#33ff33]/80 text-xs leading-relaxed mt-1">
+                    <p className="text-[#d0d6e0] text-xs leading-relaxed mt-1">
                       <WordByWordReveal text={data?.verdict || "Awaiting simulation signal..."} />
                     </p>
 
                     {/* Key points */}
                     {data?.key_points && (
-                      <div className="mt-3.5 pt-3 border-t border-[#1b4d1b]/40 space-y-2">
+                      <div className="mt-3.5 pt-3 border-t border-white/5 space-y-2">
                         {data.key_points.map((pt, i) => (
                           <div key={i} className="flex items-start gap-2">
-                            <span className="text-[10px] shrink-0 text-[#33ff33]">
-                              *
+                            <span 
+                              className="text-[11px] leading-none shrink-0" 
+                              style={{ color: `${agent.color}aa` }}
+                            >
+                              ▸
                             </span>
-                            <p className="text-[#33ff33]/50 text-[10px] leading-relaxed">
+                            <p className="text-white/40 text-[11px] leading-relaxed">
                               {pt}
                             </p>
                           </div>
@@ -289,74 +316,68 @@ export default function Screen3_Workspace() {
           <div className="h-[240px] flex gap-3 flex-shrink-0">
             
             {/* Optimistic */}
-            <div className="flex-1 terminal-panel p-4 flex flex-col justify-between bg-[#050905]">
+            <div className="flex-1 synthwave-panel p-4 flex flex-col justify-between bg-white/5 bg-[#0d021a]/55">
               <div>
-                <div className="flex items-center gap-2 mb-1 border-b border-[#1b4d1b]/40 pb-1">
-                  <span className="w-1.5 h-1.5 bg-[#33ff33] animate-pulse" />
-                  <h4 className="text-[#33ff33] font-bold text-xs uppercase">Optimistic</h4>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-[#00f0ff]" style={{ boxShadow: "0 0 8px #00f0ff" }} />
+                  <h4 className="text-white font-semibold text-sm uppercase">Optimistic</h4>
                 </div>
-                <div className="text-[9px] text-[#33ff33]/50 font-bold uppercase tracking-wider">
-                  PROBABILITY: {Math.round((optimismData.probability || 0) * 100)}%
-                </div>
-                <p className="text-[#33ff33]/80 text-xs leading-snug mt-2.5">
-                  &gt; {optimismData.headline || "Premise achieves positive viral loops."}
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((optimismData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-[#d0d6e0] text-xs leading-snug mt-2">
+                  {optimismData.headline || "Premise achieves positive viral loops."}
                 </p>
               </div>
               <div>
-                <span className="text-[#33ff33]/40 text-[9px] uppercase">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {optimismData.estimated_timeline || "N/A"}
                 </span>
-                <div className="text-[9px] text-[#33ff33] font-bold mt-2">
-                  {getASCIIProgressBar(optimismData.probability)}
-                </div>
+                <div className="h-1 rounded-full mt-3 bg-[#00f0ff] w-full" style={{ boxShadow: "0 0 6px #00f0ff" }} />
               </div>
             </div>
 
             {/* Neutral */}
-            <div className="flex-1 terminal-panel p-4 flex flex-col justify-between bg-[#050905]">
+            <div className="flex-1 synthwave-panel p-4 flex flex-col justify-between bg-white/5 bg-[#0d021a]/55">
               <div>
-                <div className="flex items-center gap-2 mb-1 border-b border-[#1b4d1b]/40 pb-1">
-                  <span className="w-1.5 h-1.5 bg-[#33ff33]/60" />
-                  <h4 className="text-[#33ff33] font-bold text-xs uppercase">Neutral</h4>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-[#bd00ff]" style={{ boxShadow: "0 0 8px #bd00ff" }} />
+                  <h4 className="text-white font-semibold text-sm uppercase">Neutral</h4>
                 </div>
-                <div className="text-[9px] text-[#33ff33]/50 font-bold uppercase tracking-wider">
-                  PROBABILITY: {Math.round((neutralData.probability || 0) * 100)}%
-                </div>
-                <p className="text-[#33ff33]/80 text-xs leading-snug mt-2.5">
-                  &gt; {neutralData.headline || "Growth scales at typical industry baseline."}
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((neutralData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-[#d0d6e0] text-xs leading-snug mt-2">
+                  {neutralData.headline || "Growth scales at typical industry baseline."}
                 </p>
               </div>
               <div>
-                <span className="text-[#33ff33]/40 text-[9px] uppercase">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {neutralData.estimated_timeline || "N/A"}
                 </span>
-                <div className="text-[9px] text-[#33ff33]/70 font-bold mt-2">
-                  {getASCIIProgressBar(neutralData.probability)}
-                </div>
+                <div className="h-1 rounded-full mt-3 bg-[#bd00ff] w-full" style={{ boxShadow: "0 0 6px #bd00ff" }} />
               </div>
             </div>
 
             {/* Risk / Pessimistic */}
-            <div className="flex-1 terminal-panel p-4 flex flex-col justify-between bg-[#050905]">
+            <div className="flex-1 synthwave-panel p-4 flex flex-col justify-between bg-white/5 bg-[#0d021a]/55">
               <div>
-                <div className="flex items-center gap-2 mb-1 border-b border-[#1b4d1b]/40 pb-1">
-                  <span className="w-1.5 h-1.5 bg-[#33ff33]/40" />
-                  <h4 className="text-[#33ff33] font-bold text-xs uppercase">Risk Path</h4>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-[#ff007f]" style={{ boxShadow: "0 0 8px #ff007f" }} />
+                  <h4 className="text-white font-semibold text-sm uppercase">Risk Path</h4>
                 </div>
-                <div className="text-[9px] text-[#33ff33]/50 font-bold uppercase tracking-wider">
-                  PROBABILITY: {Math.round((riskData.probability || 0) * 100)}%
-                </div>
-                <p className="text-[#33ff33]/80 text-xs leading-snug mt-2.5">
-                  &gt; {riskData.headline || "High churn levels or low initial response rate."}
+                <span className="text-white/30 text-[10px] font-mono">
+                  {Math.round((riskData.probability || 0) * 100)}% LIKELY
+                </span>
+                <p className="text-[#d0d6e0] text-xs leading-snug mt-2">
+                  {riskData.headline || "High churn levels or low initial response rate."}
                 </p>
               </div>
               <div>
-                <span className="text-[#33ff33]/40 text-[9px] uppercase">
+                <span className="text-white/25 text-[10px] font-mono">
                   TIMELINE: {riskData.estimated_timeline || "N/A"}
                 </span>
-                <div className="text-[9px] text-[#33ff33]/50 font-bold mt-2">
-                  {getASCIIProgressBar(riskData.probability)}
-                </div>
+                <div className="h-1 rounded-full mt-3 bg-[#ff007f] w-full" style={{ boxShadow: "0 0 6px #ff007f" }} />
               </div>
             </div>
 

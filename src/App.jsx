@@ -51,11 +51,11 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <div className="relative min-h-screen w-screen bg-[#050805] text-[#33ff33] overflow-hidden select-none font-mono crt-flicker">
+      <div className="relative min-h-screen w-screen bg-[#0d021a] text-[#f7f8f8] overflow-hidden select-none font-sans">
         
-        {/* CRT Scanline and Vignette overlays */}
-        <div className="scanline-overlay" />
-        <div className="vignette-overlay" />
+        {/* Synthwave Backdrops */}
+        <div className="synthwave-grid" />
+        <div className="synthwave-sunset" />
 
         {/* Content sits above overlays */}
         <div className="relative z-10 w-full min-h-screen flex flex-col">
