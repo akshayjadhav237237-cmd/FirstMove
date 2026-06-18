@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSession } from "../context/SessionContext";
 import { resilientFetch } from "../utils/resilientFetch";
 import { QuestionSkeleton } from "../components/SkeletonLoader";
-import { motion } from "motion/react";
+import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 
 const AGENTS = [
   {
@@ -10,21 +10,24 @@ const AGENTS = [
     initials: "LS",
     name: "Lead Strategist",
     role: "OPPORTUNITY_ANALYSIS",
-    gradient: "linear-gradient(135deg, #ff007f, #bd00ff)",
+    bgCls: "bg-indigo-900/40 border-indigo-500/30 text-indigo-400",
+    barBg: "bg-[#6366F1]",
   },
   {
     key: "risk_analyst",
     initials: "RA",
     name: "Risk Analyst",
     role: "THREAT_ASSESSMENT",
-    gradient: "linear-gradient(135deg, #ff007f, #818CF8)",
+    bgCls: "bg-rose-900/40 border-rose-500/30 text-rose-400",
+    barBg: "bg-[#F43F5E]",
   },
   {
     key: "devils_advocate",
     initials: "DA",
     name: "Devil's Advocate",
     role: "CHALLENGE_ASSESSMENT",
-    gradient: "linear-gradient(135deg, #bd00ff, #00f0ff)",
+    bgCls: "bg-orange-900/40 border-orange-500/30 text-orange-400",
+    barBg: "bg-[#F97316]",
   },
 ];
 
@@ -58,158 +61,158 @@ export default function Screen2_Questions({ isLoading }) {
   };
 
   return (
-    <div className="scrollable-screen w-full flex-1 flex flex-col lg:flex-row min-h-screen relative p-1 pb-4 font-sans">
-      
-      {/* ── LEFT PANEL: Socratic Questions (44% width) ── */}
-      <div className="w-full lg:w-[44%] flex flex-col synthwave-panel p-8 m-4 lg:my-4 lg:mr-2 lg:ml-4 overflow-y-auto max-h-[calc(100vh-32px)] bg-[#0d021a]/55">
+    <div className="h-screen w-screen overflow-hidden bg-[#080C14] flex">
+      <style>{`
+        @keyframes slide-indicator {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(200%); }
+        }
+        .animate-slide {
+          animation: slide-indicator 3s linear infinite;
+        }
+      `}</style>
+
+      <PanelGroup direction="horizontal" className="h-full w-full">
         
-        {/* Step Badge */}
-        <div className="self-start inline-flex items-center rounded-lg bg-white/5 border border-white/10 px-3.5 py-1.5 text-xs text-white/70 font-mono tracking-wider font-semibold mb-6">
-          Step 2 of 3
-        </div>
-
-        {/* Heading */}
-        <h1 className="heading-display font-semibold text-white tracking-tight mb-1 uppercase">
-          A few questions
-        </h1>
-        <p className="text-white/40 text-xs mb-8 font-mono uppercase tracking-wide font-semibold">
-          Provide parameters for simulation nodes.
-        </p>
-
-        {/* Question blocks */}
-        <div className="flex-1 space-y-6">
-          {isLoading ? (
-            <div className="space-y-4">
-              <p className="text-[#00f0ff] text-[10px] font-mono uppercase tracking-widest animate-pulse">
-                PROCESSING_AGENT_PIPELINE...
-              </p>
-              <QuestionSkeleton />
-            </div>
-          ) : (
-            state.socraticQuestions.map((q, i) => (
-              <div key={q.id} className="flex flex-col">
-                <span className="mono-label text-[9px] text-[#ff007f] mb-2 block font-semibold">
-                  {q.target_variable || `VARIABLE_0${i + 1}`}
-                </span>
-                <h2 className="text-white text-sm font-semibold mb-1 leading-snug">
-                  {q.question_text}
-                </h2>
-                <p className="text-[#d0d6e0]/40 text-xs italic mb-3">
-                  {q.contextual_rationale}
-                </p>
-                <textarea
-                  value={answers[q.id] || ""}
-                  onChange={(e) =>
-                    setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
-                  }
-                  placeholder="Type your response..."
-                  className="w-full bg-[#0d021a]/50 border border-[#00f0ff]/20 rounded-xl p-3.5 text-white text-sm min-h-[80px] resize-none placeholder:text-white/10 outline-none focus:border-[#00f0ff] focus:shadow-[0_0_10px_rgba(0,240,255,0.15)] transition-all duration-200"
-                />
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer controls & Submit */}
-        <div className="pt-6 border-t border-white/10 mt-6 flex flex-col gap-4">
-          {state.error && (
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3.5 text-red-400 text-xs font-mono">
-              ERROR: {state.error}
-            </div>
-          )}
-
-          <div className="flex justify-between items-center">
-            <button
-              onClick={() => dispatch({ type: "RESET" })}
-              className="text-white/35 hover:text-[#00f0ff] text-[10px] font-mono tracking-wider font-semibold transition-colors cursor-pointer uppercase"
-            >
-              ← Restart
-            </button>
-          </div>
-
-          <button
-            onClick={handleSubmit}
-            disabled={!allAnswered || isLoading}
-            className="btn-synthwave w-full py-4 uppercase font-semibold tracking-wider disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
-          >
-            {isLoading ? (
-              <>
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span className="font-mono text-xs tracking-wider">PIPELINE_RUNNING...</span>
-              </>
-            ) : (
-              "Launch Agent Pipeline →"
-            )}
-          </button>
-        </div>
-
-      </div>
-
-      {/* ── RIGHT PANEL: Agent Previews (56% width) ── */}
-      <div className="w-full lg:w-[56%] flex flex-col m-4 lg:my-4 lg:ml-2 lg:mr-4 max-h-[calc(100vh-32px)]">
-        
-        {/* Section Heading */}
-        <div className="mt-8 mb-4 pl-2">
-          <span className="mono-label text-xs tracking-widest text-white/50 font-semibold uppercase">
-            Agents standing by
-          </span>
-        </div>
-
-        {/* 3 Previews */}
-        <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-          {AGENTS.map((agent) => (
-            <div key={agent.key} className="synthwave-panel p-5 flex items-center gap-4 bg-[#0d021a]/55">
-              
-              {/* Gradient avatar */}
-              <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 select-none shadow-inner border border-white/10"
-                style={{ background: agent.gradient }}
+        {/* LEFT PANEL: 38% */}
+        <Panel defaultSize={38} minSize={30} maxSize={48}>
+          <div className="h-full flex flex-col bg-[#080C14] border-r border-white/[0.06] overflow-hidden relative">
+            
+            {/* Sticky top section */}
+            <div className="px-8 pt-10 pb-6 flex-shrink-0 select-none relative">
+              <button 
+                onClick={() => dispatch({ type: "RESET" })} 
+                className="text-[#475569] hover:text-[#6366F1] text-xs font-semibold mb-6 flex items-center gap-1 uppercase transition-colors"
               >
-                <span className="font-extrabold text-white text-base tracking-tight">
-                  {agent.initials}
-                </span>
+                &lt; Back
+              </button>
+              
+              {/* Huge Background Number */}
+              <div className="text-[80px] font-bold text-[#111827] leading-none mb-2 select-none pointer-events-none">
+                02
               </div>
-
-              {/* Identity & Status */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 border-b border-white/[0.04] pb-1.5">
-                  <h3 className="text-white font-bold text-sm truncate uppercase">
-                    {agent.name}
-                  </h3>
-                  <span className="mono-label text-[9px] text-white/30 tracking-wider">
-                    {agent.role}
-                  </span>
-                </div>
-
-                {/* Status Bar */}
-                <div className="mt-4 flex flex-col gap-1.5">
-                  <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
-                    {isLoading ? (
-                      <motion.div 
-                        className="h-full bg-gradient-to-r from-[#ff007f] to-[#00f0ff]"
-                        animate={{ x: ["-100%", "300%"] }}
-                        transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                        style={{ width: "30%" }}
-                      />
-                    ) : (
-                      <div className="h-full bg-white/10 w-[5%]" />
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className={`w-1.5 h-1.5 rounded-full bg-[#00f0ff] ${isLoading ? "animate-ping" : "animate-pulse"}`} style={{ boxShadow: "0 0 8px #00f0ff" }} />
-                    <span className="text-white/20 text-[9px] font-mono uppercase tracking-wider font-semibold">
-                      {isLoading ? "ANALYZING_VARIABLES..." : "AWAITING INPUT"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
+              
+              <h1 className="text-xl font-bold text-[#F1F5F9] leading-tight">
+                Answer these questions.
+              </h1>
+              <p className="text-[#475569] text-sm mt-1">
+                Your answers shape the debate.
+              </p>
             </div>
-          ))}
-        </div>
 
-      </div>
+            {/* Questions list (Scrollable) */}
+            <div className="flex-1 overflow-y-auto px-8 pb-32">
+              {isLoading ? (
+                <div className="space-y-4">
+                  <p className="text-[#94A3B8] text-xs font-mono uppercase tracking-widest animate-pulse">
+                    GENERATING_DEBATE_BUFFERS...
+                  </p>
+                  <QuestionSkeleton />
+                </div>
+              ) : (
+                state.socraticQuestions.map((q, i) => (
+                  <div key={q.id} className="flex flex-col mb-8">
+                    <div className="flex items-center mb-2">
+                      <span className="bg-[#6366F1]/10 text-[#6366F1] text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider font-mono">
+                        Q{i + 1}
+                      </span>
+                    </div>
+                    <h2 className="text-[#F1F5F9] font-semibold text-sm leading-relaxed mb-1">
+                      {q.question_text}
+                    </h2>
+                    <p className="text-[#475569] text-xs italic mb-3">
+                      {q.contextual_rationale}
+                    </p>
+                    <textarea
+                      value={answers[q.id] || ""}
+                      onChange={(e) =>
+                        setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
+                      }
+                      placeholder="Type your response..."
+                      className="w-full bg-[#111827] border border-white/[0.07] rounded-xl p-3 text-sm text-white min-h-[72px] resize-none outline-none focus:border-[#6366F1] transition-colors leading-relaxed"
+                    />
+                  </div>
+                ))
+              )}
+            </div>
 
+            {/* Bottom sticky Controls */}
+            <div className="absolute bottom-0 left-0 right-0 bg-[#080C14]/90 backdrop-blur-md px-8 py-6 border-t border-white/[0.06] z-10">
+              {state.error && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3 text-red-400 text-xs font-mono mb-4">
+                  ERROR: {state.error}
+                </div>
+              )}
+              
+              <button
+                onClick={handleSubmit}
+                disabled={!allAnswered || isLoading}
+                className="w-full h-12 bg-[#6366F1] hover:bg-[#4F46E5] text-white text-sm font-semibold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>LAUNCHING...</span>
+                  </>
+                ) : (
+                  "Launch Debate →"
+                )}
+              </button>
+            </div>
+
+          </div>
+        </Panel>
+
+        {/* DRAG HANDLER */}
+        <PanelResizeHandle className="w-[1px] bg-white/[0.06] hover:bg-[#6366F1]/50 hover:w-1 transition-all cursor-col-resize z-30" />
+
+        {/* RIGHT PANEL: 62% */}
+        <Panel defaultSize={62}>
+          <div className="h-full bg-[#080C14] px-8 pt-10 overflow-y-auto pb-16">
+            
+            <div className="text-xs uppercase tracking-widest text-[#475569] mb-8 font-semibold select-none">
+              Standing by
+            </div>
+
+            <div className="flex flex-col">
+              {AGENTS.map((agent) => (
+                <div key={agent.key} className="mb-10 flex items-start gap-4">
+                  
+                  {/* Circle avatar */}
+                  <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center flex-shrink-0 select-none ${agent.bgCls}`}>
+                    {agent.initials}
+                  </div>
+
+                  {/* Identity & Status */}
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-[#F1F5F9] font-semibold text-base uppercase tracking-tight leading-none">
+                      {agent.name}
+                    </h3>
+                    <div className="text-[#475569] text-xs uppercase tracking-wider mt-1 mb-3 font-semibold">
+                      {agent.role}
+                    </div>
+
+                    {/* Loader */}
+                    {isLoading ? (
+                      <div className="w-full bg-[#111827] rounded-full h-1 overflow-hidden relative mb-2">
+                        <div className={`h-full animate-slide ${agent.barBg}`} style={{ width: "100%" }} />
+                      </div>
+                    ) : null}
+
+                    {/* Status Text */}
+                    <div className="text-xs font-mono text-[#475569]">
+                      {isLoading ? "ANALYZING..." : "AWAITING YOUR INPUT"}
+                    </div>
+                  </div>
+
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </Panel>
+
+      </PanelGroup>
     </div>
   );
 }

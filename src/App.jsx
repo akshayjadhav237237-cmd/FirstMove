@@ -51,13 +51,9 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <div className="relative min-h-screen w-screen bg-[#0d021a] text-[#f7f8f8] overflow-hidden select-none font-sans">
+      <div className="relative min-h-screen w-screen bg-[#080C14] text-[#F1F5F9] overflow-hidden select-none font-sans">
         
-        {/* Synthwave Backdrops */}
-        <div className="synthwave-grid" />
-        <div className="synthwave-sunset" />
-
-        {/* Content sits above overlays */}
+        {/* Main Content Viewport */}
         <div className="relative z-10 w-full min-h-screen flex flex-col">
           <AppRouter />
         </div>
