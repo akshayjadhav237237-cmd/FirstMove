@@ -65,10 +65,10 @@ function AppRouter() {
 export default function App() {
   return (
     <SessionProvider>
-      <div className="relative min-h-screen w-screen bg-[#080C14] text-[#F1F5F9] overflow-hidden select-none font-sans">
+      <div className="relative h-screen w-screen bg-[#080C14] text-[#F1F5F9] overflow-hidden select-none font-sans">
         
         {/* Main Content Viewport */}
-        <div className="relative z-10 w-full min-h-screen flex flex-col">
+        <div className="relative z-10 w-full h-full flex flex-col">
           <AppRouter />
         </div>
 
