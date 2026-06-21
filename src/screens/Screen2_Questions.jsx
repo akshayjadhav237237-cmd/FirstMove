@@ -82,7 +82,7 @@ export default function Screen2_Questions({ isLoading }) {
             <div className="px-8 pt-10 pb-6 flex-shrink-0 select-none relative">
               <button 
                 onClick={() => dispatch({ type: "RESET" })} 
-                className="text-[#475569] hover:text-[#6366F1] text-xs font-semibold mb-6 flex items-center gap-1 uppercase transition-colors"
+                className="text-[#94A3B8] hover:text-[#6366F1] text-xs font-semibold mb-6 flex items-center gap-1 uppercase transition-colors"
               >
                 &lt; Back
               </button>
@@ -95,7 +95,7 @@ export default function Screen2_Questions({ isLoading }) {
               <h1 className="text-xl font-bold text-[#F1F5F9] leading-tight">
                 Answer these questions.
               </h1>
-              <p className="text-[#475569] text-sm mt-1">
+              <p className="text-[#94A3B8] text-sm mt-1">
                 Your answers shape the debate.
               </p>
             </div>
@@ -120,7 +120,7 @@ export default function Screen2_Questions({ isLoading }) {
                     <h2 className="text-[#F1F5F9] font-semibold text-sm leading-relaxed mb-1">
                       {q.question_text}
                     </h2>
-                    <p className="text-[#475569] text-xs italic mb-3">
+                    <p className="text-[#94A3B8] text-xs italic mb-3">
                       {q.contextual_rationale}
                     </p>
                     <textarea
@@ -129,7 +129,7 @@ export default function Screen2_Questions({ isLoading }) {
                         setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))
                       }
                       placeholder="Type your response..."
-                      className="w-full bg-[#111827] border border-white/[0.07] rounded-xl p-3 text-sm text-white min-h-[72px] resize-none outline-none focus:border-[#6366F1] transition-colors leading-relaxed"
+                      className="w-full bg-[#111827] border border-white/[0.07] rounded-xl p-3 text-sm text-white placeholder-[#94A3B8]/40 min-h-[72px] resize-none outline-none focus:border-[#6366F1] transition-colors leading-relaxed"
                     />
                   </div>
                 ))
@@ -170,7 +170,7 @@ export default function Screen2_Questions({ isLoading }) {
         <Panel defaultSize={62}>
           <div className="h-full bg-[#080C14] px-8 pt-10 overflow-y-auto pb-16">
             
-            <div className="text-xs uppercase tracking-widest text-[#475569] mb-8 font-semibold select-none">
+            <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-8 font-semibold select-none">
               Standing by
             </div>
 
@@ -188,7 +188,7 @@ export default function Screen2_Questions({ isLoading }) {
                     <h3 className="text-[#F1F5F9] font-semibold text-base uppercase tracking-tight leading-none">
                       {agent.name}
                     </h3>
-                    <div className="text-[#475569] text-xs uppercase tracking-wider mt-1 mb-3 font-semibold">
+                    <div className="text-[#94A3B8] text-xs uppercase tracking-wider mt-1 mb-3 font-semibold">
                       {agent.role}
                     </div>
 
@@ -200,7 +200,7 @@ export default function Screen2_Questions({ isLoading }) {
                     ) : null}
 
                     {/* Status Text */}
-                    <div className="text-xs font-mono text-[#475569]">
+                    <div className="text-xs font-mono text-[#94A3B8]">
                       {isLoading ? "ANALYZING..." : "AWAITING YOUR INPUT"}
                     </div>
                   </div>

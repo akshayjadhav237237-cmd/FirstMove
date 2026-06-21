@@ -253,7 +253,7 @@ export default function Screen3_Workspace() {
         
         {/* Problem Statement Card */}
         <div className="col-span-2 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-6 flex flex-col min-h-0 select-none">
-          <div className="text-xs uppercase tracking-widest text-[#475569] mb-3 font-semibold font-mono">
+          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-3 font-semibold font-mono">
             PROBLEM STATEMENT
           </div>
           <div className="overflow-y-auto pr-1 flex-1">
@@ -282,7 +282,7 @@ export default function Screen3_Workspace() {
               {blueprint.immediate_next_step?.rationale_objective}
             </p>
           </div>
-          <div className="text-[#475569] text-[10px] font-mono italic border-t border-white/[0.06] pt-3 mt-auto">
+          <div className="text-[#94A3B8] text-[10px] font-mono italic border-t border-white/[0.06] pt-3 mt-auto">
             DISCLAIMER: FirstMove is an AI tool. All insights are probabilistic.
           </div>
         </div>
@@ -291,7 +291,7 @@ export default function Screen3_Workspace() {
 
         {/* Assumptions Card */}
         <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#475569] mb-4 font-semibold font-mono select-none">
+          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             ASSUMPTIONS
           </div>
           <div className="flex-1 overflow-y-auto pr-1">
@@ -310,7 +310,7 @@ export default function Screen3_Workspace() {
                     <span className={`rounded-full text-[10px] px-2 py-0.5 font-bold uppercase tracking-wider ${badgeColor}`}>
                       {dim}
                     </span>
-                    <span className="text-xs font-mono text-[#475569]">
+                    <span className="text-xs font-mono text-[#94A3B8]">
                       {asm.confidence_assessment?.confidence_score}%
                     </span>
                   </div>
@@ -328,7 +328,7 @@ export default function Screen3_Workspace() {
                   {isExpanded && (
                     <div className="mt-3 space-y-2 select-none">
                       <div className="bg-[#111827] rounded-lg p-3 text-[11px] font-mono text-[#94A3B8] border border-white/[0.05] space-y-1">
-                        <div className="text-[#475569] text-[10px] mb-1 font-bold">// RISK FACTORS:</div>
+                        <div className="text-[#94A3B8] text-[10px] mb-1 font-bold">// RISK FACTORS:</div>
                         {(asm.confidence_assessment?.contributing_factors || []).map((f, i) => (
                           <div key={i}>▸ {f}</div>
                         ))}
@@ -347,7 +347,7 @@ export default function Screen3_Workspace() {
 
         {/* Roadmap Card */}
         <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#475569] mb-4 font-semibold font-mono select-none">
+          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             ROADMAP
           </div>
           <div className="flex-1 overflow-y-auto pr-1 relative pl-8 select-none">
@@ -365,7 +365,7 @@ export default function Screen3_Workspace() {
                 <div className="text-[#F1F5F9] text-xs font-semibold leading-snug">
                   {step.mitigation_action}
                 </div>
-                <div className="text-[#475569] text-[10px] font-mono mt-1">
+                <div className="text-[#94A3B8] text-[10px] font-mono mt-1">
                   METRIC: {step.test_metrics}
                 </div>
               </div>
@@ -375,7 +375,7 @@ export default function Screen3_Workspace() {
 
         {/* Scenarios Card */}
         <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#475569] mb-4 font-semibold font-mono select-none">
+          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             SCENARIOS
           </div>
           <div className="flex-1 overflow-y-auto pr-1 space-y-3">
@@ -387,14 +387,14 @@ export default function Screen3_Workspace() {
                     <span className={`font-semibold text-xs ${sc.textColor}`}>
                       {sc.label}
                     </span>
-                    <span className="text-xs font-mono text-[#475569]">
+                    <span className="text-xs font-mono text-[#94A3B8]">
                       {Math.round(probability * 100)}% LIKELY
                     </span>
                   </div>
                   <p className="text-[#94A3B8] text-xs leading-snug mt-1 mb-1 font-medium select-none">
                     {sc.data.headline || "Calculated projection payload..."}
                   </p>
-                  <div className="text-[#475569] text-[10px] font-mono select-none">
+                  <div className="text-[#94A3B8] text-[10px] font-mono select-none">
                     TIMELINE: {sc.data.estimated_timeline || "N/A"}
                   </div>
                   {/* Progress bar */}

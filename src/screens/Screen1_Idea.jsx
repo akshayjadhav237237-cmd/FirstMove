@@ -91,7 +91,7 @@ export default function Screen1_Idea({ isLoading }) {
                   key={i}
                   type="button"
                   onClick={() => setIdea(chip)}
-                  className="bg-transparent border border-white/10 text-[#475569] hover:border-[#6366F1]/50 hover:text-[#94A3B8] rounded-full px-4 py-1.5 text-sm transition-all duration-200 cursor-pointer"
+                  className="bg-transparent border border-white/10 text-[#94A3B8] hover:border-[#6366F1] hover:text-white rounded-full px-4 py-1.5 text-sm transition-all duration-200 cursor-pointer"
                 >
                   {chip}
                 </button>
@@ -118,15 +118,15 @@ export default function Screen1_Idea({ isLoading }) {
         {/* BOTTOM indicators */}
         {!isLoading && (
           <div className="mt-10 flex items-center gap-6 text-xs sm:text-sm font-semibold select-none">
-            <div className="flex items-center gap-2 text-[#475569]">
+            <div className="flex items-center gap-2 text-[#94A3B8]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#6366F1]" />
               <span>Lead Strategist</span>
             </div>
-            <div className="flex items-center gap-2 text-[#475569]">
+            <div className="flex items-center gap-2 text-[#94A3B8]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#F43F5E]" />
               <span>Risk Analyst</span>
             </div>
-            <div className="flex items-center gap-2 text-[#475569]">
+            <div className="flex items-center gap-2 text-[#94A3B8]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#F97316]" />
               <span>Devil's Advocate</span>
             </div>
