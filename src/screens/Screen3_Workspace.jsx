@@ -254,7 +254,7 @@ export default function Screen3_Workspace() {
                 PROBLEM STATEMENT
               </div>
               <p className="text-[22px] font-bold text-[#F1F5F9] leading-[1.45] tracking-tight">
-                {blueprint.problem_statement || "No problem statement calculated."}
+                {blueprint.sharpened_problem_statement || "No problem statement calculated."}
               </p>
             </div>
 
@@ -274,7 +274,7 @@ export default function Screen3_Workspace() {
                   {blueprint.immediate_next_step?.action_item || "Validate core value premise first."}
                 </h4>
                 <p className="text-[#94A3B8] text-sm leading-relaxed">
-                  {blueprint.immediate_next_step?.rationale_objective}
+                  {blueprint.immediate_next_step?.objective}
                 </p>
               </div>
               <div className="text-[#94A3B8] text-[10px] font-mono italic border-t border-white/[0.06] pt-3 mt-4">
@@ -288,7 +288,7 @@ export default function Screen3_Workspace() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {AGENTS.map((agent) => (
               <div key={agent.key} className="flex flex-col">
-                <AgentDebateCard agent={agent} debateData={debate} />
+                <AgentDebateCard agent={agent} debateData={debate?.[agent.key]} />
               </div>
             ))}
           </div>
