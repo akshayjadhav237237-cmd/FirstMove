@@ -964,10 +964,10 @@ export default function LandingPage({ onStart }) {
                       <img
                         src={
                           i === 0
-                            ? "/socratic-debate.png"
+                            ? "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=96&q=80"
                             : i === 1
-                            ? "/dvf-analysis.png"
-                            : "/responsible-ai.png"
+                            ? "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=96&q=80"
+                            : "https://images.unsplash.com/photo-1589254065878-42c9da997008?w=96&q=80"
                         }
                         alt={feat.title}
                         loading="lazy"
@@ -975,6 +975,7 @@ export default function LandingPage({ onStart }) {
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                          filter: "grayscale(1) brightness(0.65) contrast(1.3)",
                         }}
                       />
                     </div>
