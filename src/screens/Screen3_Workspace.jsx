@@ -77,7 +77,7 @@ function AgentDebateCard({ agent, debateData }) {
   }, [verdict]);
 
   return (
-    <div className="bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 relative overflow-hidden flex flex-col h-full min-h-0 select-none">
+    <div className="bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-6 relative overflow-hidden flex flex-col h-full min-h-0 select-none">
       
       {/* TOP STRIPE (3px tall) */}
       <div className={`absolute top-0 left-0 right-0 h-[3px] ${agent.barBg}`} />
@@ -99,25 +99,27 @@ function AgentDebateCard({ agent, debateData }) {
         </div>
 
         {/* Agent Name & Role */}
-        <h4 className="text-[#F1F5F9] font-semibold text-sm leading-none mb-1 uppercase">
+        <h4 className="text-[#F1F5F9] font-bold text-[15px] leading-none mb-1 uppercase">
           {agent.name}
         </h4>
-        <span className={`text-[10px] uppercase tracking-wider font-semibold mb-4 font-mono ${agent.roleColor}`}>
+        <span className={`text-[11px] uppercase tracking-wider font-semibold mb-6 font-mono ${agent.roleColor}`}>
           {agent.role}
         </span>
 
         {/* Verdict text */}
-        <div className="text-[13px] text-[#94A3B8] leading-[1.65] flex-1 overflow-y-auto mb-3 pr-1">
+        <div className="text-[13px] text-[#94A3B8] leading-[1.7] flex-1 overflow-y-auto mb-3 pr-1">
           {verdictWords.map((word, idx) => (
-            <span
-              key={idx}
-              className="reveal-word opacity-0"
-              style={{
-                animationDelay: `${idx * 30}ms`
-              }}
-            >
-              {word}{" "}
-            </span>
+            <React.Fragment key={idx}>
+              <span
+                className="reveal-word opacity-0"
+                style={{
+                  animationDelay: `${idx * 30}ms`
+                }}
+              >
+                {word}
+              </span>
+              {" "}
+            </React.Fragment>
           ))}
           {showCursor && (
             <span 
@@ -140,7 +142,7 @@ function AgentDebateCard({ agent, debateData }) {
               <span className="text-xs font-bold shrink-0" style={{ color: agent.color }}>
                 ▸
               </span>
-              <p className="text-[#475569] text-xs leading-relaxed">
+              <p className="text-[#94A3B8] text-xs leading-relaxed">
                 {pt}
               </p>
             </div>
@@ -226,7 +228,7 @@ export default function Screen3_Workspace() {
             <span className="text-white">Workspace</span>
           </div>
           <span className="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-pulse shadow-[0_0_8px_#10B981] ml-2" />
-          <span className="text-[9px] font-mono text-[#10B981] uppercase tracking-widest font-bold">
+          <span className="text-[10px] font-mono text-[#10B981] uppercase tracking-widest font-bold">
             ACTIVE_RUN
           </span>
         </div>
@@ -240,7 +242,7 @@ export default function Screen3_Workspace() {
       </header>
 
       {/* BENTO GRID DASHBOARD */}
-      <main className="grid grid-cols-3 grid-rows-[280px_140px_1fr] gap-3 p-4 h-[calc(100vh-48px)] overflow-hidden min-h-0 flex-1">
+      <main className="grid grid-cols-3 grid-rows-[280px_140px_1fr] gap-4 p-5 h-[calc(100vh-48px)] overflow-hidden min-h-0 flex-1">
         
         {/* ━━━ ROW 1: THREE AGENT CARDS ━━━ */}
         {AGENTS.map((agent) => (
@@ -252,12 +254,12 @@ export default function Screen3_Workspace() {
         {/* ━━━ ROW 2: PROBLEM STATEMENT + FIRSTMOVE ━━━ */}
         
         {/* Problem Statement Card */}
-        <div className="col-span-2 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-6 flex flex-col min-h-0 select-none">
+        <div className="col-span-2 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-8 flex flex-col min-h-0 select-none">
           <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-3 font-semibold font-mono">
             PROBLEM STATEMENT
           </div>
           <div className="overflow-y-auto pr-1 flex-1">
-            <p className="text-[22px] font-bold text-[#F1F5F9] leading-[1.4] tracking-tight">
+            <p className="text-[22px] font-bold text-[#F1F5F9] leading-[1.45] tracking-tight">
               {blueprint.problem_statement || "No problem statement calculated."}
             </p>
           </div>
@@ -265,7 +267,7 @@ export default function Screen3_Workspace() {
 
         {/* FirstMove Action Card */}
         <div 
-          className="col-span-1 border rounded-[20px] p-6 flex flex-col min-h-0"
+          className="col-span-1 border rounded-[20px] p-[28px] flex flex-col min-h-0"
           style={{
             background: "linear-gradient(135deg, rgba(99,102,241,0.2), rgba(139,92,246,0.1))",
             borderColor: "rgba(99,102,241,0.3)",
@@ -275,7 +277,7 @@ export default function Screen3_Workspace() {
             YOUR FIRSTMOVE
           </div>
           <div className="overflow-y-auto pr-1 flex-1 mb-2">
-            <h4 className="text-[#F1F5F9] font-bold text-base leading-snug mb-1">
+            <h4 className="text-[#F1F5F9] font-bold text-[15px] leading-[1.55] mb-1">
               {blueprint.immediate_next_step?.action_item || "Validate core value premise first."}
             </h4>
             <p className="text-[#94A3B8] text-sm">
@@ -290,8 +292,8 @@ export default function Screen3_Workspace() {
         {/* ━━━ ROW 3: ASSUMPTIONS + ROADMAP + SCENARIOS ━━━ */}
 
         {/* Assumptions Card */}
-        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
+        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-[20px_22px] min-h-[280px] flex flex-col min-h-0 overflow-hidden">
+          <div className="text-[10px] uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             ASSUMPTIONS
           </div>
           <div className="flex-1 overflow-y-auto pr-1">
@@ -305,7 +307,7 @@ export default function Screen3_Workspace() {
                   ? "bg-[#10B981]/10 text-[#10B981]"
                   : "bg-[#F97316]/10 text-[#F97316]";
               return (
-                <div key={asm.id || idx} className="mb-4 pb-4 border-b border-white/[0.05] last:border-b-0 last:pb-0">
+                <div key={asm.id || idx} className="mb-[14px] pb-[14px] border-b border-white/[0.05] last:border-b-0 last:pb-0">
                   <div className="flex justify-between items-center gap-2 select-none">
                     <span className={`rounded-full text-[10px] px-2 py-0.5 font-bold uppercase tracking-wider ${badgeColor}`}>
                       {dim}
@@ -314,7 +316,7 @@ export default function Screen3_Workspace() {
                       {asm.confidence_assessment?.confidence_score}%
                     </span>
                   </div>
-                  <p className="text-[#94A3B8] text-xs leading-relaxed mt-2 font-medium">
+                  <p className="text-[#94A3B8] text-[12px] leading-[1.65] mt-2 font-medium">
                     {asm.assumption_statement}
                   </p>
 
@@ -346,8 +348,8 @@ export default function Screen3_Workspace() {
         </div>
 
         {/* Roadmap Card */}
-        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
+        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-[20px_22px] min-h-[280px] flex flex-col min-h-0 overflow-hidden">
+          <div className="text-[10px] uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             ROADMAP
           </div>
           <div className="flex-1 overflow-y-auto pr-1 relative pl-8 select-none">
@@ -355,17 +357,17 @@ export default function Screen3_Workspace() {
             <div className="absolute left-[16px] top-2 bottom-2 w-[1px] bg-gradient-to-b from-[#6366F1] to-[#6366F1]/10" />
 
             {(blueprint.prioritized_roadmap || []).map((step, idx) => (
-              <div key={idx} className="relative mb-6 last:mb-0">
+              <div key={idx} className="relative mb-8 last:mb-0">
                 {/* Step dot */}
                 <div className="absolute -left-[22px] top-1.5 w-3 h-3 rounded-full bg-gradient-to-br from-[#6366F1] to-[#4F46E5] shadow-[0_0_8px_rgba(99,102,241,0.6)]" />
 
                 <div className="text-[9px] font-mono text-[#6366F1]/60 uppercase mb-1">
                   STEP 0{idx + 1}
                 </div>
-                <div className="text-[#F1F5F9] text-xs font-semibold leading-snug">
+                <div className="text-[#F1F5F9] text-[12px] font-semibold leading-snug">
                   {step.mitigation_action}
                 </div>
-                <div className="text-[#94A3B8] text-[10px] font-mono mt-1">
+                <div className="text-[#94A3B8] text-[11px] font-mono mt-1">
                   METRIC: {step.test_metrics}
                 </div>
               </div>
@@ -374,27 +376,27 @@ export default function Screen3_Workspace() {
         </div>
 
         {/* Scenarios Card */}
-        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-5 flex flex-col min-h-0 overflow-hidden">
-          <div className="text-xs uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
+        <div className="col-span-1 bg-[#0D1220] border border-white/[0.07] rounded-[20px] p-[20px_22px] min-h-[280px] flex flex-col min-h-0 overflow-hidden">
+          <div className="text-[10px] uppercase tracking-widest text-[#94A3B8] mb-4 font-semibold font-mono select-none">
             SCENARIOS
           </div>
-          <div className="flex-1 overflow-y-auto pr-1 space-y-3">
+          <div className="flex-1 overflow-y-auto pr-1 space-y-[18px]">
             {SCENARIO_TYPES.map((sc) => {
               const probability = sc.data.probability || 0.5;
               return (
-                <div key={sc.key} className={`rounded-xl p-3 ${sc.bgCls}`}>
+                <div key={sc.key} className={`rounded-xl p-[14px_16px] ${sc.bgCls}`}>
                   <div className="flex justify-between items-center mb-1 select-none">
-                    <span className={`font-semibold text-xs ${sc.textColor}`}>
+                    <span className={`font-semibold text-[13px] ${sc.textColor}`}>
                       {sc.label}
                     </span>
                     <span className="text-xs font-mono text-[#94A3B8]">
                       {Math.round(probability * 100)}% LIKELY
                     </span>
                   </div>
-                  <p className="text-[#94A3B8] text-xs leading-snug mt-1 mb-1 font-medium select-none">
+                  <p className="text-[#94A3B8] text-[12px] leading-[1.6] mt-1 mb-1 font-medium select-none">
                     {sc.data.headline || "Calculated projection payload..."}
                   </p>
-                  <div className="text-[#94A3B8] text-[10px] font-mono select-none">
+                  <div className="text-[#94A3B8] text-[11px] font-mono select-none">
                     TIMELINE: {sc.data.estimated_timeline || "N/A"}
                   </div>
                   {/* Progress bar */}
