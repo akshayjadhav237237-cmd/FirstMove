@@ -32,8 +32,8 @@ export default function Screen1_Idea({ isLoading }) {
   };
 
   return (
-    <div className="scrollable-screen w-full flex-1 flex flex-col items-center justify-center min-h-screen bg-[#080C14] py-16">
-      <div className="max-w-2xl w-full px-6 flex flex-col items-center text-center">
+    <div className="w-full h-screen overflow-y-auto bg-[#080C14] py-12">
+      <div className="max-w-2xl w-full px-6 mx-auto flex flex-col items-center justify-center text-center min-h-full">
         
         {/* TOP Logo row */}
         <div className="flex items-center gap-2 mb-20 text-sm font-semibold select-none">
