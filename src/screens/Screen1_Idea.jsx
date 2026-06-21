@@ -32,8 +32,8 @@ export default function Screen1_Idea({ isLoading }) {
   };
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-[#080C14] flex flex-col justify-center items-center py-6">
-      <div className="max-w-2xl w-full px-6 mx-auto flex flex-col items-center text-center">
+    <div className="w-full h-full overflow-y-auto bg-[#080C14] flex flex-col items-center">
+      <div className="max-w-2xl w-full px-6 mx-auto flex flex-col items-center text-center my-auto py-8">
         
         {/* TOP Logo row */}
         <div className="flex items-center gap-2 mb-8 text-sm font-semibold select-none">
