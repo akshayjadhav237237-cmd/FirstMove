@@ -32,11 +32,11 @@ export default function Screen1_Idea({ isLoading }) {
   };
 
   return (
-    <div className="w-full h-screen overflow-y-auto bg-[#080C14] py-12">
-      <div className="max-w-2xl w-full px-6 mx-auto flex flex-col items-center justify-center text-center min-h-full">
+    <div className="w-full h-screen overflow-hidden bg-[#080C14] flex flex-col justify-center items-center py-6">
+      <div className="max-w-2xl w-full px-6 mx-auto flex flex-col items-center text-center">
         
         {/* TOP Logo row */}
-        <div className="flex items-center gap-2 mb-20 text-sm font-semibold select-none">
+        <div className="flex items-center gap-2 mb-8 text-sm font-semibold select-none">
           <div className="px-2 py-1 bg-[#6366F1] text-white rounded-lg font-bold text-xs uppercase tracking-tight">
             FM
           </div>
@@ -48,17 +48,17 @@ export default function Screen1_Idea({ isLoading }) {
         </div>
 
         {/* HEADLINE */}
-        <div className="mb-6 tracking-tight leading-none text-left w-full select-none">
-          <div className="text-[72px] font-bold text-[#F1F5F9] tracking-tight leading-none">
+        <div className="mb-4 tracking-tight leading-none text-left w-full select-none">
+          <div className="text-4xl sm:text-5xl font-extrabold text-[#F1F5F9] leading-tight">
             Turn your rough idea
           </div>
-          <div className="text-[72px] font-bold text-[#6366F1] tracking-tight leading-none mt-1">
+          <div className="text-4xl sm:text-5xl font-extrabold text-[#6366F1] leading-tight mt-1">
             into a battle-tested plan.
           </div>
         </div>
 
         {/* SUBTEXT */}
-        <p className="text-[#94A3B8] text-lg max-w-xl text-left w-full mb-12 leading-relaxed">
+        <p className="text-[#94A3B8] text-sm sm:text-base max-w-xl text-left w-full mb-6 leading-relaxed">
           Three specialized AI agents debate your idea in parallel. You get the plan, the risks, and the one thing to do first.
         </p>
 
@@ -70,13 +70,13 @@ export default function Screen1_Idea({ isLoading }) {
             <QuestionSkeleton />
           </div>
         ) : (
-          <div className="w-full flex flex-col items-start w-full">
+          <div className="w-full flex flex-col items-start">
             {/* TEXTAREA */}
             <textarea
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
               placeholder="Describe your startup concept or idea in a few sentences..."
-              className="w-full bg-[#0D1220] border border-white/10 rounded-[20px] p-6 min-h-[160px] text-base text-white placeholder-[#475569] leading-relaxed outline-none focus:border-[#6366F1] focus:ring-4 focus:ring-[#6366F1]/15 transition-all duration-300 mb-6"
+              className="w-full bg-[#0D1220] border border-white/10 rounded-[20px] p-5 min-h-[120px] text-sm sm:text-base text-white placeholder-[#475569] leading-relaxed outline-none focus:border-[#6366F1] focus:ring-4 focus:ring-[#6366F1]/15 transition-all duration-300 mb-4"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && e.metaKey) {
                   handleSubmit();
@@ -85,7 +85,7 @@ export default function Screen1_Idea({ isLoading }) {
             />
 
             {/* CHIPS */}
-            <div className="flex flex-wrap gap-2 mb-8 justify-start w-full">
+            <div className="flex flex-wrap gap-2 mb-4 justify-start w-full">
               {CHIPS.map((chip, i) => (
                 <button
                   key={i}
@@ -99,7 +99,7 @@ export default function Screen1_Idea({ isLoading }) {
             </div>
 
             {state.error && (
-              <div className="w-full bg-red-500/10 border border-red-500/20 rounded-xl p-3.5 text-red-400 text-xs font-mono mb-6 text-left">
+              <div className="w-full bg-red-500/10 border border-red-500/20 rounded-xl p-3.5 text-red-400 text-xs font-mono mb-4 text-left">
                 SYSTEM_ERROR: {state.error}
               </div>
             )}
@@ -108,7 +108,7 @@ export default function Screen1_Idea({ isLoading }) {
             <button
               onClick={handleSubmit}
               disabled={!idea.trim()}
-              className="w-full h-14 bg-[#6366F1] hover:bg-[#4F46E5] text-white text-base font-semibold rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.4)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full h-12 bg-[#6366F1] hover:bg-[#4F46E5] text-white text-base font-semibold rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.4)] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all duration-200 flex items-center justify-center gap-2"
             >
               Analyze My Idea →
             </button>
@@ -117,7 +117,7 @@ export default function Screen1_Idea({ isLoading }) {
 
         {/* BOTTOM indicators */}
         {!isLoading && (
-          <div className="mt-16 flex items-center gap-6 text-sm font-semibold select-none">
+          <div className="mt-10 flex items-center gap-6 text-xs sm:text-sm font-semibold select-none">
             <div className="flex items-center gap-2 text-[#475569]">
               <span className="w-2.5 h-2.5 rounded-full bg-[#6366F1]" />
               <span>Lead Strategist</span>
