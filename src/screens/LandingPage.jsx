@@ -512,7 +512,7 @@ function HeroVideoCard() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.src = "/hero-bg.mp4";
+    video.src = "/chess-hero.mp4";
     video.load();
     video.play().catch(() => {});
   }, []);
@@ -530,6 +530,7 @@ function HeroVideoCard() {
     >
       <video
         ref={videoRef}
+        autoPlay
         loop
         muted
         playsInline
@@ -590,7 +591,7 @@ function HeroBgVideoCard() {
     if (!video) return;
 
     const sources = [
-      "/hero-bg.mp4",
+      "/chess-hero.mp4",
       "https://res.cloudinary.com/dbqsqrctz/video/upload/q_auto,f_auto/v1781474639/hero_eogjwi.mp4",
       "https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4",
     ];
@@ -620,6 +621,7 @@ function HeroBgVideoCard() {
     >
       <video
         ref={videoRef}
+        autoPlay
         loop
         muted
         playsInline
