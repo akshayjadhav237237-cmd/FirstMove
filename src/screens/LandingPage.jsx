@@ -352,43 +352,80 @@ const HeroHeadline = () => {
   });
 
   return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <motion.h1
-        initial={{ y: "110%" }}
-        animate={isInView ? { y: "0%" } : { y: "110%" }}
-        transition={{
-          duration: 0.8,
-          ease: [0.25, 0.46, 0.45, 0.94],
-        }}
+    <div ref={ref} style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
         style={{
-          display: "block",
-          fontFamily:
-            "'Helvetica Now Display', 'Helvetica Neue', 'Helvetica', 'Arial Black', Arial, sans-serif",
-          fontWeight: 700,
-          fontSize: "clamp(40px, 8.5vw, 135px)",
-          lineHeight: 0.8,
-          color: "#f5f0e8",
-          letterSpacing: "-0.03em",
-          margin: 0,
-          whiteSpace: "nowrap",
-          position: "relative",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
+          background: "rgba(255,255,255,0.03)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "99px",
+          padding: "6px 14px",
+          marginBottom: "16px",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
         }}
       >
-        FIRSTMOVE
+        <img
+          src="/logo.png"
+          alt="FirstMove Logo"
+          style={{ width: "16px", height: "16px", objectFit: "contain" }}
+        />
         <span
           style={{
-            position: "absolute",
-            top: "0.05em",
-            left: "100%",
-            marginLeft: "8px",
-            fontSize: "0.35em",
-            color: "#00FF41",
-            lineHeight: 1,
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "11px",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.5)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
           }}
         >
-          *
+          Decision Intelligence Platform
         </span>
-      </motion.h1>
+      </motion.div>
+      <div style={{ overflow: "hidden", width: "100%" }}>
+        <motion.h1
+          initial={{ y: "110%" }}
+          animate={isInView ? { y: "0%" } : { y: "110%" }}
+          transition={{
+            duration: 0.8,
+            ease: [0.25, 0.46, 0.45, 0.94],
+          }}
+          style={{
+            display: "block",
+            fontFamily:
+              "'Helvetica Now Display', 'Helvetica Neue', 'Helvetica', 'Arial Black', Arial, sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(40px, 8.5vw, 135px)",
+            lineHeight: 0.8,
+            color: "#f5f0e8",
+            letterSpacing: "-0.03em",
+            margin: 0,
+            whiteSpace: "nowrap",
+            position: "relative",
+          }}
+        >
+          FIRSTMOVE
+          <span
+            style={{
+              position: "absolute",
+              top: "0.05em",
+              left: "100%",
+              marginLeft: "8px",
+              fontSize: "0.35em",
+              color: "#00FF41",
+              lineHeight: 1,
+            }}
+          >
+            *
+          </span>
+        </motion.h1>
+      </div>
     </div>
   );
 };
@@ -1544,6 +1581,9 @@ export default function LandingPage({ onStart }) {
             <div>
               <div
                 style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
                   fontFamily: "'Space Mono', monospace",
                   fontSize: "16px",
                   fontWeight: 700,
@@ -1552,6 +1592,11 @@ export default function LandingPage({ onStart }) {
                   marginBottom: "16px",
                 }}
               >
+                <img
+                  src="/logo.png"
+                  alt="FirstMove Logo"
+                  style={{ width: "20px", height: "20px", objectFit: "contain" }}
+                />
                 FIRSTMOVE
                 <span style={{ color: "#39ff7a" }}>*</span>
               </div>

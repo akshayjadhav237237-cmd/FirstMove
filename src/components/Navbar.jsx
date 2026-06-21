@@ -32,17 +32,35 @@ export default function Navbar({ onTryIt }) {
         zIndex: 10100,
         display: "inline-flex",
         alignItems: "center",
-        gap: "32px",
+        gap: "28px",
         background: "#000000",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        border: "none",
+        border: "1px solid rgba(255,255,255,0.08)",
         borderRadius: "16px",
-        padding: "10px 28px",
+        padding: "10px 24px",
         whiteSpace: "nowrap",
         outline: "none",
       }}
     >
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginRight: "8px" }}>
+        <img
+          src="/logo.png"
+          alt="FirstMove Logo"
+          style={{ width: "20px", height: "20px", objectFit: "contain" }}
+        />
+        <span
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: "14px",
+            fontWeight: 700,
+            color: "#ffffff",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          FirstMove
+        </span>
+      </div>
       {HOME_LINKS.map((link) => (
         <a
           key={link.label}
