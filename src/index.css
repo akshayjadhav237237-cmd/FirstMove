@@ -78,3 +78,43 @@ h1, h2, h3, h4, h5, h6 {
   background-color: #111827;
   animation: bento-shimmer 1.5s infinite ease-in-out;
 }
+
+/* ─── Landing Page Animations ─── */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(7px); }
+}
+
+/* Scroll reveal */
+.sr {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.sr.visible { opacity: 1; transform: translateY(0); }
+.sr-d1 { transition-delay: 80ms; }
+.sr-d2 { transition-delay: 160ms; }
+.sr-d3 { transition-delay: 240ms; }
+
+/* Bento Grid Responsive Layout */
+.features-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr 1fr 1fr;
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .features-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
