@@ -964,7 +964,7 @@ export default function LandingPage({ onStart }) {
                       <img
                         src={
                           i === 0
-                            ? "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=96&q=80"
+                            ? "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=96&q=80"
                             : i === 1
                             ? "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=96&q=80"
                             : "https://images.unsplash.com/photo-1589254065878-42c9da997008?w=96&q=80"
