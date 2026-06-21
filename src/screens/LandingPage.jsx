@@ -7,34 +7,34 @@ import Navbar from "../components/Navbar";
 const FEATURES = [
   {
     num: "01",
-    title: "Multi-Agent Debate.",
+    title: "Socratic Debate.",
     bullets: [
-      "Lead Strategist maps out the execution path",
-      "Risk Analyst identifies critical bottlenecks",
-      "Devil's Advocate challenges weak assumptions",
-      "Real-time collaborative simulation",
+      "Three agents debate your idea simultaneously",
+      "Strategist maps the opportunity space",
+      "Risk Analyst surfaces critical threats",
+      "Devil's Advocate challenges your core premise",
     ],
     link: "#try-it",
   },
   {
     num: "02",
-    title: "Socratic Alignment.",
+    title: "DVF Analysis.",
     bullets: [
-      "Dynamic context-aware questioning",
-      "Identifies hidden plan gaps in minutes",
-      "Refines business models interactively",
-      "Zero generic boilerplate templates",
+      "Desirability · Viability · Feasibility",
+      "Confidence scoring on each assumption",
+      "Roadmap sequenced by risk weight",
+      "One concrete first action step",
     ],
     link: "#try-it",
   },
   {
     num: "03",
-    title: "Actionable Blueprints.",
+    title: "Responsible AI.",
     bullets: [
-      "DVF (Desirability, Viability, Feasibility) analysis",
-      "Granular weekly timeline & milestones",
-      "Optimistic & pessimistic scenario planning",
-      "Clear 'First Move' priority action item",
+      "Human-in-the-loop by design",
+      "AI never makes the go/no-go call",
+      "Uncertainty represented honestly",
+      "Confidence levels not false certainty",
     ],
     link: "#try-it",
   },
@@ -42,59 +42,59 @@ const FEATURES = [
 
 const PHASES = [
   {
-    branch: "action/submit",
+    branch: "action/clarify",
     phase: "PHASE 01",
-    dates: "Step 01",
-    title: "Submit Your Idea",
-    desc: "Describe your concept in plain English. FirstMove initializes three specialized AI agents to analyze the feasibility.",
+    dates: "Step 1",
+    title: "Clarify Your Idea",
+    desc: "Describe your rough idea. FirstMove asks 3 Socratic questions to sharpen your concept into a specific problem and user.",
   },
   {
-    branch: "action/question",
+    branch: "action/debate",
     phase: "PHASE 02",
-    dates: "Step 02",
-    title: "Socratic Refinement",
-    desc: "Answer targeted Socratic questions generated in real-time. Uncover hidden bottlenecks and build consensus.",
+    dates: "Step 2",
+    title: "Agent Debate",
+    desc: "Three specialized agents analyze your idea simultaneously — each from a different angle. Strategist, Risk Analyst, Devil's Advocate.",
   },
   {
-    branch: "action/blueprint",
+    branch: "action/execute",
     phase: "PHASE 03",
-    dates: "Step 03",
-    title: "Executable Blueprint",
-    desc: "Get a complete, de-risked strategic plan, assumptions checklist, and your exact priority first move.",
+    dates: "Step 3",
+    title: "Your FirstMove",
+    desc: "Get a de-risked roadmap sequenced by riskiest assumption first, plus one concrete action to take this week. Not next month.",
   },
 ];
 
 const DIFFS = [
   {
     id: "01",
-    label: "// VALIDATION SPEED",
-    minus: "Weeks of customer interviews and manual market research with high bias.",
-    plus: "Three AI agents stress-test your idea in parallel in under 3 minutes.",
+    label: "// REASONING DEPTH",
+    minus: "Generic AI chat that generates task lists without reasoning through tradeoffs.",
+    plus: "DVF framework · Bayesian confidence scoring · Risk-weighted roadmap sequencing.",
   },
   {
     id: "02",
-    label: "// FEEDBACK QUALITY",
-    minus: "Safe, generic advice from friends or online templates that hide major risks.",
-    plus: "Brutally honest Socratic critique and assumptions-based risk mapping.",
+    label: "// DECISION SUPPORT",
+    minus: "Outputs presented as correct answers. False confidence in uncertain outcomes.",
+    plus: "Uncertainty represented honestly. Confidence levels shown, not certainty. You decide what to do.",
   },
   {
     id: "03",
-    label: "// ACTION LEVEL",
-    minus: "50-page business plans that sit in a drawer and get outdated immediately.",
-    plus: "Dynamic, interactive bento dashboard with a clear, prioritized 'First Move'.",
+    label: "// AI APPROACH",
+    minus: "Single model generating generic plans. No perspective diversity. One point of view.",
+    plus: "Three specialized agents debating in parallel. Strategist vs Risk Analyst vs Devil's Advocate. Three perspectives, one plan.",
   },
   {
     id: "04",
-    label: "// FRAMEWORK METHOD",
-    minus: "Unstructured guessing and unstructured brainstorm sessions.",
-    plus: "Grounded in Desirability, Viability, and Feasibility (DVF) frameworks.",
+    label: "// HUMAN CONTROL",
+    minus: "AI making the go/no-go call for you. Automating high-stakes personal decisions.",
+    plus: "AI never decides if your idea is worth pursuing. That call depends on your runway, risk tolerance, and context. Always yours.",
   },
 ];
 
 const STATS = [
-  { end: 48, suffix: "", label: "critical assumptions tested" },
-  { end: 100, suffix: "%, ", label: "coverage of risks" },
-  { end: 3, suffix: "", label: "AI debate agents" },
+  { end: 3, suffix: "", label: "PARALLEL AI AGENTS" },
+  { end: 100, suffix: "", label: "VALIDATION FRAMEWORK", value: "DVF" },
+  { end: 1, suffix: "", label: "CONCRETE FIRST STEP" },
 ];
 
 const WordRevealParagraph = () => {
@@ -116,26 +116,25 @@ const WordRevealParagraph = () => {
   const content = [
     { text: "We", italic: false, green: false },
     { text: "are", italic: false, green: false },
-    { text: "startup", italic: false, green: false },
-    { text: "thinkers,", italic: false, green: false },
+    { text: "idea", italic: false, green: false },
+    { text: "validators,", italic: false, green: false },
     { text: "\n", italic: false, green: false },
     { text: "building", italic: true, green: true },
     { text: "for", italic: true, green: true },
-    { text: "speed.", italic: true, green: true },
+    { text: "founders.", italic: true, green: true },
     { text: "\n", italic: false, green: false },
     { text: "We", italic: false, green: false },
-    { text: "empower", italic: false, green: false },
+    { text: "help", italic: false, green: false },
     { text: "founders", italic: false, green: false },
     { text: "\n", italic: false, green: false },
     { text: "to", italic: false, green: false },
-    { text: "debate,", italic: false, green: false },
-    { text: "de-risk,", italic: false, green: false },
-    { text: "\n", italic: false, green: false },
-    { text: "and", italic: false, green: false },
-    { text: "execute", italic: false, green: false },
-    { text: "their", italic: false, green: false },
-    { text: "startup", italic: false, green: false },
-    { text: "ideas.", italic: false, green: false },
+    { text: "turn", italic: false, green: false },
+    { text: "vague", italic: false, green: false },
+    { text: "ideas", italic: false, green: false },
+    { text: "into", italic: false, green: false },
+    { text: "battle-tested", italic: false, green: false },
+    { text: "execution", italic: false, green: false },
+    { text: "plans.", italic: false, green: false },
   ];
 
   const wordCount = content.filter((w) => w.text !== "\n").length;
@@ -480,7 +479,7 @@ function StartButton({ onStart }) {
         transition: "background 0.2s ease",
       }}
     >
-      Analyze My Idea
+      Analyze My Idea →
       <span
         style={{
           width: "48px",
@@ -576,7 +575,7 @@ function HeroVideoCard() {
             margin: 0,
           }}
         >
-          Debate. De-risk. Execute.
+          Debate. Plan. Act.
         </p>
       </div>
     </div>
@@ -848,7 +847,7 @@ export default function LandingPage({ onStart }) {
 
             <div style={{ maxWidth: "640px", margin: "0 auto 48px", textAlign: "center" }}>
               <ScrollFadeParagraph
-                text="Over a validation cycle, you collaborate with three specialized AI agents to uncover hidden bottlenecks. Together, we foster a new generation of conscious founders that bridge insight with action — pushing the boundaries of what early-stage startups can achieve."
+                text="Three specialized AI agents debate your idea simultaneously. Each brings a different lens — opportunity, risk, and challenge. Together they surface what you don't know yet, before you commit a single week to building."
                 fontSize="17px"
                 fontWeight={300}
               />
@@ -856,7 +855,7 @@ export default function LandingPage({ onStart }) {
 
             <div style={{ maxWidth: "640px", margin: "0 auto 48px", textAlign: "center" }}>
               <ScrollFadeParagraph
-                text="Multi-agent decision intelligence for conscious builders."
+                text="Founder-first intelligence for early-stage builders."
                 fontSize="17px"
                 fontWeight={300}
                 simultaneous
@@ -865,7 +864,7 @@ export default function LandingPage({ onStart }) {
 
             <div style={{ maxWidth: "640px", margin: "0 auto 48px", textAlign: "center" }}>
               <ScrollFadeParagraph
-                text="Built on Socratic methodology. Powered by Gemini."
+                text="Built on DVF frameworks. Powered by Gemini."
                 fontSize="17px"
                 fontWeight={300}
                 simultaneous
@@ -887,7 +886,7 @@ export default function LandingPage({ onStart }) {
                 marginBottom: "10px",
               }}
             >
-              Decision intelligence for conscious builders.
+              Decision intelligence for early-stage founders.
             </h2>
             <p
               style={{
@@ -897,7 +896,7 @@ export default function LandingPage({ onStart }) {
                 color: "#6b8cba",
               }}
             >
-              Built on Socratic methodology. Powered by Gemini.
+              Built on DVF frameworks. Powered by Gemini.
             </p>
           </div>
 
@@ -1065,7 +1064,7 @@ export default function LandingPage({ onStart }) {
             >
               <div>
                 <div style={{ ...eyebrow, marginBottom: "16px", display: "block" }}>
-                  [ DECISION JOURNEY 2026 ]
+                  [ FIRSTMOVE PIPELINE ]
                 </div>
                 <h2
                   style={{
@@ -1085,7 +1084,7 @@ export default function LandingPage({ onStart }) {
                       fontWeight: 300,
                     }}
                   >
-                    Journey.
+                    Pipeline.
                   </em>
                 </h2>
               </div>
@@ -1100,8 +1099,8 @@ export default function LandingPage({ onStart }) {
                   marginTop: "8px",
                 }}
               >
-                A structured validation framework. Stress-test your startup concept from initial
-                description to target assumptions and execute your first move.
+                A structured idea validation pipeline. Move from vague concept to de-risked execution
+                plan in under 5 minutes.
               </p>
             </div>
 
@@ -1296,8 +1295,8 @@ export default function LandingPage({ onStart }) {
                   marginTop: "8px",
                 }}
               >
-                Compare FirstMove's validation model with generic advisors. We prioritize Socratic
-                stress-testing over theoretical templates.
+                Compare FirstMove's approach with generic AI tools. We prioritize real reasoning over
+                task list generation.
               </p>
             </div>
 
@@ -1324,7 +1323,7 @@ export default function LandingPage({ onStart }) {
                   letterSpacing: "0.04em",
                 }}
               >
-                startup.validation.diff
+                idea.validation.diff
               </span>
             </div>
 
@@ -1496,7 +1495,7 @@ export default function LandingPage({ onStart }) {
                       marginBottom: "10px",
                     }}
                   >
-                    {counts[i]}
+                    {stat.value || counts[i]}
                     {stat.suffix}
                   </div>
                   <div
@@ -1564,8 +1563,7 @@ export default function LandingPage({ onStart }) {
                   maxWidth: "220px",
                 }}
               >
-                Empowering the next generation of founders through Socratic AI debate and
-                assumption-based risk validation.
+                Helping early-stage founders turn vague ideas into battle-tested execution plans through multi-agent AI reasoning.
               </p>
             </div>
 
@@ -1584,10 +1582,10 @@ export default function LandingPage({ onStart }) {
                 Quick Links
               </div>
               {[
-                { label: "Try It", href: "#try-it" },
+                { label: "App", href: "#try-it" },
                 { label: "How It Works", href: "#how-it-works" },
                 { label: "Agents", href: "#agents" },
-                { label: "About", href: "#about" },
+                { label: "About FirstMove", href: "#about" },
               ].map((link) => (
                 <a
                   key={link.label}
@@ -1731,27 +1729,27 @@ function TermsAccordion() {
   const items = [
     {
       num: "01",
-      title: "Socratic debate framework.",
+      title: "AI reasoning methodology.",
       content:
-        "Our debate model uses a multi-agent critique cycle, derived from classic Socratic questioning to expose Desirability, Viability, and Feasibility (DVF) gaps.",
+        "FirstMove uses the DVF (Desirability, Viability, Feasibility) framework from IDEO and Lean Startup methodology. Assumptions are ranked by confidence score, roadmap sequenced by risk weight: W = 1 - (confidence/100).",
     },
     {
       num: "02",
-      title: "Grounded agent personas.",
+      title: "Human-in-the-loop design.",
       content:
-        "The Lead Strategist, Risk Analyst, and Devil's Advocate draw on custom personas to simulate distinct market viewpoints and prevent single-perspective bias.",
+        "FirstMove is built to assist human decision-making, not automate it. The final call always depends on your runway, risk tolerance, and context. AI never decides if your idea is worth pursuing.",
     },
     {
       num: "03",
-      title: "Gemini LLM context window.",
+      title: "Uncertainty representation.",
       content:
-        "Analyzing your concept uses local memory context or secure API endpoints. No user data, intellectual property, or code is ever shared or stored.",
+        "Uncertainty is represented honestly in all reports. Confidence levels are shown rather than false certainty, allowing you to identify what needs testing before you build.",
     },
     {
       num: "04",
-      title: "Assumption-driven execution.",
+      title: "Confidence scoring system.",
       content:
-        "FirstMove is built on assumption-first development. Identifying and testing critical path assumptions prevents founders from building the wrong product.",
+        "Assumptions are ranked based on confidence scores to prioritize risk-weighted roadmap sequencing, guiding you to execute the most critical step first.",
     },
   ];
 
@@ -1775,7 +1773,7 @@ function TermsAccordion() {
     >
       <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
         <div className="sr" style={{ marginBottom: "56px", textAlign: "center" }}>
-          <span style={eyebrow}>[ METHODOLOGY & AGENTS ]</span>
+          <span style={eyebrow}>[ RESPONSIBLE AI ]</span>
           <h2
             style={{
               fontFamily: "'Clash Display', sans-serif",
@@ -1786,7 +1784,7 @@ function TermsAccordion() {
               marginTop: "12px",
             }}
           >
-            Validation Rules &amp;{" "}
+            AI Design &amp;{" "}
             <em
               style={{
                 fontFamily: "'Fraunces', serif",
