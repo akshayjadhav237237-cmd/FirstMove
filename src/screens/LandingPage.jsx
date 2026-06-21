@@ -366,7 +366,7 @@ const HeroHeadline = () => {
           fontFamily:
             "'Helvetica Now Display', 'Helvetica Neue', 'Helvetica', 'Arial Black', Arial, sans-serif",
           fontWeight: 700,
-          fontSize: "clamp(60px, 12vw, 200px)",
+          fontSize: "clamp(40px, 8.5vw, 135px)",
           lineHeight: 0.8,
           color: "#f5f0e8",
           letterSpacing: "-0.03em",
