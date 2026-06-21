@@ -21,6 +21,13 @@ html, body, #root {
   overflow: hidden; /* Prevent global screen bouncing */
 }
 
+/* Screen 1: overflow auto */
+.scrollable-screen {
+  overflow-y: auto;
+  height: 100%;
+}
+
+
 /* Headings typography (weights: 400, 500, 600, 700) */
 h1, h2, h3, h4, h5, h6 {
   color: #F1F5F9;
