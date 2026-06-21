@@ -30,5 +30,3 @@ npm run dev
 ```
 
 The application will start at `http://localhost:5173` (or the next available port).
-
-## Project Structure
