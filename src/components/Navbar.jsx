@@ -51,7 +51,7 @@ export default function Navbar({ onTryIt }) {
           target={link.href.startsWith("http") ? "_blank" : undefined}
           rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
           style={{
-            fontFamily: "'Clash Display', sans-serif",
+            fontFamily: "'Space Grotesk', sans-serif",
             fontSize: "14px",
             fontWeight: 500,
             color: "rgba(255,255,255,0.75)",
